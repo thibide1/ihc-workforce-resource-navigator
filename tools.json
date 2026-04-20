@@ -38,7 +38,7 @@
       "category": "reentry",
       "status": "live",
       "audience": "People re-entering the workforce; workforce coaches; facilitators",
-      "time_estimate": "30\u201360 minutes",
+      "time_estimate": "30–60 minutes",
       "what_you_get": [
         "A draft of your story in your own words",
         "Three job ideas that match your skills",
@@ -47,33 +47,37 @@
       ],
       "launch_path": "tools/re-entry-storytelling/index.html",
       "learn_more_path": "tools/re-entry-storytelling/docs/From-Paper-to-Pathway-v1.pdf",
-      "icon": "\ud83d\udcd3",
+      "icon": "📓",
       "brand_color": "purple",
       "privacy_note": "Your answers stay on this device only. Nothing is sent over the internet.",
       "badge": "New"
     },
     {
-      "id": "placeholder-wage-explorer",
-      "name": "Hamilton County Wage Explorer",
-      "tagline": "See what jobs pay near you",
-      "description": "A plain-language view of wages by occupation in Hamilton County. Drawn from public BLS data.",
+      "id": "pathway-explorer",
+      "name": "Pathway Explorer",
+      "tagline": "See where your job could take you",
+      "description": "Type the job you have now — or one you're curious about — and see what it pays in Hamilton County, where people typically move next, and how others got there.",
       "category": "job-search",
-      "status": "coming-soon",
-      "audience": "Job seekers, career changers",
-      "time_estimate": "5 minutes",
+      "status": "live",
+      "audience": "Job seekers, career changers, people planning their next step",
+      "time_estimate": "5–10 minutes",
       "what_you_get": [
-        "Median and typical wage range for hundreds of occupations",
-        "How your skills might translate to different jobs",
-        "Which occupations are growing locally"
+        "Typical pay range for your job in Hamilton County",
+        "Common next-step jobs with typical pay bumps",
+        "On-ramps — how people get into the job you want",
+        "All in plain language, no jargon"
       ],
-      "icon": "\ud83d\udcbc",
-      "brand_color": "blue"
+      "launch_path": "tools/pathway-explorer/index.html",
+      "icon": "🧭",
+      "brand_color": "blue",
+      "privacy_note": "Nothing you search is saved. No account, no tracking.",
+      "badge": "New"
     },
     {
       "id": "placeholder-training-finder",
       "name": "Training Finder",
       "tagline": "What can you learn, and who pays for it?",
-      "description": "A guide to short-credential, certificate, and degree programs in Hamilton County and central Indiana \u2014 with funding pathways (WIOA, Ivy Tech grants, employer-sponsored).",
+      "description": "A guide to short-credential, certificate, and degree programs in Hamilton County and central Indiana — with funding pathways (WIOA, Ivy Tech grants, employer-sponsored).",
       "category": "training",
       "status": "coming-soon",
       "audience": "People considering retraining, new credentials, or career moves",
@@ -83,7 +87,7 @@
         "Cost and time estimates",
         "Funding programs you might qualify for"
       ],
-      "icon": "\ud83c\udf93",
+      "icon": "🎓",
       "brand_color": "gold"
     },
     {
@@ -100,7 +104,7 @@
         "Phone numbers and addresses that are up to date",
         "Clear info on who qualifies for what"
       ],
-      "icon": "\ud83e\udd1d",
+      "icon": "🤝",
       "brand_color": "red"
     }
   ],
@@ -110,7 +114,7 @@
       "value": "988"
     },
     {
-      "label": "Anything in Indiana \u2014 dial",
+      "label": "Anything in Indiana — dial",
       "value": "2-1-1"
     },
     {

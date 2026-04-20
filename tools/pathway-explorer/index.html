@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pathway Explorer — Workforce Resource Navigator</title>
+<meta name="description" content="See where your job could take you. Free career pathway tool for Hamilton County residents.">
+<meta name="theme-color" content="#413494">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens-shared.css">
+<link rel="stylesheet" href="../../assets/css/tokens-ihc-2026.css">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--color-neutral-10);
+    color: var(--color-text);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-md);
+    line-height: var(--font-leading-normal);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--color-primary); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  a:hover { color: var(--color-primary-dark); }
+  button, a { font-family: inherit; }
+  button:focus-visible, a:focus-visible, input:focus-visible {
+    outline: 3px solid var(--color-secondary); outline-offset: 2px; border-radius: 4px;
+  }
+  [x-cloak] { display: none !important; }
+
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--color-primary); color: #fff;
+    padding: var(--space-sm) var(--space-md);
+    z-index: 100;
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-semibold);
+  }
+  .skip-link:focus { left: 0; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--color-neutral-20);
+    padding: 0.75rem var(--space-md);
+  }
+  .topbar-inner {
+    max-width: 1080px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-md);
+  }
+  .topbar-back {
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: var(--font-weight-medium);
+    color: var(--color-neutral); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar-back:hover { color: var(--color-primary); }
+  .topbar-logo { height: 28px; width: auto; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background:
+      radial-gradient(ellipse at top right, rgba(249, 194, 10, 0.14) 0%, transparent 55%),
+      linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: var(--space-2xl) var(--space-md);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 32px);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--color-warm); font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-sm);
+    padding: 0.25rem 0.7rem; border: 1px solid rgba(249, 194, 10, 0.5); border-radius: 999px;
+  }
+  .hero h1 {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-black);
+    font-size: clamp(1.9rem, 4vw, 2.75rem); line-height: var(--font-leading-tight);
+    letter-spacing: -0.015em; margin: 0 0 var(--space-sm); color: #fff;
+  }
+  .hero p {
+    font-size: var(--font-size-md); max-width: 680px; margin: 0 0 var(--space-lg);
+    color: rgba(255, 255, 255, 0.9); line-height: var(--font-leading-normal);
+  }
+
+  /* ---------- Search ---------- */
+  .search-shell {
+    position: relative; max-width: 640px; margin-top: var(--space-md);
+  }
+  .search-input {
+    width: 100%; padding: 1rem 1.2rem;
+    font-family: var(--font-family-body); font-size: 1.05rem;
+    border: none; border-radius: var(--radius-md);
+    background: #fff; color: var(--color-text);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  }
+  .search-input:focus { outline: 3px solid var(--color-warm); outline-offset: 2px; }
+  .search-dropdown {
+    position: absolute; top: calc(100% + 0.4rem); left: 0; right: 0;
+    background: #fff; border-radius: var(--radius-md);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+    max-height: 360px; overflow-y: auto; z-index: 20;
+    border: 1px solid var(--color-neutral-20);
+  }
+  .search-result {
+    padding: 0.7rem 1.1rem; cursor: pointer;
+    border-bottom: 1px solid var(--color-neutral-10);
+    display: flex; flex-direction: column; gap: 0.15rem;
+    transition: var(--transition-fast);
+  }
+  .search-result:last-child { border-bottom: none; }
+  .search-result:hover, .search-result.focused { background: var(--color-primary-10); }
+  .search-result-title {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-semibold);
+    color: var(--color-primary); font-size: 0.95rem;
+  }
+  .search-result-meta {
+    font-size: 0.8rem; color: var(--color-neutral);
+    font-family: var(--font-family-heading);
+  }
+  .search-suggestions {
+    margin-top: var(--space-md);
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    align-items: center;
+  }
+  .search-suggestions-label {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: rgba(255,255,255,0.75); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-right: 0.3rem;
+  }
+  .suggestion-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-family: var(--font-family-heading); font-size: 0.8rem; font-weight: var(--font-weight-medium);
+    padding: 0.3rem 0.75rem; border-radius: 999px;
+    cursor: pointer; transition: var(--transition-fast);
+  }
+  .suggestion-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+
+  /* ---------- Main ---------- */
+  main { max-width: 1080px; margin: 0 auto; padding: var(--space-xl) var(--space-md) var(--space-4xl); }
+
+  /* Empty state */
+  .empty-state {
+    background: #fff; border: 1.5px solid var(--color-neutral-20);
+    border-radius: var(--radius-lg); padding: var(--space-2xl) var(--space-lg);
+    text-align: center;
+  }
+  .empty-state h2 {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-bold);
+    color: var(--color-primary); font-size: 1.3rem; margin: 0 0 var(--space-sm);
+  }
+  .empty-state p { max-width: 520px; margin: 0 auto var(--space-md); color: var(--color-neutral); }
+
+  /* ---------- Occupation Detail ---------- */
+  .occ-detail { display: grid; gap: var(--space-lg); }
+
+  .occ-header {
+    background: #fff; border-radius: var(--radius-lg);
+    border: 1.5px solid var(--color-neutral-20); overflow: hidden;
+  }
+  .occ-header-top {
+    padding: var(--space-lg); display: grid; grid-template-columns: 1fr auto; gap: var(--space-md);
+    align-items: start; border-bottom: 1px solid var(--color-neutral-20);
+  }
+  .occ-major-group {
+    font-family: var(--font-family-heading); font-size: 0.7rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-accent); font-weight: var(--font-weight-bold);
+    margin-bottom: 0.3rem;
+  }
+  .occ-title {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-black);
+    color: var(--color-primary); font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: var(--font-leading-tight); margin: 0;
+  }
+  .occ-soc {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-neutral); background: var(--color-neutral-10);
+    padding: 0.2rem 0.55rem; border-radius: 4px; white-space: nowrap;
+    align-self: start;
+  }
+  .occ-quickstats {
+    padding: var(--space-lg);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md);
+  }
+  .qs { display: flex; flex-direction: column; gap: 0.15rem; }
+  .qs-label {
+    font-family: var(--font-family-heading); font-size: 0.7rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral);
+  }
+  .qs-value {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-bold);
+    color: var(--color-primary); font-size: 1.4rem; line-height: 1;
+  }
+  .qs-sub { font-size: 0.8rem; color: var(--color-neutral); margin-top: 0.15rem; }
+
+  /* Wage band visualization */
+  .wage-band {
+    background: #fff; border-radius: var(--radius-lg);
+    border: 1.5px solid var(--color-neutral-20); padding: var(--space-lg);
+  }
+  .wage-band h3, .pathways-block h3 {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-bold);
+    color: var(--color-primary); font-size: 1.1rem; margin: 0 0 var(--space-xs);
+  }
+  .wage-band-sub { font-size: 0.9rem; color: var(--color-neutral); margin: 0 0 var(--space-md); }
+  .wage-track {
+    position: relative; height: 54px; margin: 1.5rem 0 2.5rem;
+    background: linear-gradient(to right, var(--color-neutral-10), var(--color-neutral-20));
+    border-radius: var(--radius-sm);
+  }
+  .wage-fill {
+    position: absolute; top: 0; bottom: 0;
+    background: linear-gradient(to right, var(--color-secondary) 0%, var(--color-primary) 100%);
+    border-radius: var(--radius-sm);
+  }
+  .wage-marker {
+    position: absolute; top: -28px; height: calc(100% + 56px);
+    width: 2px; background: var(--color-primary-dark);
+    transform: translateX(-1px);
+  }
+  .wage-marker .wage-label {
+    position: absolute; top: -22px; transform: translateX(-50%);
+    font-family: var(--font-family-heading); font-size: 0.75rem; font-weight: var(--font-weight-bold);
+    color: var(--color-primary-dark); white-space: nowrap;
+  }
+  .wage-marker .wage-sub {
+    position: absolute; bottom: -22px; transform: translateX(-50%);
+    font-family: var(--font-family-heading); font-size: 0.65rem;
+    color: var(--color-neutral); white-space: nowrap;
+  }
+  .wage-marker.p10 { background: var(--color-neutral-33); }
+  .wage-marker.p10 .wage-label, .wage-marker.p10 .wage-sub { color: var(--color-neutral); }
+  .wage-marker.p90 { background: var(--color-neutral-33); }
+  .wage-marker.p90 .wage-label, .wage-marker.p90 .wage-sub { color: var(--color-neutral); }
+  .wage-legend {
+    font-size: 0.85rem; color: var(--color-neutral);
+    font-style: italic; margin: 0.5rem 0 0; line-height: var(--font-leading-snug);
+  }
+
+  /* Pathway cards */
+  .pathways-block {
+    background: #fff; border-radius: var(--radius-lg);
+    border: 1.5px solid var(--color-neutral-20); padding: var(--space-lg);
+  }
+  .pathways-block .block-sub { font-size: 0.95rem; color: var(--color-neutral); margin: 0 0 var(--space-md); }
+  .pathway-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-sm); margin: 0; padding: 0; list-style: none; }
+  .pathway-card {
+    background: #fff; border: 1.5px solid var(--color-neutral-20); border-radius: var(--radius-md);
+    padding: var(--space-md); cursor: pointer; transition: var(--transition-fast);
+    display: flex; flex-direction: column; gap: 0.4rem; text-align: left;
+    font-family: inherit; color: inherit;
+  }
+  .pathway-card:hover {
+    border-color: var(--color-primary); transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(65, 52, 148, 0.1);
+  }
+  .pathway-card-lift {
+    font-family: var(--font-family-heading); font-size: 0.7rem;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: var(--font-weight-bold);
+  }
+  .pathway-card-lift.positive { color: var(--color-green); }
+  .pathway-card-lift.negative { color: var(--color-accent); }
+  .pathway-card-lift.neutral { color: var(--color-neutral); }
+  .pathway-card-title {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-bold);
+    color: var(--color-primary); font-size: 1rem; line-height: var(--font-leading-tight);
+  }
+  .pathway-card-wage {
+    font-family: var(--font-family-heading); font-size: 0.9rem; color: var(--color-neutral);
+  }
+  .pathway-card-footer {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    margin-top: 0.25rem;
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+  }
+  .pathway-card-confidence {
+    padding: 0.1rem 0.45rem; border-radius: 3px;
+    font-weight: var(--font-weight-semibold); letter-spacing: 0.03em;
+  }
+  .pathway-card-confidence.high { background: var(--color-primary-10); color: var(--color-primary); }
+  .pathway-card-confidence.mixed { background: var(--color-secondary-10); color: var(--color-secondary-dark); }
+  .pathway-card-confidence.low { background: var(--color-neutral-10); color: var(--color-neutral); }
+  .pathway-card-jobs { color: var(--color-neutral); }
+
+  .empty-pathways {
+    background: var(--color-neutral-10); padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md); color: var(--color-neutral);
+    font-style: italic; font-size: 0.95rem;
+  }
+
+  /* Crisis bar (matches WRN) */
+  .crisis-bar {
+    background: #fff; border: 1px solid var(--color-neutral-20);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-md); padding: var(--space-lg);
+    margin: var(--space-2xl) 0 var(--space-lg);
+  }
+  .crisis-heading {
+    font-family: var(--font-family-heading); font-weight: var(--font-weight-bold);
+    color: var(--color-accent-dark); font-size: 0.75rem;
+    letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 var(--space-sm);
+  }
+  .crisis-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-sm) var(--space-md);
+  }
+  .crisis-list li { font-size: 0.95rem; }
+  .crisis-list strong {
+    font-family: var(--font-family-heading); color: var(--color-accent);
+    font-weight: var(--font-weight-bold); font-size: 1.05rem; margin-right: 0.3rem;
+  }
+
+  /* Footer */
+  footer { background: #fff; border-top: 1px solid var(--color-neutral-20); padding: var(--space-2xl) var(--space-md); text-align: center; }
+  .footer-inner { max-width: 1080px; margin: 0 auto; }
+  .footer-note { font-size: 0.85rem; color: var(--color-neutral); max-width: 680px; margin: 0 auto; line-height: var(--font-leading-normal); }
+  .footer-note strong { color: var(--color-primary); }
+
+  @media (max-width: 768px) {
+    .occ-header-top { grid-template-columns: 1fr; }
+    .qs-value { font-size: 1.2rem; }
+    .pathway-list { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+    .pathway-card:hover { transform: none; }
+  }
+
+  .loading {
+    text-align: center; padding: var(--space-xl);
+    color: var(--color-neutral); font-style: italic;
+  }
+</style>
+<script defer src="alpine.min.js"></script>
+</head>
+<body data-brand="ihc-2026">
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="../../index.html" class="topbar-back">← Workforce Resource Navigator</a>
+      <img src="../../assets/img/ihc-logo-fullcolor.png" alt="Invest Hamilton County" class="topbar-logo">
+    </div>
+  </div>
+
+  <section class="hero" x-data="pathwayApp()" x-init="init()" x-cloak>
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Pathway Explorer</span>
+      <h1>See where your job could take you.</h1>
+      <p>Type the job you have now — or one you're curious about — and we'll show you what it pays in Hamilton County, where people typically move next, and how others got there.</p>
+
+      <div class="search-shell" @click.outside="showDropdown = false">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="e.g., Nursing Assistant, Warehouse Worker, Welder, Cashier…"
+          x-model="query"
+          @input="onSearchInput()"
+          @focus="showDropdown = query.length > 0"
+          @keydown.down.prevent="focusNext()"
+          @keydown.up.prevent="focusPrev()"
+          @keydown.enter.prevent="selectFocused()"
+          @keydown.escape="showDropdown = false"
+          aria-label="Search for a job or occupation"
+          aria-autocomplete="list"
+          :aria-expanded="showDropdown"
+        >
+        <div class="search-dropdown" x-show="showDropdown && results.length > 0" x-transition.opacity>
+          <template x-for="(r, i) in results" :key="r.soc">
+            <div class="search-result"
+                 :class="{ focused: i === focusedIndex }"
+                 @click="selectOcc(r.soc)"
+                 @mouseover="focusedIndex = i">
+              <div class="search-result-title" x-text="r.title"></div>
+              <div class="search-result-meta">
+                <span x-text="r.major_group"></span>
+                <template x-if="r.hc_jobs">
+                  <span> · <span x-text="formatNum(r.hc_jobs)"></span> jobs in Hamilton</span>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+        <div class="search-dropdown" x-show="showDropdown && results.length === 0 && query.length >= 2" x-transition.opacity>
+          <div class="search-result" style="cursor:default;">
+            <div class="search-result-title">No matches for "<span x-text="query"></span>"</div>
+            <div class="search-result-meta">Try a different word — e.g., "drive" for driving jobs, or "health" for healthcare.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-suggestions">
+        <span class="search-suggestions-label">Try:</span>
+        <template x-for="s in suggestions" :key="s.soc">
+          <button class="suggestion-pill" @click="selectOcc(s.soc)" x-text="s.label"></button>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <main id="main" role="main" x-data="pathwayDetail()" x-init="init()" x-cloak>
+
+    <template x-if="loading">
+      <div class="loading">Loading data…</div>
+    </template>
+
+    <template x-if="!loading && !selected">
+      <div class="empty-state">
+        <h2>Pick a job to start</h2>
+        <p>Search or choose one of the examples above. We'll show you the typical pay, how many people do this work in Hamilton County, and what the common next steps are.</p>
+      </div>
+    </template>
+
+    <template x-if="!loading && selected">
+      <div class="occ-detail">
+
+        <!-- Header -->
+        <section class="occ-header" aria-labelledby="occ-title">
+          <div class="occ-header-top">
+            <div>
+              <div class="occ-major-group" x-text="selected.major_group"></div>
+              <h2 id="occ-title" class="occ-title" x-text="selected.title"></h2>
+            </div>
+            <div class="occ-soc" x-text="'Code ' + selected.soc"></div>
+          </div>
+          <div class="occ-quickstats">
+            <div class="qs">
+              <div class="qs-label">People doing this in Hamilton</div>
+              <div class="qs-value" x-text="formatNum(selected.hc_jobs) || '—'"></div>
+              <div class="qs-sub">Jobs in 2025</div>
+            </div>
+            <div class="qs">
+              <div class="qs-label">Typical openings a year</div>
+              <div class="qs-value" x-text="formatNum(selected.openings) || '—'"></div>
+              <div class="qs-sub">Both new jobs and replacements</div>
+            </div>
+            <div class="qs">
+              <div class="qs-label">How the field is growing</div>
+              <div class="qs-value" x-text="formatGrowth(selected.growth_pct)"></div>
+              <div class="qs-sub">Projected 5-year change</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Wage band -->
+        <template x-if="wageData">
+          <section class="wage-band" aria-labelledby="wage-title">
+            <h3 id="wage-title">Typical pay</h3>
+            <p class="wage-band-sub">Annual pay range for this job across the Indianapolis metro area. Your actual pay depends on the employer, your experience, and the specific role.</p>
+            <div class="wage-track" role="img" :aria-label="'Pay range from ' + formatWage(wageData.annual.p10) + ' to ' + formatWage(wageData.annual.p90)">
+              <div class="wage-fill"
+                   :style="'left: ' + wagePct(wageData.annual.p25) + '%; width: ' + (wagePct(wageData.annual.p75) - wagePct(wageData.annual.p25)) + '%'"></div>
+              <div class="wage-marker p10" :style="'left: ' + wagePct(wageData.annual.p10) + '%'">
+                <div class="wage-label" x-text="formatWage(wageData.annual.p10)"></div>
+                <div class="wage-sub">starting out</div>
+              </div>
+              <div class="wage-marker" :style="'left: ' + wagePct(wageData.annual.median) + '%'">
+                <div class="wage-label" x-text="formatWage(wageData.annual.median)"></div>
+                <div class="wage-sub">typical (median)</div>
+              </div>
+              <div class="wage-marker p90" :style="'left: ' + wagePct(wageData.annual.p90) + '%'">
+                <div class="wage-label" x-text="formatWage(wageData.annual.p90)"></div>
+                <div class="wage-sub">experienced</div>
+              </div>
+            </div>
+            <p class="wage-legend">Purple band shows the middle 50% of people in this job. Most start closer to the left and move right over time. Source: BLS Occupational Employment &amp; Wage Statistics, May 2024.</p>
+          </section>
+        </template>
+
+        <!-- Outbound: where could you go next? -->
+        <section class="pathways-block" aria-labelledby="next-title">
+          <h3 id="next-title">Where could you go from here?</h3>
+          <p class="block-sub">These are jobs people commonly move into from this role. Click any card to jump to that job's page.</p>
+          <template x-if="outbound.length > 0">
+            <ul class="pathway-list">
+              <template x-for="edge in outbound" :key="edge.target_soc">
+                <li>
+                  <button class="pathway-card" @click="selectOcc(edge.target_soc)" type="button">
+                    <div class="pathway-card-lift" :class="liftClass(edge.wage_lift)" x-text="formatLift(edge.wage_lift)"></div>
+                    <div class="pathway-card-title" x-text="edge.target_title"></div>
+                    <div class="pathway-card-wage">
+                      Typical pay: <strong x-text="formatWage(edge.target_wage)"></strong>
+                    </div>
+                    <div class="pathway-card-footer">
+                      <span class="pathway-card-confidence" :class="edge.confidence" x-text="confidenceLabel(edge.confidence)"></span>
+                      <template x-if="edge.target_hc_jobs">
+                        <span class="pathway-card-jobs"><span x-text="formatNum(edge.target_hc_jobs)"></span> jobs in Hamilton</span>
+                      </template>
+                    </div>
+                  </button>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template x-if="outbound.length === 0">
+            <div class="empty-pathways">We don't have mapped next-step pathways for this occupation yet. Most jobs have paths — we're still adding them. Try a related job from the suggestions above, or talk to your local WorkOne office at 1-800-891-6499.</div>
+          </template>
+        </section>
+
+        <!-- Inbound: how did people get here? -->
+        <section class="pathways-block" aria-labelledby="prior-title">
+          <h3 id="prior-title">How do people get into this job?</h3>
+          <p class="block-sub">If this is the job you want, here are the jobs people commonly come from. Knowing the on-ramps can help you plan.</p>
+          <template x-if="inbound.length > 0">
+            <ul class="pathway-list">
+              <template x-for="edge in inbound" :key="edge.source_soc">
+                <li>
+                  <button class="pathway-card" @click="selectOcc(edge.source_soc)" type="button">
+                    <div class="pathway-card-lift" :class="liftClass(edge.wage_lift)">
+                      <template x-if="edge.wage_lift && edge.wage_lift > 0">moves up <span x-text="formatWage(edge.wage_lift)"></span></template>
+                      <template x-if="!edge.wage_lift || edge.wage_lift <= 0">lateral / variable</template>
+                    </div>
+                    <div class="pathway-card-title" x-text="edge.source_title"></div>
+                    <div class="pathway-card-wage">
+                      Typical pay there: <strong x-text="formatWage(edge.source_wage)"></strong>
+                    </div>
+                    <div class="pathway-card-footer">
+                      <span class="pathway-card-confidence" :class="edge.confidence" x-text="confidenceLabel(edge.confidence)"></span>
+                    </div>
+                  </button>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template x-if="inbound.length === 0">
+            <div class="empty-pathways">We don't have mapped entry paths into this occupation yet. Most people enter this kind of work through a combination of education, certificates, and experience. Your facilitator or WorkOne counselor can help you plan.</div>
+          </template>
+        </section>
+
+      </div>
+    </template>
+
+    <section class="crisis-bar" aria-labelledby="crisis-heading">
+      <h2 id="crisis-heading" class="crisis-heading">If you need help right now</h2>
+      <ul class="crisis-list">
+        <li><strong>988</strong>Crisis line (call or text)</li>
+        <li><strong>2-1-1</strong>Anything in Indiana — dial</li>
+        <li><strong>1-800-869-0212</strong>Free legal help (Indiana Legal Services)</li>
+        <li><strong>1-800-891-6499</strong>WorkOne Indiana — job help</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-note">
+        <strong>Pathway Explorer</strong> · part of the Workforce Resource Navigator by Invest Hamilton County. Data from the U.S. Bureau of Labor Statistics, Lightcast, and O*NET. Typical pay ranges are for the Indianapolis metro area. Your actual earnings depend on employer, experience, and specific role. This tool shows patterns, not promises.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Shared state across both Alpine components via Alpine store -->
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('pe', {
+        ready: false,
+        occupations: [],
+        wages: {},
+        outbound: {},
+        inbound: {},
+        currentSoc: null,
+
+        async load() {
+          try {
+            const [occR, wagR, pthR] = await Promise.all([
+              fetch('data/occupations.json'),
+              fetch('data/wages.json'),
+              fetch('data/pathways.json'),
+            ]);
+            const occ = await occR.json();
+            const wag = await wagR.json();
+            const pth = await pthR.json();
+            this.occupations = occ.occupations || [];
+            this.wages = wag.wages || {};
+            this.outbound = pth.outbound || {};
+            this.inbound = pth.inbound || {};
+            this.ready = true;
+
+            // Deep-link support
+            const params = new URLSearchParams(window.location.search);
+            const soc = params.get('soc');
+            if (soc) this.currentSoc = soc;
+          } catch (e) {
+            console.error('Pathway Explorer data load failed:', e);
+            alert('We had trouble loading the job data. Refresh the page to try again.');
+          }
+        },
+
+        selectOcc(soc) {
+          this.currentSoc = soc;
+          const url = new URL(window.location);
+          url.searchParams.set('soc', soc);
+          history.pushState({ soc }, '', url);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+      });
+    });
+
+    function pathwayApp() {
+      return {
+        query: '',
+        results: [],
+        showDropdown: false,
+        focusedIndex: -1,
+        suggestions: [
+          { soc: '31-1131', label: 'Nursing Assistant' },
+          { soc: '53-7062', label: 'Warehouse Worker' },
+          { soc: '41-2011', label: 'Cashier' },
+          { soc: '51-4121', label: 'Welder' },
+          { soc: '31-1121', label: 'Home Health Aide' },
+          { soc: '53-3032', label: 'Truck Driver' },
+          { soc: '35-2014', label: 'Cook' },
+          { soc: '43-4051', label: 'Customer Service' },
+        ],
+        async init() {
+          if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
+        },
+        onSearchInput() {
+          const q = this.query.trim().toLowerCase();
+          if (q.length < 2) { this.results = []; this.showDropdown = false; return; }
+          const occs = Alpine.store('pe').occupations;
+          this.results = occs.filter(o =>
+            o.title.toLowerCase().includes(q) ||
+            (o.major_group || '').toLowerCase().includes(q)
+          ).slice(0, 12);
+          this.showDropdown = true;
+          this.focusedIndex = this.results.length > 0 ? 0 : -1;
+        },
+        focusNext() { if (this.focusedIndex < this.results.length - 1) this.focusedIndex++; },
+        focusPrev() { if (this.focusedIndex > 0) this.focusedIndex--; },
+        selectFocused() {
+          if (this.focusedIndex >= 0 && this.results[this.focusedIndex]) {
+            this.selectOcc(this.results[this.focusedIndex].soc);
+          }
+        },
+        selectOcc(soc) {
+          Alpine.store('pe').selectOcc(soc);
+          this.query = '';
+          this.results = [];
+          this.showDropdown = false;
+        },
+        formatNum(n) { return n ? n.toLocaleString() : ''; },
+      };
+    }
+
+    function pathwayDetail() {
+      return {
+        async init() {
+          if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
+          // React to history popstate
+          window.addEventListener('popstate', (e) => {
+            const params = new URLSearchParams(window.location.search);
+            Alpine.store('pe').currentSoc = params.get('soc') || null;
+          });
+        },
+        get loading() { return !Alpine.store('pe').ready; },
+        get selected() {
+          const soc = Alpine.store('pe').currentSoc;
+          if (!soc) return null;
+          return Alpine.store('pe').occupations.find(o => o.soc === soc) || null;
+        },
+        get wageData() {
+          const soc = Alpine.store('pe').currentSoc;
+          if (!soc) return null;
+          return Alpine.store('pe').wages[soc] || null;
+        },
+        get outbound() {
+          const soc = Alpine.store('pe').currentSoc;
+          if (!soc) return [];
+          return (Alpine.store('pe').outbound[soc] || []).slice(0, 8);
+        },
+        get inbound() {
+          const soc = Alpine.store('pe').currentSoc;
+          if (!soc) return [];
+          return (Alpine.store('pe').inbound[soc] || []).slice(0, 8);
+        },
+        selectOcc(soc) { Alpine.store('pe').selectOcc(soc); },
+        formatNum(n) { return n ? n.toLocaleString() : ''; },
+        formatWage(n) {
+          if (!n && n !== 0) return '—';
+          return '$' + Math.round(n).toLocaleString();
+        },
+        formatGrowth(n) {
+          if (n === null || n === undefined) return '—';
+          const sign = n > 0 ? '+' : '';
+          return sign + n.toFixed(1) + '%';
+        },
+        formatLift(n) {
+          if (!n && n !== 0) return 'typical move';
+          if (n > 0) return '+$' + Math.round(n).toLocaleString() + ' a year';
+          if (n < 0) return '−$' + Math.round(Math.abs(n)).toLocaleString() + ' a year';
+          return 'similar pay';
+        },
+        liftClass(n) {
+          if (!n) return 'neutral';
+          return n > 0 ? 'positive' : 'negative';
+        },
+        confidenceLabel(c) {
+          if (c === 'high') return 'Common path';
+          if (c === 'mixed') return 'Possible path';
+          return 'Less common';
+        },
+        wagePct(v) {
+          // Map wage to 0..100% across 0–$200K span
+          const max = 200000;
+          return Math.max(2, Math.min(98, (v / max) * 100));
+        },
+      };
+    }
+  </script>
+</body>
+</html>
