@@ -29,8 +29,6 @@
   button:focus-visible, a:focus-visible, input:focus-visible {
     outline: 3px solid var(--color-secondary); outline-offset: 2px; border-radius: 4px;
   }
-  [x-cloak] { display: none !important; }
-
   .skip-link {
     position: absolute; left: -9999px; top: 0;
     background: var(--color-primary); color: #fff;
@@ -343,155 +341,6 @@
     color: var(--color-neutral); font-style: italic;
   }
 </style>
-<script>
-// Register Alpine components BEFORE Alpine loads so alpine:init listeners are in place.
-document.addEventListener('alpine:init', () => {
-  Alpine.store('pe', {
-    ready: false,
-    occupations: [],
-    wages: {},
-    outbound: {},
-    inbound: {},
-    currentSoc: null,
-    async load() {
-      try {
-        const [occR, wagR, pthR] = await Promise.all([
-          fetch('data/occupations.json'),
-          fetch('data/wages.json'),
-          fetch('data/pathways.json'),
-        ]);
-        const occ = await occR.json();
-        const wag = await wagR.json();
-        const pth = await pthR.json();
-        this.occupations = occ.occupations || [];
-        this.wages = wag.wages || {};
-        this.outbound = pth.outbound || {};
-        this.inbound = pth.inbound || {};
-        this.ready = true;
-        const params = new URLSearchParams(window.location.search);
-        const soc = params.get('soc');
-        if (soc) this.currentSoc = soc;
-      } catch (e) {
-        console.error('Pathway Explorer data load failed:', e);
-      }
-    },
-    selectOcc(soc) {
-      this.currentSoc = soc;
-      const url = new URL(window.location);
-      url.searchParams.set('soc', soc);
-      history.pushState({ soc }, '', url);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-  });
-
-  Alpine.data('pathwayApp', () => ({
-    query: '',
-    results: [],
-    showDropdown: false,
-    focusedIndex: -1,
-    suggestions: [
-      { soc: '31-1131', label: 'Nursing Assistant' },
-      { soc: '53-7062', label: 'Warehouse Worker' },
-      { soc: '41-2011', label: 'Cashier' },
-      { soc: '51-4121', label: 'Welder' },
-      { soc: '31-1121', label: 'Home Health Aide' },
-      { soc: '53-3032', label: 'Truck Driver' },
-      { soc: '35-2014', label: 'Cook' },
-      { soc: '43-4051', label: 'Customer Service' },
-    ],
-    async init() {
-      if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
-    },
-    onSearchInput() {
-      const q = this.query.trim().toLowerCase();
-      if (q.length < 2) { this.results = []; this.showDropdown = false; return; }
-      const occs = Alpine.store('pe').occupations;
-      this.results = occs.filter(o =>
-        o.title.toLowerCase().includes(q) ||
-        (o.major_group || '').toLowerCase().includes(q)
-      ).slice(0, 12);
-      this.showDropdown = true;
-      this.focusedIndex = this.results.length > 0 ? 0 : -1;
-    },
-    focusNext() { if (this.focusedIndex < this.results.length - 1) this.focusedIndex++; },
-    focusPrev() { if (this.focusedIndex > 0) this.focusedIndex--; },
-    selectFocused() {
-      if (this.focusedIndex >= 0 && this.results[this.focusedIndex]) {
-        this.selectOcc(this.results[this.focusedIndex].soc);
-      }
-    },
-    selectOcc(soc) {
-      Alpine.store('pe').selectOcc(soc);
-      this.query = '';
-      this.results = [];
-      this.showDropdown = false;
-    },
-    formatNum(n) { return n ? n.toLocaleString() : ''; },
-  }));
-
-  Alpine.data('pathwayDetail', () => ({
-    async init() {
-      if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
-      window.addEventListener('popstate', () => {
-        const params = new URLSearchParams(window.location.search);
-        Alpine.store('pe').currentSoc = params.get('soc') || null;
-      });
-    },
-    get loading() { return !Alpine.store('pe').ready; },
-    get selected() {
-      const soc = Alpine.store('pe').currentSoc;
-      if (!soc) return null;
-      return Alpine.store('pe').occupations.find(o => o.soc === soc) || null;
-    },
-    get wageData() {
-      const soc = Alpine.store('pe').currentSoc;
-      if (!soc) return null;
-      return Alpine.store('pe').wages[soc] || null;
-    },
-    get outbound() {
-      const soc = Alpine.store('pe').currentSoc;
-      if (!soc) return [];
-      return (Alpine.store('pe').outbound[soc] || []).slice(0, 8);
-    },
-    get inbound() {
-      const soc = Alpine.store('pe').currentSoc;
-      if (!soc) return [];
-      return (Alpine.store('pe').inbound[soc] || []).slice(0, 8);
-    },
-    selectOcc(soc) { Alpine.store('pe').selectOcc(soc); },
-    formatNum(n) { return n ? n.toLocaleString() : ''; },
-    formatWage(n) {
-      if (!n && n !== 0) return '—';
-      return '$' + Math.round(n).toLocaleString();
-    },
-    formatGrowth(n) {
-      if (n === null || n === undefined) return '—';
-      const sign = n > 0 ? '+' : '';
-      return sign + n.toFixed(1) + '%';
-    },
-    formatLift(n) {
-      if (!n && n !== 0) return 'typical move';
-      if (n > 0) return '+$' + Math.round(n).toLocaleString() + ' a year';
-      if (n < 0) return '−$' + Math.round(Math.abs(n)).toLocaleString() + ' a year';
-      return 'similar pay';
-    },
-    liftClass(n) {
-      if (!n) return 'neutral';
-      return n > 0 ? 'positive' : 'negative';
-    },
-    confidenceLabel(c) {
-      if (c === 'high') return 'Common path';
-      if (c === 'mixed') return 'Possible path';
-      return 'Less common';
-    },
-    wagePct(v) {
-      const max = 200000;
-      return Math.max(2, Math.min(98, (v / max) * 100));
-    },
-  }));
-});
-</script>
-<script defer src="alpine.min.js"></script>
 </head>
 <body data-brand="ihc-2026">
   <a href="#main" class="skip-link">Skip to content</a>
@@ -503,260 +352,341 @@ document.addEventListener('alpine:init', () => {
     </div>
   </div>
 
-  <section class="hero" x-data="pathwayApp" x-init="init()" x-cloak>
+  <section class="hero">
     <div class="hero-inner">
       <span class="hero-eyebrow">Pathway Explorer</span>
       <h1>See where your job could take you.</h1>
       <p>Type the job you have now — or one you're curious about — and we'll show you what it pays in Hamilton County, where people typically move next, and how others got there.</p>
 
-      <div class="search-shell" @click.outside="showDropdown = false">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="e.g., Nursing Assistant, Warehouse Worker, Welder, Cashier…"
-          x-model="query"
-          @input="onSearchInput()"
-          @focus="showDropdown = query.length > 0"
-          @keydown.down.prevent="focusNext()"
-          @keydown.up.prevent="focusPrev()"
-          @keydown.enter.prevent="selectFocused()"
-          @keydown.escape="showDropdown = false"
-          aria-label="Search for a job or occupation"
-          aria-autocomplete="list"
-          :aria-expanded="showDropdown"
-        >
-        <div class="search-dropdown" x-show="showDropdown && results.length > 0" x-transition.opacity>
-          <template x-for="(r, i) in results" :key="r.soc">
-            <div class="search-result"
-                 :class="{ focused: i === focusedIndex }"
-                 @click="selectOcc(r.soc)"
-                 @mouseover="focusedIndex = i">
-              <div class="search-result-title" x-text="r.title"></div>
-              <div class="search-result-meta">
-                <span x-text="r.major_group"></span>
-                <template x-if="r.hc_jobs">
-                  <span> · <span x-text="formatNum(r.hc_jobs)"></span> jobs in Hamilton</span>
-                </template>
-              </div>
-            </div>
-          </template>
-        </div>
-        <div class="search-dropdown" x-show="showDropdown && results.length === 0 && query.length >= 2" x-transition.opacity>
-          <div class="search-result" style="cursor:default;">
-            <div class="search-result-title">No matches for "<span x-text="query"></span>"</div>
-            <div class="search-result-meta">Try a different word — e.g., "drive" for driving jobs, or "health" for healthcare.</div>
-          </div>
-        </div>
+      <div class="search-shell" id="search-shell">
+        <input type="text" id="search-input" class="search-input"
+               placeholder="e.g., Nursing Assistant, Warehouse Worker, Welder, Cashier…"
+               aria-label="Search for a job or occupation"
+               aria-autocomplete="list" autocomplete="off">
+        <div class="search-dropdown" id="search-dropdown" style="display:none;"></div>
       </div>
 
-      <div class="search-suggestions">
+      <div class="search-suggestions" id="suggestions-bar">
         <span class="search-suggestions-label">Try:</span>
-        <template x-for="s in suggestions" :key="s.soc">
-          <button class="suggestion-pill" @click="selectOcc(s.soc)" x-text="s.label"></button>
-        </template>
       </div>
     </div>
   </section>
 
-  <main id="main" role="main" x-data="pathwayDetail" x-init="init()" x-cloak>
+  <main id="main" role="main">
+    <div id="empty-state" class="empty-state" style="display:none;">
+      <h2>Pick a job to start</h2>
+      <p>Search or choose one of the examples above. We'll show you the typical pay, how many people do this work in Hamilton County, and what the common next steps are.</p>
+    </div>
+    <div id="loading-state" class="loading">Loading data…</div>
+    <div id="occ-detail" class="occ-detail" style="display:none;"></div>
 
-    <template x-if="loading">
-      <div class="loading">Loading data…</div>
-    </template>
+    <section class="crisis-bar" aria-labelledby="crisis-heading">
+      <h2 id="crisis-heading" class="crisis-heading">If you need help right now</h2>
+      <ul class="crisis-list">
+        <li><strong>988</strong>Crisis line (call or text)</li>
+        <li><strong>2-1-1</strong>Anything in Indiana — dial</li>
+        <li><strong>1-800-869-0212</strong>Free legal help (Indiana Legal Services)</li>
+        <li><strong>1-800-891-6499</strong>WorkOne Indiana — job help</li>
+      </ul>
+    </section>
+  </main>
 
-    <template x-if="!loading && !selected">
-      <div class="empty-state">
-        <h2>Pick a job to start</h2>
-        <p>Search or choose one of the examples above. We'll show you the typical pay, how many people do this work in Hamilton County, and what the common next steps are.</p>
-      </div>
-    </template>
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-note">
+        <strong>Pathway Explorer</strong> · part of the Workforce Resource Navigator by Invest Hamilton County. Data from the U.S. Bureau of Labor Statistics, Lightcast, and O*NET. Typical pay ranges are for the Indianapolis metro area. Your actual earnings depend on employer, experience, and specific role. This tool shows patterns, not promises.
+      </p>
+    </div>
+  </footer>
 
-    <template x-if="!loading && selected">
-      <div class="occ-detail">
+<script>
+(function() {
+  'use strict';
 
-        <!-- Header -->
-        <section class="occ-header" aria-labelledby="occ-title">
-          <div class="occ-header-top">
-            <div>
-              <div class="occ-major-group" x-text="selected.major_group"></div>
-              <h2 id="occ-title" class="occ-title" x-text="selected.title"></h2>
-            </div>
-            <div class="occ-soc" x-text="'Code ' + selected.soc"></div>
-          </div>
-          <div class="occ-quickstats">
-            <div class="qs">
-              <div class="qs-label">People doing this in Hamilton</div>
-              <div class="qs-value" x-text="formatNum(selected.hc_jobs) || '—'"></div>
-              <div class="qs-sub">Jobs in 2025</div>
-            </div>
-            <div class="qs">
-              <div class="qs-label">Typical openings a year</div>
-              <div class="qs-value" x-text="formatNum(selected.openings) || '—'"></div>
-              <div class="qs-sub">Both new jobs and replacements</div>
-            </div>
-            <div class="qs">
-              <div class="qs-label">How the field is growing</div>
-              <div class="qs-value" x-text="formatGrowth(selected.growth_pct)"></div>
-              <div class="qs-sub">Projected 5-year change</div>
-            </div>
-          </div>
-        </section>
+  const SUGGESTIONS = [
+    { soc: '31-1131', label: 'Nursing Assistant' },
+    { soc: '53-7062', label: 'Warehouse Worker' },
+    { soc: '41-2011', label: 'Cashier' },
+    { soc: '51-4121', label: 'Welder' },
+    { soc: '31-1121', label: 'Home Health Aide' },
+    { soc: '53-3032', label: 'Truck Driver' },
+    { soc: '35-2014', label: 'Cook' },
+    { soc: '43-4051', label: 'Customer Service' }
+  ];
 
-        <!-- Wage band -->
-        <template x-if="wageData">
-          <section class="wage-band" aria-labelledby="wage-title">
-            <h3 id="wage-title">Typical pay</h3>
-            <p class="wage-band-sub">Annual pay range for this job across the Indianapolis metro area. Your actual pay depends on the employer, your experience, and the specific role.</p>
-            <div class="wage-track" role="img" :aria-label="'Pay range from ' + formatWage(wageData.annual.p10) + ' to ' + formatWage(wageData.annual.p90)">
-              <div class="wage-fill"
-                   :style="'left: ' + wagePct(wageData.annual.p25) + '%; width: ' + (wagePct(wageData.annual.p75) - wagePct(wageData.annual.p25)) + '%'"></div>
-              <div class="wage-marker p10" :style="'left: ' + wagePct(wageData.annual.p10) + '%'">
-                <div class="wage-label" x-text="formatWage(wageData.annual.p10)"></div>
-                <div class="wage-sub">starting out</div>
-              </div>
-              <div class="wage-marker" :style="'left: ' + wagePct(wageData.annual.median) + '%'">
-                <div class="wage-label" x-text="formatWage(wageData.annual.median)"></div>
-                <div class="wage-sub">typical (median)</div>
-              </div>
-              <div class="wage-marker p90" :style="'left: ' + wagePct(wageData.annual.p90) + '%'">
-                <div class="wage-label" x-text="formatWage(wageData.annual.p90)"></div>
-                <div class="wage-sub">experienced</div>
-              </div>
-            </div>
-            <p class="wage-legend">Purple band shows the mid        this.inbound = pth.inbound || {};
-            this.ready = true;
+  const state = {
+    occupations: [],
+    wages: {},
+    outbound: {},
+    inbound: {},
+    currentSoc: null,
+    searchResults: [],
+    searchFocus: -1
+  };
 
-            // Deep-link support
-            const params = new URLSearchParams(window.location.search);
-            const soc = params.get('soc');
-            if (soc) this.currentSoc = soc;
-          } catch (e) {
-            console.error('Pathway Explorer data load failed:', e);
-            alert('We had trouble loading the job data. Refresh the page to try again.');
-          }
-        },
-
-        selectOcc(soc) {
-          this.currentSoc = soc;
-          const url = new URL(window.location);
-          url.searchParams.set('soc', soc);
-          history.pushState({ soc }, '', url);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-      });
-
-    Alpine.data('pathwayApp', () => {
-      return {
-        query: '',
-        results: [],
-        showDropdown: false,
-        focusedIndex: -1,
-        suggestions: [
-          { soc: '31-1131', label: 'Nursing Assistant' },
-          { soc: '53-7062', label: 'Warehouse Worker' },
-          { soc: '41-2011', label: 'Cashier' },
-          { soc: '51-4121', label: 'Welder' },
-          { soc: '31-1121', label: 'Home Health Aide' },
-          { soc: '53-3032', label: 'Truck Driver' },
-          { soc: '35-2014', label: 'Cook' },
-          { soc: '43-4051', label: 'Customer Service' },
-        ],
-        async init() {
-          if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
-        },
-        onSearchInput() {
-          const q = this.query.trim().toLowerCase();
-          if (q.length < 2) { this.results = []; this.showDropdown = false; return; }
-          const occs = Alpine.store('pe').occupations;
-          this.results = occs.filter(o =>
-            o.title.toLowerCase().includes(q) ||
-            (o.major_group || '').toLowerCase().includes(q)
-          ).slice(0, 12);
-          this.showDropdown = true;
-          this.focusedIndex = this.results.length > 0 ? 0 : -1;
-        },
-        focusNext() { if (this.focusedIndex < this.results.length - 1) this.focusedIndex++; },
-        focusPrev() { if (this.focusedIndex > 0) this.focusedIndex--; },
-        selectFocused() {
-          if (this.focusedIndex >= 0 && this.results[this.focusedIndex]) {
-            this.selectOcc(this.results[this.focusedIndex].soc);
-          }
-        },
-        selectOcc(soc) {
-          Alpine.store('pe').selectOcc(soc);
-          this.query = '';
-          this.results = [];
-          this.showDropdown = false;
-        },
-        formatNum(n) { return n ? n.toLocaleString() : ''; },
-      };
-      });
-
-      Alpine.data('pathwayDetail', () => {
-      return {
-        async init() {
-          if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
-          // React to history popstate
-          window.addEventListener('popstate', (e) => {
-            const params = new URLSearchParams(window.location.search);
-            Alpine.store('pe').currentSoc = params.get('soc') || null;
-          });
-        },
-        get loading() { return !Alpine.store('pe').ready; },
-        get selected() {
-          const soc = Alpine.store('pe').currentSoc;
-          if (!soc) return null;
-          return Alpine.store('pe').occupations.find(o => o.soc === soc) || null;
-        },
-        get wageData() {
-          const soc = Alpine.store('pe').currentSoc;
-          if (!soc) return null;
-          return Alpine.store('pe').wages[soc] || null;
-        },
-        get outbound() {
-          const soc = Alpine.store('pe').currentSoc;
-          if (!soc) return [];
-          return (Alpine.store('pe').outbound[soc] || []).slice(0, 8);
-        },
-        get inbound() {
-          const soc = Alpine.store('pe').currentSoc;
-          if (!soc) return [];
-          return (Alpine.store('pe').inbound[soc] || []).slice(0, 8);
-        },
-        selectOcc(soc) { Alpine.store('pe').selectOcc(soc); },
-        formatNum(n) { return n ? n.toLocaleString() : ''; },
-        formatWage(n) {
-          if (!n && n !== 0) return '—';
-          return '$' + Math.round(n).toLocaleString();
-        },
-        formatGrowth(n) {
-          if (n === null || n === undefined) return '—';
-          const sign = n > 0 ? '+' : '';
-          return sign + n.toFixed(1) + '%';
-        },
-        formatLift(n) {
-          if (!n && n !== 0) return 'typical move';
-          if (n > 0) return '+$' + Math.round(n).toLocaleString() + ' a year';
-          if (n < 0) return '−$' + Math.round(Math.abs(n)).toLocaleString() + ' a year';
-          return 'similar pay';
-        },
-        liftClass(n) {
-          if (!n) return 'neutral';
-          return n > 0 ? 'positive' : 'negative';
-        },
-        confidenceLabel(c) {
-          if (c === 'high') return 'Common path';
-          if (c === 'mixed') return 'Possible path';
-          return 'Less common';
-        },
-        wagePct(v) {
-          // Map wage to 0..100% across 0–$200K span
-          const max = 200000;
-          return Math.max(2, Math.min(98, (v / max) * 100));
-        },
-      };
-      });
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
     });
-  </script>
+  }
+  function num(n) { return n != null ? n.toLocaleString() : ''; }
+  function wage(n) { return (n == null) ? '—' : '$' + Math.round(n).toLocaleString(); }
+  function growth(n) { if (n == null) return '—'; return (n > 0 ? '+' : '') + n.toFixed(1) + '%'; }
+  function liftStr(n) {
+    if (n == null) return 'typical move';
+    if (n > 0) return '+$' + Math.round(n).toLocaleString() + ' a year';
+    if (n < 0) return '−$' + Math.round(Math.abs(n)).toLocaleString() + ' a year';
+    return 'similar pay';
+  }
+  function liftCls(n) { if (!n) return 'neutral'; return n > 0 ? 'positive' : 'negative'; }
+  function confLabel(c) {
+    if (c === 'high') return 'Common path';
+    if (c === 'mixed') return 'Possible path';
+    return 'Less common';
+  }
+  function wagePct(v) { return Math.max(2, Math.min(98, (v / 200000) * 100)); }
+
+  function renderSuggestions() {
+    const bar = document.getElementById('suggestions-bar');
+    SUGGESTIONS.forEach(function(s) {
+      const b = document.createElement('button');
+      b.className = 'suggestion-pill';
+      b.textContent = s.label;
+      b.addEventListener('click', function() { selectOcc(s.soc); });
+      bar.appendChild(b);
+    });
+  }
+
+  function selectOcc(soc) {
+    state.currentSoc = soc;
+    const url = new URL(window.location);
+    url.searchParams.set('soc', soc);
+    history.pushState({ soc: soc }, '', url);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-dropdown').style.display = 'none';
+    state.searchResults = [];
+    renderDetail();
+  }
+
+  function renderSearchResults() {
+    const dropdown = document.getElementById('search-dropdown');
+    if (state.searchResults.length === 0) {
+      const q = document.getElementById('search-input').value.trim();
+      if (q.length >= 2) {
+        dropdown.innerHTML = '<div class="search-result" style="cursor:default;">' +
+          '<div class="search-result-title">No matches for "' + esc(q) + '"</div>' +
+          '<div class="search-result-meta">Try a different word — "drive" for driving jobs, or "health" for healthcare.</div>' +
+          '</div>';
+        dropdown.style.display = 'block';
+      } else {
+        dropdown.style.display = 'none';
+      }
+      return;
+    }
+    dropdown.innerHTML = state.searchResults.map(function(r, i) {
+      return '<div class="search-result ' + (i === state.searchFocus ? 'focused' : '') + '" data-soc="' + esc(r.soc) + '">' +
+        '<div class="search-result-title">' + esc(r.title) + '</div>' +
+        '<div class="search-result-meta">' + esc(r.major_group || '') +
+        (r.hc_jobs ? ' · ' + num(r.hc_jobs) + ' jobs in Hamilton' : '') + '</div>' +
+        '</div>';
+    }).join('');
+    dropdown.style.display = 'block';
+    dropdown.querySelectorAll('.search-result[data-soc]').forEach(function(el) {
+      el.addEventListener('click', function() { selectOcc(el.dataset.soc); });
+    });
+  }
+
+  function wireSearch() {
+    const input = document.getElementById('search-input');
+    const dropdown = document.getElementById('search-dropdown');
+
+    input.addEventListener('input', function() {
+      const q = input.value.trim().toLowerCase();
+      if (q.length < 2) { state.searchResults = []; dropdown.style.display = 'none'; return; }
+      state.searchResults = state.occupations.filter(function(o) {
+        return o.title.toLowerCase().indexOf(q) >= 0 ||
+               (o.major_group || '').toLowerCase().indexOf(q) >= 0;
+      }).slice(0, 12);
+      state.searchFocus = state.searchResults.length > 0 ? 0 : -1;
+      renderSearchResults();
+    });
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (state.searchFocus < state.searchResults.length - 1) state.searchFocus++;
+        renderSearchResults();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (state.searchFocus > 0) state.searchFocus--;
+        renderSearchResults();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (state.searchFocus >= 0 && state.searchResults[state.searchFocus]) {
+          selectOcc(state.searchResults[state.searchFocus].soc);
+        }
+      } else if (e.key === 'Escape') {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('search-shell').contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  }
+
+  function renderDetail() {
+    document.getElementById('loading-state').style.display = 'none';
+    const detailEl = document.getElementById('occ-detail');
+    const emptyEl = document.getElementById('empty-state');
+    if (!state.currentSoc) {
+      detailEl.style.display = 'none';
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    const occ = state.occupations.find(function(o) { return o.soc === state.currentSoc; });
+    if (!occ) {
+      detailEl.style.display = 'block';
+      detailEl.innerHTML = '<div class="empty-state"><h2>Job not found</h2><p>We don\'t have data for that job code. Try the search above.</p></div>';
+      return;
+    }
+    const wd = state.wages[state.currentSoc];
+    const outbound = (state.outbound[state.currentSoc] || []).slice(0, 8);
+    const inbound = (state.inbound[state.currentSoc] || []).slice(0, 8);
+
+    let wageHtml = '';
+    if (wd && wd.annual) {
+      const a = wd.annual;
+      wageHtml =
+        '<section class="wage-band" aria-labelledby="wage-title">' +
+          '<h3 id="wage-title">Typical pay</h3>' +
+          '<p class="wage-band-sub">Annual pay range for this job across the Indianapolis metro area. Your actual pay depends on the employer, your experience, and the specific role.</p>' +
+          '<div class="wage-track" role="img" aria-label="Pay range from ' + esc(wage(a.p10)) + ' to ' + esc(wage(a.p90)) + '">' +
+            '<div class="wage-fill" style="left: ' + wagePct(a.p25) + '%; width: ' + (wagePct(a.p75) - wagePct(a.p25)) + '%"></div>' +
+            '<div class="wage-marker p10" style="left: ' + wagePct(a.p10) + '%">' +
+              '<div class="wage-label">' + esc(wage(a.p10)) + '</div><div class="wage-sub">starting out</div>' +
+            '</div>' +
+            '<div class="wage-marker" style="left: ' + wagePct(a.median) + '%">' +
+              '<div class="wage-label">' + esc(wage(a.median)) + '</div><div class="wage-sub">typical (median)</div>' +
+            '</div>' +
+            '<div class="wage-marker p90" style="left: ' + wagePct(a.p90) + '%">' +
+              '<div class="wage-label">' + esc(wage(a.p90)) + '</div><div class="wage-sub">experienced</div>' +
+            '</div>' +
+          '</div>' +
+          '<p class="wage-legend">Purple band shows the middle 50% of people in this job. Most start closer to the left and move right over time. Source: BLS Occupational Employment &amp; Wage Statistics, May 2024.</p>' +
+        '</section>';
+    }
+
+    function pathwayCard(edge, isInbound) {
+      const targetSoc = isInbound ? edge.source_soc : edge.target_soc;
+      const title = isInbound ? edge.source_title : edge.target_title;
+      const wageVal = isInbound ? edge.source_wage : edge.target_wage;
+      const wageLabel = isInbound ? 'Typical pay there' : 'Typical pay';
+      const liftDisplay = isInbound
+        ? (edge.wage_lift && edge.wage_lift > 0 ? 'moves up ' + esc(wage(edge.wage_lift)) : 'lateral / variable')
+        : esc(liftStr(edge.wage_lift));
+      const jobsHtml = (!isInbound && edge.target_hc_jobs)
+        ? '<span class="pathway-card-jobs">' + num(edge.target_hc_jobs) + ' jobs in Hamilton</span>' : '';
+      return '<li>' +
+        '<button class="pathway-card" data-soc="' + esc(targetSoc) + '" type="button">' +
+          '<div class="pathway-card-lift ' + liftCls(edge.wage_lift) + '">' + liftDisplay + '</div>' +
+          '<div class="pathway-card-title">' + esc(title) + '</div>' +
+          '<div class="pathway-card-wage">' + wageLabel + ': <strong>' + esc(wage(wageVal)) + '</strong></div>' +
+          '<div class="pathway-card-footer">' +
+            '<span class="pathway-card-confidence ' + esc(edge.confidence || '') + '">' + esc(confLabel(edge.confidence)) + '</span>' +
+            jobsHtml +
+          '</div>' +
+        '</button>' +
+      '</li>';
+    }
+
+    const outboundHtml = outbound.length > 0
+      ? '<ul class="pathway-list">' + outbound.map(function(e) { return pathwayCard(e, false); }).join('') + '</ul>'
+      : '<div class="empty-pathways">We don\'t have mapped next-step pathways for this occupation yet. Most jobs have paths — we\'re still adding them. Try a related job from the suggestions above, or talk to your local WorkOne office at 1-800-891-6499.</div>';
+
+    const inboundHtml = inbound.length > 0
+      ? '<ul class="pathway-list">' + inbound.map(function(e) { return pathwayCard(e, true); }).join('') + '</ul>'
+      : '<div class="empty-pathways">We don\'t have mapped entry paths into this occupation yet. Most people enter this kind of work through a combination of education, certificates, and experience. Your facilitator or WorkOne counselor can help you plan.</div>';
+
+    detailEl.innerHTML =
+      '<section class="occ-header" aria-labelledby="occ-title">' +
+        '<div class="occ-header-top">' +
+          '<div>' +
+            '<div class="occ-major-group">' + esc(occ.major_group || '') + '</div>' +
+            '<h2 id="occ-title" class="occ-title">' + esc(occ.title) + '</h2>' +
+          '</div>' +
+          '<div class="occ-soc">Code ' + esc(occ.soc) + '</div>' +
+        '</div>' +
+        '<div class="occ-quickstats">' +
+          '<div class="qs"><div class="qs-label">People doing this in Hamilton</div><div class="qs-value">' + (num(occ.hc_jobs) || '—') + '</div><div class="qs-sub">Jobs in 2025</div></div>' +
+          '<div class="qs"><div class="qs-label">Typical openings a year</div><div class="qs-value">' + (num(occ.openings) || '—') + '</div><div class="qs-sub">Both new jobs and replacements</div></div>' +
+          '<div class="qs"><div class="qs-label">How the field is growing</div><div class="qs-value">' + growth(occ.growth_pct) + '</div><div class="qs-sub">Projected 5-year change</div></div>' +
+        '</div>' +
+      '</section>' +
+      wageHtml +
+      '<section class="pathways-block" aria-labelledby="next-title">' +
+        '<h3 id="next-title">Where could you go from here?</h3>' +
+        '<p class="block-sub">These are jobs people commonly move into from this role. Click any card to jump to that job\'s page.</p>' +
+        outboundHtml +
+      '</section>' +
+      '<section class="pathways-block" aria-labelledby="prior-title">' +
+        '<h3 id="prior-title">How do people get into this job?</h3>' +
+        '<p class="block-sub">If this is the job you want, here are the jobs people commonly come from. Knowing the on-ramps can help you plan.</p>' +
+        inboundHtml +
+      '</section>';
+
+    detailEl.style.display = 'grid';
+    detailEl.querySelectorAll('.pathway-card[data-soc]').forEach(function(card) {
+      card.addEventListener('click', function() { selectOcc(card.dataset.soc); });
+    });
+  }
+
+  async function loadData() {
+    try {
+      const [occR, wagR, pthR] = await Promise.all([
+        fetch('data/occupations.json'),
+        fetch('data/wages.json'),
+        fetch('data/pathways.json')
+      ]);
+      const occ = await occR.json();
+      const wag = await wagR.json();
+      const pth = await pthR.json();
+      state.occupations = occ.occupations || [];
+      state.wages = wag.wages || {};
+      state.outbound = pth.outbound || {};
+      state.inbound = pth.inbound || {};
+      const params = new URLSearchParams(window.location.search);
+      const soc = params.get('soc');
+      if (soc) state.currentSoc = soc;
+      renderDetail();
+    } catch (e) {
+      console.error('Pathway Explorer data load failed:', e);
+      document.getElementById('loading-state').textContent = 'We had trouble loading the job data. Refresh the page to try again.';
+    }
+  }
+
+  window.addEventListener('popstate', function() {
+    const params = new URLSearchParams(window.location.search);
+    state.currentSoc = params.get('soc') || null;
+    renderDetail();
+  });
+
+  function start() {
+    renderSuggestions();
+    wireSearch();
+    loadData();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
+</script>
 </body>
 </html>
