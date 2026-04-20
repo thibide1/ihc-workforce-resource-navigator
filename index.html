@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workforce Resource Navigator — Invest Hamilton County</title>
+<meta name="description" content="Free tools for Hamilton County residents preparing for work, changing careers, and finding support. From Invest Hamilton County.">
+<meta name="theme-color" content="#413494">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens-shared.css">
+<link rel="stylesheet" href="assets/css/tokens-ihc-2026.css">
+<style>
+  /* ================================================================
+     Workforce Resource Navigator
+     Track A public-facing umbrella app
+     Brand: IHC 2026 — all colors/spacing via design tokens
+     ================================================================ */
+
+  :root {
+    --header-pad-y: var(--space-2xl);
+    --header-pad-x: var(--space-lg);
+    --card-radius: var(--radius-lg);
+    --surface: #ffffff;
+    --surface-subtle: var(--color-neutral-10);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--surface-subtle);
+    color: var(--color-text);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-md);
+    line-height: var(--font-leading-normal);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--color-primary); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  a:hover { color: var(--color-primary-dark); }
+  button, a { font-family: inherit; }
+  button:focus-visible,
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 3px solid var(--color-secondary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  [x-cloak] { display: none !important; }
+
+  /* ---------- Skip link ---------- */
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--color-primary); color: #fff;
+    padding: var(--space-sm) var(--space-md);
+    z-index: 100;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    border-radius: 0 0 var(--radius-md) 0;
+  }
+  .skip-link:focus { left: 0; }
+
+  /* ================================================================
+     HERO HEADER
+     ================================================================ */
+  .app-header {
+    background:
+      radial-gradient(ellipse at top right, rgba(249, 194, 10, 0.15) 0%, transparent 55%),
+      linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    padding: var(--header-pad-y) var(--header-pad-x) calc(var(--header-pad-y) + var(--space-md));
+    position: relative;
+    overflow: hidden;
+  }
+  .app-header::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 32px),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 32px);
+    pointer-events: none;
+  }
+  .app-header::after {
+    content: "";
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(249, 194, 10, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .app-header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .app-logo {
+    display: block;
+    height: 42px;
+    width: auto;
+    margin-bottom: var(--space-xl);
+  }
+  .app-tagline-eyebrow {
+    display: inline-block;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-warm);
+    margin-bottom: var(--space-sm);
+    padding: 0.25rem 0.7rem;
+    border: 1px solid rgba(249, 194, 10, 0.5);
+    border-radius: 999px;
+  }
+  .app-title {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-black);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: var(--font-leading-tight);
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--space-sm);
+    color: #fff;
+  }
+  .app-subtitle {
+    font-family: var(--font-family-body);
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.375rem);
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 var(--space-md);
+    max-width: 640px;
+    line-height: var(--font-leading-snug);
+  }
+  .app-lede {
+    font-size: var(--font-size-md);
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 600px;
+    margin: 0;
+    line-height: var(--font-leading-normal);
+  }
+
+  /* ================================================================
+     MAIN LAYOUT
+     ================================================================ */
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md) var(--space-4xl);
+  }
+
+  /* ---------- Category filter bar ---------- */
+  .category-bar {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    margin: 0 0 var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--color-neutral-20);
+  }
+  .category-chip {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-medium);
+    font-size: 0.875rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-neutral-33);
+    background: var(--surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+  }
+  .category-chip:hover {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary-dark);
+  }
+  .category-chip.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(65, 52, 148, 0.25);
+  }
+
+  /* ---------- Section heading ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 0 0 var(--space-md);
+    gap: var(--space-md);
+  }
+  .section-head h2 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .section-head .count {
+    font-family: var(--font-family-heading);
+    font-size: 0.8rem;
+    color: var(--color-neutral);
+    letter-spacing: 0.04em;
+  }
+
+  /* ================================================================
+     TOOL CARDS
+     ================================================================ */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border-radius: var(--card-radius);
+    padding: var(--space-lg);
+    border: 1.5px solid var(--color-neutral-20);
+    box-shadow: 0 1px 3px rgba(65, 52, 148, 0.04), 0 4px 14px rgba(65, 52, 148, 0.04);
+    transition: var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .tool-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: var(--transition-fast);
+  }
+  .tool-card.live:hover {
+    border-color: var(--color-primary-33);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(65, 52, 148, 0.08), 0 12px 28px rgba(65, 52, 148, 0.10);
+  }
+  .tool-card.live:hover::before { opacity: 1; }
+  .tool-card.coming-soon {
+    background: var(--color-neutral-10);
+    border-color: var(--color-neutral-20);
+    border-style: dashed;
+  }
+
+  /* ---------- Icon badge ---------- */
+  .tool-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--space-md);
+    background: var(--color-primary-10);
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  .tool-card.coming-soon .tool-icon {
+    background: var(--color-neutral-20);
+    opacity: 0.7;
+  }
+  /* color variants (driven by tool.brand_color in data) */
+  .tool-icon.brand-purple { background: var(--color-primary-10); color: var(--color-primary); }
+  .tool-icon.brand-blue { background: var(--color-secondary-10); color: var(--color-secondary-dark); }
+  .tool-icon.brand-gold { background: var(--color-warm-10); color: var(--color-warm-dark, #8a6a00); }
+  .tool-icon.brand-red { background: var(--color-accent-10); color: var(--color-accent-dark); }
+
+  /* ---------- Status badge (top-right) ---------- */
+  .tool-badge {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    font-family: var(--font-family-heading);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+  }
+  .tool-badge.new {
+    background: var(--color-warm);
+    color: #1a1a2e;
+  }
+  .tool-badge.coming-soon-badge {
+    background: var(--color-neutral-20);
+    color: var(--color-neutral-dark);
+  }
+
+  /* ---------- Card typography ---------- */
+  .tool-name {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    line-height: var(--font-leading-tight);
+    margin: 0 0 0.25rem;
+  }
+  .tool-tagline {
+    font-family: var(--font-family-body);
+    font-style: italic;
+    color: var(--color-neutral);
+    font-size: 0.95rem;
+    margin: 0 0 var(--space-sm);
+  }
+  .tool-description {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    line-height: var(--font-leading-normal);
+    margin: 0 0 var(--space-md);
+    flex: 1;
+  }
+
+  /* ---------- Meta row ---------- */
+  .tool-meta {
+    font-family: var(--font-family-heading);
+    font-size: 0.8rem;
+    color: var(--color-neutral);
+    margin-bottom: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .tool-meta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .tool-meta-item .meta-icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ---------- CTA row ---------- */
+  .tool-cta-row {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.925rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition-fast);
+    text-align: center;
+    line-height: 1;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(65, 52, 148, 0.25);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-neutral-33);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary-dark);
+  }
+  .btn-disabled {
+    background: transparent;
+    color: var(--color-neutral);
+    border: 1.5px dashed var(--color-neutral-33);
+    cursor: not-allowed;
+  }
+
+  /* ---------- Details disclosure ---------- */
+  details.tool-details {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px dashed var(--color-neutral-20);
+    font-size: 0.9rem;
+  }
+  details.tool-details summary {
+    cursor: pointer;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-medium);
+    font-size: 0.85rem;
+    color: var(--color-secondary-dark);
+    list-style: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  details.tool-details summary::-webkit-details-marker { display: none; }
+  details.tool-details summary::before {
+    content: "+";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    font-weight: var(--font-weight-bold);
+    font-size: 0.95rem;
+    background: var(--color-secondary-10);
+    color: var(--color-secondary-dark);
+    border-radius: 50%;
+    transition: var(--transition-fast);
+  }
+  details.tool-details[open] summary::before { content: "−"; background: var(--color-primary-10); color: var(--color-primary); }
+  details.tool-details ul {
+    padding-left: 1.25rem;
+    margin: var(--space-xs) 0 0;
+  }
+  details.tool-details li {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+  details.tool-details .privacy-note {
+    font-size: 0.85rem;
+    color: var(--color-neutral);
+    font-style: italic;
+    margin-top: var(--space-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-secondary-10);
+    border-left: 3px solid var(--color-secondary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  /* ================================================================
+     CRISIS RESOURCE BAR
+     ================================================================ */
+  .crisis-bar {
+    background: var(--surface);
+    border: 1px solid var(--color-neutral-20);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin: var(--space-3xl) 0 var(--space-lg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .crisis-heading {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent-dark);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-sm);
+  }
+  .crisis-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-sm) var(--space-md);
+  }
+  .crisis-list li {
+    font-size: 0.95rem;
+    line-height: var(--font-leading-snug);
+    color: var(--color-text);
+  }
+  .crisis-list strong {
+    font-family: var(--font-family-heading);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.05rem;
+    display: inline-block;
+    margin-right: 0.3rem;
+  }
+
+  /* ================================================================
+     FOOTER
+     ================================================================ */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--color-neutral-20);
+    padding: var(--space-2xl) var(--space-md);
+    text-align: center;
+  }
+  .footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .footer-wordmark {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-black);
+    font-size: 0.95rem;
+    color: var(--color-primary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .footer-tagline {
+    font-family: var(--font-family-heading);
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+    font-weight: var(--font-weight-semibold);
+  }
+  .footer-disclaimer {
+    font-size: 0.85rem;
+    color: var(--color-neutral);
+    max-width: 680px;
+    margin: var(--space-lg) auto 0;
+    line-height: var(--font-leading-normal);
+  }
+  .footer-links {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: var(--space-md);
+  }
+  .footer-links a {
+    font-family: var(--font-family-heading);
+    font-size: 0.85rem;
+    color: var(--color-neutral);
+    text-decoration: none;
+  }
+  .footer-links a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  /* ================================================================
+     RESPONSIVE
+     ================================================================ */
+  @media (max-width: 768px) {
+    :root {
+      --header-pad-y: var(--space-xl);
+      --header-pad-x: var(--space-md);
+    }
+    .app-logo { height: 36px; margin-bottom: var(--space-lg); }
+    main { padding: var(--space-lg) var(--space-md) var(--space-3xl); }
+    .tool-grid { grid-template-columns: 1fr; }
+    .tool-card { padding: var(--space-md); }
+    .tool-icon { width: 44px; height: 44px; font-size: 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition: none !important;
+      animation: none !important;
+      scroll-behavior: auto !important;
+    }
+    .tool-card.live:hover { transform: none; }
+    .btn-primary:hover { transform: none; }
+  }
+</style>
+<script defer src="alpine.min.js"></script>
+</head>
+<body data-brand="ihc-2026">
+  <a href="#main" class="skip-link">Skip to tools</a>
+
+  <header class="app-header" role="banner">
+    <div class="app-header-inner">
+      <img src="assets/img/ihc-logo-white.png" alt="Invest Hamilton County" class="app-logo">
+      <span class="app-tagline-eyebrow">Workforce Resource Navigator</span>
+      <h1 class="app-title">Tools that help you prepare, search, train, and get support.</h1>
+      <p class="app-subtitle">Free to use. Nothing stored on our servers. No account required.</p>
+      <p class="app-lede">Built for Hamilton County residents — useful to anyone. Each tool here is self-contained and privacy-forward.</p>
+    </div>
+  </header>
+
+  <main id="main" role="main" x-data="wrn()" x-cloak>
+
+    <nav class="category-bar" role="tablist" aria-label="Filter tools by category">
+      <button class="category-chip" :class="{active: active === 'all'}" @click="active='all'" role="tab" :aria-selected="active === 'all'">All tools</button>
+      <template x-for="cat in categories" :key="cat.id">
+        <button class="category-chip" :class="{active: active === cat.id}" @click="active = cat.id" role="tab" :aria-selected="active === cat.id" x-text="cat.label"></button>
+      </template>
+    </nav>
+
+    <div class="section-head">
+      <h2 x-text="active === 'all' ? 'All tools' : (categories.find(c => c.id === active)?.label || 'Tools')"></h2>
+      <span class="count" x-text="filteredTools.length + (filteredTools.length === 1 ? ' tool' : ' tools')"></span>
+    </div>
+
+    <div class="tool-grid">
+      <template x-for="tool in filteredTools" :key="tool.id">
+        <article class="tool-card" :class="tool.status">
+
+          <template x-if="tool.badge && tool.status === 'live'">
+            <span class="tool-badge new" x-text="tool.badge"></span>
+          </template>
+          <template x-if="tool.status === 'coming-soon'">
+            <span class="tool-badge coming-soon-badge">Coming soon</span>
+          </template>
+
+          <div class="tool-icon" :class="'brand-' + (tool.brand_color || 'purple')" aria-hidden="true" x-text="tool.icon"></div>
+          <h3 class="tool-name" x-text="tool.name"></h3>
+          <p class="tool-tagline" x-text="tool.tagline"></p>
+          <p class="tool-description" x-text="tool.description"></p>
+
+          <div class="tool-meta">
+            <template x-if="tool.time_estimate">
+              <span class="tool-meta-item"><span class="meta-icon" aria-hidden="true">⏱</span><span x-text="tool.time_estimate"></span></span>
+            </template>
+            <template x-if="tool.audience">
+              <span class="tool-meta-item"><span class="meta-icon" aria-hidden="true">👥</span><span x-text="tool.audience"></span></span>
+            </template>
+          </div>
+
+          <div class="tool-cta-row">
+            <template x-if="tool.status === 'live' && tool.launch_path">
+              <a :href="tool.launch_path" class="btn btn-primary">Open tool <span aria-hidden="true">→</span></a>
+            </template>
+            <template x-if="tool.status === 'live' && tool.learn_more_path">
+              <a :href="tool.learn_more_path" class="btn btn-ghost" target="_blank" rel="noopener">Read more</a>
+            </template>
+            <template x-if="tool.status === 'coming-soon'">
+              <span class="btn btn-disabled">In development</span>
+            </template>
+          </div>
+
+          <template x-if="tool.what_you_get && tool.what_you_get.length">
+            <details class="tool-details">
+              <summary>What you get</summary>
+              <ul>
+                <template x-for="item in tool.what_you_get" :key="item">
+                  <li x-text="item"></li>
+                </template>
+              </ul>
+              <template x-if="tool.privacy_note">
+                <div class="privacy-note" x-text="tool.privacy_note"></div>
+              </template>
+            </details>
+          </template>
+
+        </article>
+      </template>
+    </div>
+
+    <section class="crisis-bar" aria-labelledby="crisis-heading">
+      <h2 id="crisis-heading" class="crisis-heading">If you need help right now</h2>
+      <ul class="crisis-list">
+        <template x-for="r in crisisResources" :key="r.label">
+          <li><strong x-text="r.value"></strong><span x-text="r.label"></span></li>
+        </template>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-wordmark">Invest Hamilton County</div>
+      <div class="footer-tagline">Where Insight Becomes Action</div>
+      <p class="footer-disclaimer">
+        These tools provide general information and coaching support. They are not legal or medical advice.
+        For legal questions, Indiana Legal Services is free: <strong>1-800-869-0212</strong>.
+        For crisis support, call or text <strong>988</strong>.
+        Your data stays on your device unless a tool specifically says otherwise.
+      </p>
+      <nav class="footer-links" aria-label="External links">
+        <a href="https://investhamiltoncounty.com" target="_blank" rel="noopener">investhamiltoncounty.com</a>
+        <a href="mailto:info@investhamiltoncounty.com">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    function wrn() {
+      const DATA = {"_meta": {"version": "1.0", "app_name": "Workforce Resource Navigator", "app_slug": "workforce-resource-navigator", "owner": "Invest Hamilton County", "description": "Umbrella app for consumer/resident-facing workforce tools. Each tool is self-contained and can be added/removed without affecting others.", "created": "2026-04-20"}, "categories": [{"id": "reentry", "label": "Re-Entry & Second Chance", "description": "Tools for people re-entering the workforce after jail, recovery, or supervision"}, {"id": "job-search", "label": "Job Search & Career", "description": "Tools for finding work, understanding wages, and mapping career paths"}, {"id": "training", "label": "Training & Credentials", "description": "Tools for finding training programs, credentials, and funding"}, {"id": "support", "label": "Support Services", "description": "Tools for connecting to housing, childcare, transportation, legal help"}], "tools": [{"id": "re-entry-storytelling", "name": "From Paper to Pathway", "tagline": "Your Story Toolkit", "description": "A workbook that helps you prepare to talk with employers about where you've been and where you're going. For people re-entering the workforce after jail, recovery, or supervision.", "category": "reentry", "status": "live", "audience": "People re-entering the workforce; workforce coaches; facilitators", "time_estimate": "30–60 minutes", "what_you_get": ["A draft of your story in your own words", "Three job ideas that match your skills", "Practice answers for interview questions", "A resource directory for what you need help with"], "launch_path": "tools/re-entry-storytelling/index.html", "learn_more_path": "tools/re-entry-storytelling/docs/From-Paper-to-Pathway-v1.pdf", "icon": "📓", "brand_color": "purple", "privacy_note": "Your answers stay on this device only. Nothing is sent over the internet.", "badge": "New"}, {"id": "placeholder-wage-explorer", "name": "Hamilton County Wage Explorer", "tagline": "See what jobs pay near you", "description": "A plain-language view of wages by occupation in Hamilton County. Drawn from public BLS data.", "category": "job-search", "status": "coming-soon", "audience": "Job seekers, career changers", "time_estimate": "5 minutes", "what_you_get": ["Median and typical wage range for hundreds of occupations", "How your skills might translate to different jobs", "Which occupations are growing locally"], "icon": "💼", "brand_color": "blue"}, {"id": "placeholder-training-finder", "name": "Training Finder", "tagline": "What can you learn, and who pays for it?", "description": "A guide to short-credential, certificate, and degree programs in Hamilton County and central Indiana — with funding pathways (WIOA, Ivy Tech grants, employer-sponsored).", "category": "training", "status": "coming-soon", "audience": "People considering retraining, new credentials, or career moves", "time_estimate": "10 minutes", "what_you_get": ["Programs matched to the kind of work you want", "Cost and time estimates", "Funding programs you might qualify for"], "icon": "🎓", "brand_color": "gold"}, {"id": "placeholder-support-map", "name": "Support Services Directory", "tagline": "Housing, childcare, transportation, legal help", "description": "A curated directory of the support services that make work possible. Filtered by what you need.", "category": "support", "status": "coming-soon", "audience": "Anyone who needs help with the things that get in the way of working", "time_estimate": "5 minutes", "what_you_get": ["Resources filtered by your situation", "Phone numbers and addresses that are up to date", "Clear info on who qualifies for what"], "icon": "🤝", "brand_color": "red"}], "crisis_resources": [{"label": "Crisis line (call or text)", "value": "988"}, {"label": "Anything in Indiana — dial", "value": "2-1-1"}, {"label": "Free legal help (Indiana Legal Services)", "value": "1-800-869-0212"}]};
+      return {
+        active: 'all',
+        categories: DATA.categories,
+        tools: DATA.tools,
+        crisisResources: DATA.crisis_resources,
+        get filteredTools() {
+          const filtered = this.active === 'all'
+            ? this.tools
+            : this.tools.filter(t => t.category === this.active);
+          return filtered.slice().sort((a, b) => {
+            if (a.status === b.status) return 0;
+            return a.status === 'live' ? -1 : 1;
+          });
+        },
+      };
+    }
+  </script>
+</body>
+</html>

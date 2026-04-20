@@ -1,0 +1,44 @@
+# Render Blueprint — Workforce Resource Navigator
+# Static site. Zero build step. Deploys from the root of this repo.
+#
+# Deploy flow:
+#   1. Push this directory to a GitHub repo
+#   2. In Render → New → Blueprint → point at the repo
+#   3. Render auto-detects this file and creates the service
+#
+# Or manual: New → Static Site → same repo → root dir / → publish dir /
+
+services:
+  - type: web
+    name: ihc-workforce-resource-navigator
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
+
+    # Security headers (Track A privacy floor per CLAUDE.md Web App Foundation)
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+      - path: /*
+        name: Strict-Transport-Security
+        value: "max-age=31536000; includeSubDomains"
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'"
+
+    # Route all 404s to the landing page (SPA-style fallback for tool subpaths)
+    routes:
+      - type: rewrite
+        source: /tools/re-entry-storytelling
+        destination: /tools/re-entry-storytelling/index.html

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Paper to Pathway — Your Story Toolkit (Beta)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens-shared.css">
+<link rel="stylesheet" href="../../assets/css/tokens-ihc-2026.css">
+<style>
+  :root {
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Lora', Georgia, serif;
+    --focus: 3px solid var(--color-secondary);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--color-neutral-10); color: var(--color-text); font-family: var(--font-body); font-size: 17px; line-height: 1.55; }
+  a { color: var(--color-primary); }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, label:focus-within { outline: var(--focus); outline-offset: 2px; }
+
+  /* ---------- APP SHELL ---------- */
+  .app { max-width: 760px; margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
+  header.brand {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 0.75rem 0 1rem; border-bottom: 1px solid var(--color-neutral-20);
+    margin-bottom: 1.25rem;
+  }
+  .wordmark { font-family: var(--font-heading); font-weight: 800; font-size: 0.95rem; letter-spacing: 0.08em; color: var(--color-primary); text-transform: uppercase; }
+  .beta { font-family: var(--font-heading); font-size: 0.7rem; background: var(--color-warm); color: #000; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 700; letter-spacing: 0.05em; }
+
+  /* ---------- PROGRESS ---------- */
+  .progress-wrap { position: sticky; top: 0; background: var(--color-neutral-10); z-index: 10; padding: 0.5rem 0 0.75rem; margin: 0 -1.25rem 1rem; padding-left:1.25rem; padding-right:1.25rem; border-bottom: 1px solid var(--color-neutral-20); }
+  .progress-label { font-family: var(--font-heading); font-size: 0.78rem; color: var(--color-neutral); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.3rem; display:flex; justify-content:space-between; }
+  .progress-bar { height: 6px; background: var(--color-neutral-20); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); transition: width 0.3s ease; }
+
+  /* ---------- STEP ---------- */
+  .step { background: #fff; border-radius: 14px; padding: 1.75rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.06); }
+  .eyebrow { font-family: var(--font-heading); font-size: 0.75rem; color: var(--color-accent); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.4rem; }
+  h1.page-title { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 1.75rem; margin: 0 0 1rem; line-height: 1.15; }
+  h2 { font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1.1rem; margin: 1.4rem 0 0.5rem; }
+  .qlabel { font-family: var(--font-heading); font-weight: 600; color: var(--color-text); font-size: 1rem; margin: 1.2rem 0 0.5rem; display: flex; align-items: baseline; gap: 0.5rem; }
+  .qlabel .qid { font-size: 0.7rem; color: var(--color-neutral); background: var(--color-neutral-10); padding: 0.1rem 0.4rem; border-radius: 4px; letter-spacing: 0.05em; }
+  .hint { font-size: 0.9rem; color: var(--color-neutral); font-style: italic; margin: 0.25rem 0 0.5rem; }
+
+  /* ---------- INPUTS ---------- */
+  input[type=text], input[type=number], textarea, select {
+    width: 100%; font-family: var(--font-body); font-size: 1rem;
+    padding: 0.65rem 0.75rem; border: 1.5px solid var(--color-neutral-33); border-radius: 8px;
+    background: #fff; color: var(--color-text);
+  }
+  textarea { min-height: 4.5rem; resize: vertical; line-height: 1.5; }
+  input[type=text]:focus, input[type=number]:focus, textarea:focus, select:focus { border-color: var(--color-primary); }
+  .inline-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .inline-row > label { flex: 1 1 auto; }
+
+  /* Checkbox list */
+  .cb-list { list-style: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.5rem; }
+  .cb-list.two-col { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .cb-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.55rem 0.75rem; border: 1.5px solid var(--color-neutral-20); border-radius: 8px; background: #fff; cursor: pointer; transition: all 0.15s; }
+  .cb-item:hover { border-color: var(--color-secondary); }
+  .cb-item input { margin-top: 0.25rem; width: 1.1rem; height: 1.1rem; accent-color: var(--color-primary); flex-shrink: 0; }
+  .cb-item.checked { border-color: var(--color-primary); background: var(--color-primary-10); }
+  .cb-item .other-input { margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.95rem; border-width: 1px; }
+
+  /* Skip box */
+  .skip-box { margin: 0.5rem 0 0.75rem; padding: 0.5rem 0.75rem; background: var(--color-neutral-10); border: 1px dashed var(--color-neutral-33); border-radius: 6px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+  .skip-box input { accent-color: var(--color-accent); }
+  .skipped { opacity: 0.45; pointer-events: none; }
+  .skipped textarea, .skipped input[type=text] { background: var(--color-neutral-10); }
+
+  /* Callouts */
+  .callout { border-left: 4px solid var(--color-secondary); padding: 0.9rem 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; font-size: 0.97rem; }
+  .callout-info { background: var(--color-secondary-10); border-color: var(--color-secondary); }
+  .callout-warn { background: var(--color-accent-10); border-color: var(--color-accent); }
+  .callout-care { background: var(--color-warm-10); border-color: var(--color-warm); }
+
+  /* Welcome letter */
+  .letter { font-family: var(--font-body); font-style: italic; font-size: 1.05rem; line-height: 1.65; color: var(--color-text); padding: 1rem 1.2rem; background: var(--color-neutral-10); border-radius: 10px; margin: 1rem 0; }
+  .letter-sig { font-family: var(--font-heading); font-style: normal; font-weight: 600; font-size: 0.9rem; color: var(--color-primary); margin-top: 0.75rem; }
+
+  /* Nav buttons */
+  .nav { display: flex; justify-content: space-between; gap: 0.75rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--color-neutral-20); }
+  .btn { font-family: var(--font-heading); font-weight: 600; font-size: 1rem; padding: 0.75rem 1.4rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+  .btn-primary:hover { background: var(--color-primary-dark); }
+  .btn-primary:disabled { background: var(--color-neutral-33); cursor: not-allowed; }
+  .btn-ghost { background: #fff; color: var(--color-primary); border: 1.5px solid var(--color-neutral-33); }
+  .btn-ghost:hover { border-color: var(--color-primary); }
+  .btn-danger { background: #fff; color: var(--color-accent); border: 1.5px solid var(--color-accent); }
+
+  /* Review */
+  .review-section { margin: 1rem 0; padding: 1rem; background: var(--color-neutral-10); border-radius: 8px; }
+  .review-section h3 { font-family: var(--font-heading); font-size: 0.95rem; color: var(--color-primary); margin: 0 0 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .review-q { margin: 0.6rem 0; }
+  .review-q strong { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; color: var(--color-text); display: block; margin-bottom: 0.2rem; }
+  .review-q .answer { color: var(--color-neutral); font-size: 0.95rem; white-space: pre-wrap; }
+  .review-q .answer.empty { font-style: italic; }
+
+  /* Save indicator */
+  .save-indicator { font-family: var(--font-heading); font-size: 0.75rem; color: var(--color-neutral); }
+  .save-indicator.saved { color: var(--color-green, #82C341); }
+
+  /* Utilities */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  [x-cloak] { display: none !important; }
+
+  @media print {
+    .progress-wrap, .nav, header.brand .beta, .btn { display: none !important; }
+    .step { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+<script defer src="alpine.min.js"></script>
+</head>
+<body>
+<div class="app" x-data="intakeApp()" x-init="init()" x-cloak>
+
+  <header class="brand">
+    <div class="wordmark">Invest Hamilton County</div>
+    <span class="beta">BETA</span>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-wrap" x-show="step > 0 && step < steps.length - 1">
+    <div class="progress-label">
+      <span x-text="`Step ${step} of ${steps.length - 2}`"></span>
+      <span class="save-indicator" :class="{ saved: saveStatus === 'saved' }" x-text="saveStatus === 'saved' ? '✓ Saved' : 'Saving…'"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" :style="`width: ${(step / (steps.length - 2)) * 100}%`"></div></div>
+  </div>
+
+  <!-- ================== STEP 0: COVER / WELCOME ================== -->
+  <section class="step" x-show="step === 0">
+    <div style="text-align:center; padding: 2rem 0 1rem;">
+      <div style="font-family: var(--font-heading); font-weight: 800; font-size: 2.25rem; color: var(--color-primary); line-height: 1.05; letter-spacing: -0.01em;">
+        From Paper<br>to Pathway
+      </div>
+      <div style="font-family: var(--font-body); font-style: italic; font-size: 1.15rem; color: var(--color-neutral); margin-top: 0.75rem;">Your Story Toolkit</div>
+    </div>
+    <p style="text-align:center; font-size: 1.05rem; margin: 1.5rem 0;">
+      A workbook to help you prepare to talk with employers about where you've been and where you're going.
+    </p>
+
+    <div class="letter">
+      You picked up this booklet, and that matters. What you write in here is yours — nobody is grading it, nobody is using it against you, and you can stop any time you want. The questions get easier the further you go, and the hard ones have a skip box right next to them. When you're done, you'll get a guide: a story draft, some job ideas, and a few interview answers to practice.
+      <div class="letter-sig">— Mike Thibideau<br><span style="font-weight:400;">President &amp; CEO, Invest Hamilton County</span></div>
+    </div>
+
+    <h2>How this works</h2>
+    <ol>
+      <li>Answer the questions at your own pace. <strong>Skip anything you don't want to answer.</strong></li>
+      <li>Your answers are saved on this device only — nothing is sent to a server.</li>
+      <li>When you're done, you'll see a summary you can print or download.</li>
+      <li>Most people finish in 30–60 minutes.</li>
+    </ol>
+
+    <div class="callout callout-info">
+      <strong>What this toolkit is NOT:</strong> It is not a test. It is not a legal document. It is not a medical record. It is not shared with anyone unless you choose to share it.
+    </div>
+
+    <div class="nav" style="justify-content:flex-end;">
+      <button class="btn btn-primary" @click="next()">Get started →</button>
+    </div>
+    <div style="text-align:center; margin-top:1rem;" x-show="hasSavedData">
+      <button class="btn btn-ghost" @click="resume()">Resume where I left off</button>
+      <button class="btn btn-danger" @click="clearAll()" style="margin-left:0.5rem;">Start over</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 1: CONSENT ================== -->
+  <section class="step" x-show="step === 1">
+    <div class="eyebrow">Section 2 · Consent &amp; your rights</div>
+    <h1 class="page-title">Before you start — please read</h1>
+
+    <h2>Voluntary participation</h2>
+    <p>Filling out this toolkit is <strong>your choice</strong>. You can stop at any time and your answers stay with you.</p>
+
+    <h2>What happens to your answers</h2>
+    <p>This beta version runs entirely in your web browser. Your answers are saved <strong>only on this device</strong> (in local storage). Nothing is sent over the internet. You can delete everything with the "Start over" button.</p>
+
+    <div class="callout callout-warn">
+      <strong>One thing to know:</strong> Indiana law requires reporting of a few specific things — current child abuse, current elder abuse, or a clear plan to hurt yourself or someone else. In the full program with staff support, those things would be reported. In this self-serve beta, <strong>please do not write anything you wouldn't want shared.</strong> If you're in crisis, call or text <strong>988</strong>.
+    </div>
+
+    <h2>What you get back</h2>
+    <p>At the end, you'll see a summary of your answers. You'll be able to print it, download it as a file, or copy it to paste into another tool.</p>
+
+    <label class="cb-item" :class="{ checked: data.consent }" style="margin-top:1rem;">
+      <input type="checkbox" x-model="data.consent">
+      <span>I understand and I want to continue.</span>
+    </label>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()" :disabled="!data.consent">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 2: ABOUT YOU ================== -->
+  <section class="step" x-show="step === 2">
+    <div class="eyebrow">Section 3 · About you</div>
+    <h1 class="page-title">A little about you</h1>
+    <p class="hint">These are easy ones. Nothing sensitive yet.</p>
+
+    <div class="qlabel"><span class="qid">Q3.a</span> First name or nickname <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(optional — any name is fine)</span></div>
+    <input type="text" x-model="data.q3a" placeholder="What should we call you?">
+
+    <div class="qlabel"><span class="qid">Q3.b</span> Age range</div>
+    <ul class="cb-list two-col">
+      <template x-for="opt in ['18–24','25–34','35–44','45–54','55–64','65+']" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q3b === opt }">
+          <input type="radio" name="q3b" :value="opt" x-model="data.q3b"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+
+    <div class="qlabel"><span class="qid">Q3.c</span> City or town where you hope to work</div>
+    <input type="text" x-model="data.q3c" placeholder="Noblesville, Fishers, Indianapolis…">
+
+    <div class="qlabel"><span class="qid">Q3.d</span> The longest job you've ever held</div>
+    <div class="inline-row">
+      <label style="max-width:120px;">Years<br><input type="number" min="0" x-model="data.q3d_years"></label>
+      <label style="max-width:120px;">Months<br><input type="number" min="0" max="11" x-model="data.q3d_months"></label>
+    </div>
+    <label style="display:block; margin-top:0.5rem;">Kind of work it was<br>
+      <input type="text" x-model="data.q3d_kind" placeholder="What did you do?">
+    </label>
+
+    <div class="qlabel"><span class="qid">Q3.e</span> Industries you've worked in <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply, even short jobs)</span></div>
+    <ul class="cb-list two-col">
+      <template x-for="opt in industries" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q3e.includes(opt) }">
+          <input type="checkbox" :value="opt" x-model="data.q3e"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+    <label style="display:block; margin-top:0.5rem;">Other<br>
+      <input type="text" x-model="data.q3e_other" placeholder="Something else?">
+    </label>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 3: SKILLS ================== -->
+  <section class="step" x-show="step === 3">
+    <div class="eyebrow">Section 4 · Skills</div>
+    <h1 class="page-title">What you can do</h1>
+    <p class="hint">Check anything you've done — even once, even if you weren't paid, even if it was a long time ago. Skills count whether you learned them on a job, at home, or somewhere else.</p>
+
+    <div class="qlabel"><span class="qid">Q4.a</span> Skills checklist <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply)</span></div>
+    <ul class="cb-list two-col">
+      <template x-for="skill in skills" :key="skill">
+        <li><label class="cb-item" :class="{ checked: data.q4a.includes(skill) }">
+          <input type="checkbox" :value="skill" x-model="data.q4a"><span x-text="skill"></span>
+        </label></li>
+      </template>
+    </ul>
+
+    <div class="qlabel"><span class="qid">Q4.b</span> Three things people say I'm good at</div>
+    <p class="hint">Even small things count — "I'm patient with kids," "I can fix anything," "people trust me."</p>
+    <input type="text" x-model="data.q4b_1" placeholder="1." style="margin-bottom:0.5rem;">
+    <input type="text" x-model="data.q4b_2" placeholder="2." style="margin-bottom:0.5rem;">
+    <input type="text" x-model="data.q4b_3" placeholder="3.">
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 4: WHAT HAPPENED ================== -->
+  <section class="step" x-show="step === 4">
+    <div class="eyebrow">Section 5 · What happened</div>
+    <h1 class="page-title">What happened</h1>
+
+    <div class="callout callout-care">
+      Employers who ask about your past usually just want to know two things: <em>that you've thought about it</em>, and <em>what's different now</em>. You don't have to explain everything. A few sentences is enough. <strong>If any question here feels like too much today, check Skip and move on.</strong>
+    </div>
+
+    <div class="qlabel"><span class="qid">Q5.a</span> In one or two sentences, what happened?</div>
+    <p class="hint">Example: "I got a drug charge in 2019." That's enough.</p>
+    <label class="skip-box"><input type="checkbox" x-model="data.q5a_skip"> Skip this one</label>
+    <div :class="{ skipped: data.q5a_skip }"><textarea x-model="data.q5a" rows="3"></textarea></div>
+
+    <div class="qlabel"><span class="qid">Q5.b</span> When was it? (year is fine)</div>
+    <label class="skip-box"><input type="checkbox" x-model="data.q5b_skip"> Skip this one</label>
+    <div :class="{ skipped: data.q5b_skip }"><input type="number" min="1970" max="2026" x-model="data.q5b" placeholder="e.g. 2019" style="max-width:180px;"></div>
+
+    <div class="qlabel"><span class="qid">Q5.c</span> Is the case closed?</div>
+    <label class="skip-box"><input type="checkbox" x-model="data.q5c_skip"> Skip this one</label>
+    <ul class="cb-list" :class="{ skipped: data.q5c_skip }">
+      <template x-for="opt in ['Yes, fully closed','Still open / on probation or parole','Not sure']" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q5c === opt }">
+          <input type="radio" name="q5c" :value="opt" x-model="data.q5c"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+
+    <div class="qlabel"><span class="qid">Q5.d</span> <span style="font-weight:400;">Optional — only if you want to.</span> One thing about why — no blame, just honest.</div>
+    <p class="hint">Example: "I was using. I'm not anymore." You can leave this blank.</p>
+    <label class="skip-box"><input type="checkbox" x-model="data.q5d_skip"> Skip this one</label>
+    <div :class="{ skipped: data.q5d_skip }"><textarea x-model="data.q5d" rows="3"></textarea></div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 5: WHAT'S DIFFERENT NOW ================== -->
+  <section class="step" x-show="step === 5">
+    <div class="eyebrow">Section 6 · What's different now</div>
+    <h1 class="page-title">What's different now</h1>
+    <p>This is the part employers listen to most. What you've done since — what you've learned, what you've changed — matters more than what happened before.</p>
+
+    <div class="qlabel"><span class="qid">Q6.a</span> Since then, I have: <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply)</span></div>
+    <ul class="cb-list">
+      <template x-for="opt in sinceThen" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q6a.includes(opt) }">
+          <input type="checkbox" :value="opt" x-model="data.q6a"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+    <label style="display:block; margin-top:0.5rem;">Other<br>
+      <input type="text" x-model="data.q6a_other" placeholder="Something else you've done?">
+    </label>
+
+    <div class="qlabel"><span class="qid">Q6.b</span> One specific thing I'm proud of since then</div>
+    <p class="hint">Example: "I've been clean 14 months." "I finished my GED."</p>
+    <textarea x-model="data.q6b" rows="3"></textarea>
+
+    <div class="qlabel"><span class="qid">Q6.c</span> What I've learned about myself</div>
+    <p class="hint">Example: "I do better with a routine." "I can stay calm when everyone else panics."</p>
+    <textarea x-model="data.q6c" rows="4"></textarea>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 6: RECOVERY (OPTIONAL) ================== -->
+  <section class="step" x-show="step === 6">
+    <div class="eyebrow">Section 7 · Recovery (optional)</div>
+    <h1 class="page-title">Recovery</h1>
+
+    <div class="callout callout-care">
+      <strong>You do not have to share this with employers. Ever.</strong> People in recovery are protected under the Americans with Disabilities Act. If recovery is part of your story and you want it to be part of your plan, answer here. You can skip this entire page.
+    </div>
+
+    <label class="skip-box" style="margin-bottom:1rem;"><input type="checkbox" x-model="data.q7_skip"> Skip this whole page</label>
+
+    <div :class="{ skipped: data.q7_skip }">
+      <div class="qlabel"><span class="qid">Q7.a</span> Are you in recovery?</div>
+      <ul class="cb-list">
+        <template x-for="opt in ['Yes','No','Prefer not to say']" :key="opt">
+          <li><label class="cb-item" :class="{ checked: data.q7a === opt }">
+            <input type="radio" name="q7a" :value="opt" x-model="data.q7a"><span x-text="opt"></span>
+          </label></li>
+        </template>
+      </ul>
+
+      <div x-show="data.q7a === 'Yes'">
+        <div class="qlabel"><span class="qid">Q7.b</span> How long?</div>
+        <ul class="cb-list two-col">
+          <template x-for="opt in ['Less than 6 months','6–12 months','1–2 years','2–5 years','5 years or more']" :key="opt">
+            <li><label class="cb-item" :class="{ checked: data.q7b === opt }">
+              <input type="radio" name="q7b" :value="opt" x-model="data.q7b"><span x-text="opt"></span>
+            </label></li>
+          </template>
+        </ul>
+
+        <div class="qlabel"><span class="qid">Q7.c</span> Do you need any of these at work?</div>
+        <ul class="cb-list">
+          <template x-for="opt in recoveryNeeds" :key="opt">
+            <li><label class="cb-item" :class="{ checked: data.q7c.includes(opt) }">
+              <input type="checkbox" :value="opt" x-model="data.q7c"><span x-text="opt"></span>
+            </label></li>
+          </template>
+        </ul>
+        <p class="hint" style="margin-top:0.75rem;">MAT medications like methadone, buprenorphine (Suboxone), and naltrexone are legal prescriptions. Employers cannot fire you for taking them as prescribed. (EEOC Opioid Guidance, 2020)</p>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 7: THE JOB YOU WANT ================== -->
+  <section class="step" x-show="step === 7">
+    <div class="eyebrow">Section 8 · The job you want</div>
+    <h1 class="page-title">The job you want</h1>
+
+    <div class="qlabel"><span class="qid">Q8.a</span> Job or type of work I want</div>
+    <p class="hint">Example: "CDL truck driver." "Welder." "Line cook." "Something outside."</p>
+    <textarea x-model="data.q8a" rows="2"></textarea>
+
+    <div class="qlabel"><span class="qid">Q8.b</span> Why this one?</div>
+    <p class="hint">What makes it a good fit? Money? You're good at it? A friend does it?</p>
+    <textarea x-model="data.q8b" rows="3"></textarea>
+
+    <div class="qlabel"><span class="qid">Q8.c</span> Anything that might stop me that I should know about?</div>
+    <div class="callout callout-info" style="font-size:0.9rem;">
+      Some jobs have legal rules about who can be hired — healthcare, childcare, driving (CDL), banking, schools. You're not expected to know the rules. Just write what you're worried about.
+    </div>
+    <label class="skip-box"><input type="checkbox" x-model="data.q8c_skip"> Skip this one</label>
+    <div :class="{ skipped: data.q8c_skip }"><textarea x-model="data.q8c" rows="3" placeholder='Example: "I have a DUI and want to drive."'></textarea></div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 8: INTERVIEW + HELP ================== -->
+  <section class="step" x-show="step === 8">
+    <div class="eyebrow">Section 9 + 10 · Interview questions &amp; what would help</div>
+    <h1 class="page-title">Questions that worry you</h1>
+
+    <div class="qlabel"><span class="qid">Q9.a</span> Which of these interview questions worry you most? <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check up to 3)</span></div>
+    <ul class="cb-list">
+      <template x-for="opt in interviewQs" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q9a.includes(opt) }">
+          <input type="checkbox" :value="opt" x-model="data.q9a" @change="capChecks('q9a', 3)"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+
+    <div class="qlabel"><span class="qid">Q9.b</span> One question I hope they DON'T ask</div>
+    <textarea x-model="data.q9b" rows="2"></textarea>
+
+    <h2 style="margin-top:2rem;">What would help</h2>
+    <div class="qlabel"><span class="qid">Q10.a</span> Check what you'd like help with</div>
+    <ul class="cb-list two-col">
+      <template x-for="opt in helpOptions" :key="opt">
+        <li><label class="cb-item" :class="{ checked: data.q10a.includes(opt) }">
+          <input type="checkbox" :value="opt" x-model="data.q10a"><span x-text="opt"></span>
+        </label></li>
+      </template>
+    </ul>
+
+    <div class="qlabel"><span class="qid">Q10.b</span> One thing I haven't asked for help with, but I probably should</div>
+    <textarea x-model="data.q10b" rows="2"></textarea>
+
+    <div class="nav">
+      <button class="btn btn-ghost" @click="prev()">← Back</button>
+      <button class="btn btn-primary" @click="next()">Review my answers →</button>
+    </div>
+  </section>
+
+  <!-- ================== STEP 9: REVIEW / FINISH ================== -->
+  <section class="step" x-show="step === 9">
+    <div class="eyebrow">You're done</div>
+    <h1 class="page-title">Here's what you wrote</h1>
+    <p>Look it over. You can go back and change anything, or download it to share with a coach (or with Alex, the AI helper, in a future version).</p>
+
+    <div class="callout callout-info">
+      <strong>Next in the full program:</strong> These answers get turned into a printed guide — a story draft in your words, 2–3 job ideas that match your skills, practice answers for the interview questions that worry you, and a resource list. This beta only shows you the summary.
+    </div>
+
+    <!-- Render review sections -->
+    <template x-for="section in reviewSections" :key="section.title">
+      <div class="review-section">
+        <h3 x-text="section.title"></h3>
+        <template x-for="q in section.questions" :key="q.id">
+          <div class="review-q" x-show="q.show">
+            <strong x-text="`${q.id} · ${q.label}`"></strong>
+            <div class="answer" :class="{ empty: !q.value }" x-text="q.value || '(skipped)'"></div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <div class="nav" style="flex-wrap:wrap; justify-content:center; gap:0.5rem;">
+      <button class="btn btn-ghost" @click="step = 2">← Edit answers</button>
+      <button class="btn btn-primary" @click="window.print()">🖨 Print</button>
+      <button class="btn btn-primary" @click="downloadJSON()">⬇ Download (.json)</button>
+      <button class="btn btn-primary" @click="copyText()" x-text="copyLabel"></button>
+      <button class="btn btn-danger" @click="clearAll()">Start over</button>
+    </div>
+
+    <div class="callout callout-care" style="margin-top:2rem;">
+      <strong>Thank you for testing this.</strong> If you have feedback on wording, flow, or anything that felt off — let Mike know. Every version gets better because of people like you.
+    </div>
+
+    <p style="font-size:0.8rem; color:var(--color-neutral); margin-top:2rem; border-top: 1px solid var(--color-neutral-20); padding-top:1rem;">
+      <em>From Paper to Pathway</em> is a program of Invest Hamilton County. It provides general information and coaching support. <strong>It is not a lawyer, does not provide legal advice, and does not create an attorney-client relationship.</strong> For advice about expungement, licensing, or disclosure obligations in regulated fields, consult a licensed attorney. Free legal help: Indiana Legal Services 1-800-869-0212. Crisis: 988.
+    </p>
+  </section>
+
+</div>
+
+<script>
+function intakeApp() {
+  const STORAGE_KEY = 'ihc-reentry-intake-v1';
+  const emptyData = () => ({
+    consent: false,
+    q3a: '', q3b: '', q3c: '',
+    q3d_years: '', q3d_months: '', q3d_kind: '',
+    q3e: [], q3e_other: '',
+    q4a: [], q4b_1: '', q4b_2: '', q4b_3: '',
+    q5a: '', q5a_skip: false,
+    q5b: '', q5b_skip: false,
+    q5c: '', q5c_skip: false,
+    q5d: '', q5d_skip: false,
+    q6a: [], q6a_other: '', q6b: '', q6c: '',
+    q7_skip: false, q7a: '', q7b: '', q7c: [],
+    q8a: '', q8b: '', q8c: '', q8c_skip: false,
+    q9a: [], q9b: '',
+    q10a: [], q10b: '',
+  });
+
+  return {
+    step: 0,
+    steps: Array(10).fill(0), // 0..9
+    data: emptyData(),
+    saveStatus: 'saved',
+    hasSavedData: false,
+    copyLabel: '📋 Copy text',
+
+    industries: ['Food service','Warehouse / distribution','Construction','Healthcare / caregiving','Office / admin','Retail','Manufacturing / factory','Skilled trades','Driving / delivery / trucking','Landscaping / lawn care','Cleaning / janitorial','Self-employed / side hustle','Never had a paying job'],
+    skills: ['Cook for a group','Drive a car, truck, or van','Fix things','Use a computer, phone, or tablet','Care for kids, elders, or people with disabilities','Work outside in any weather','Talk to customers and handle complaints','Handle money or run a cash register','Solve problems when things go wrong fast','Lead a group or crew','Read blueprints, instructions, or manuals','Train or teach someone else','Clean to a high standard','Use hand tools or power tools','Lift and carry heavy things safely','Keep a schedule and show up on time','Stay calm around people who are upset','Write clearly'],
+    sinceThen: ['Completed a program (GED, treatment, class)','Earned a certificate or credential','Worked steady for 6 months or more','Stayed sober','Mentored someone else','Got stable housing','Repaired a relationship that matters to me','Became a parent, or became a better parent','Paid off a debt or fine'],
+    recoveryNeeds: ['Flexible schedule for treatment or meetings','A drug-test protocol that knows about my MAT','An EAP or counseling referral','A workplace that isn\'t centered around alcohol','None / not sure yet'],
+    interviewQs: ['Tell me about yourself','Why were you out of work?','Do you have a record?','What\'s your biggest weakness?','Why should we hire you?','Are you reliable?','Where do you see yourself in 2 years?','Can you pass a drug test?','Can you pass a background check?','What were you doing during [gap year]?'],
+    helpOptions: ['Expungement info','Finding a lawyer','Housing','Transportation','ID / Social Security / birth certificate','Childcare','Clothes for an interview','Mental health support','Addiction recovery support','Food / SNAP benefits','Reconnecting with family','Financial help / paying off fines'],
+
+    init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) { this.hasSavedData = true; }
+      // autosave on every change
+      this.$watch('data', () => this.save(), { deep: true });
+    },
+    save() {
+      this.saveStatus = 'saving';
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+      setTimeout(() => { this.saveStatus = 'saved'; }, 300);
+    },
+    resume() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) { this.data = { ...emptyData(), ...JSON.parse(saved) }; this.step = 1; }
+    },
+    clearAll() {
+      if (!confirm('Start over? Everything you wrote will be erased.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      this.data = emptyData();
+      this.hasSavedData = false;
+      this.step = 0;
+    },
+    next() { this.step++; window.scrollTo({top:0, behavior:'smooth'}); },
+    prev() { this.step--; window.scrollTo({top:0, behavior:'smooth'}); },
+    capChecks(field, max) {
+      if (this.data[field].length > max) this.data[field] = this.data[field].slice(0, max);
+    },
+    joinList(arr, other) {
+      let items = [...(arr || [])];
+      if (other && other.trim()) items.push(other.trim());
+      return items.length ? items.join(', ') : '';
+    },
+    get reviewSections() {
+      const d = this.data;
+      return [
+        { title: 'About you', questions: [
+          { id: 'Q3.a', label: 'Name / nickname', value: d.q3a, show: true },
+          { id: 'Q3.b', label: 'Age range', value: d.q3b, show: true },
+          { id: 'Q3.c', label: 'Where you hope to work', value: d.q3c, show: true },
+          { id: 'Q3.d', label: 'Longest job', value: [d.q3d_years && `${d.q3d_years}y`, d.q3d_months && `${d.q3d_months}m`, d.q3d_kind].filter(Boolean).join(' · '), show: true },
+          { id: 'Q3.e', label: 'Industries', value: this.joinList(d.q3e, d.q3e_other), show: true },
+        ]},
+        { title: 'Skills', questions: [
+          { id: 'Q4.a', label: 'Skills', value: (d.q4a || []).join(', '), show: true },
+          { id: 'Q4.b', label: 'Three things I\'m good at', value: [d.q4b_1, d.q4b_2, d.q4b_3].filter(Boolean).join(' · '), show: true },
+        ]},
+        { title: 'What happened', questions: [
+          { id: 'Q5.a', label: 'What happened', value: d.q5a_skip ? '' : d.q5a, show: true },
+          { id: 'Q5.b', label: 'When', value: d.q5b_skip ? '' : d.q5b, show: true },
+          { id: 'Q5.c', label: 'Case status', value: d.q5c_skip ? '' : d.q5c, show: true },
+          { id: 'Q5.d', label: 'Optional context', value: d.q5d_skip ? '' : d.q5d, show: true },
+        ]},
+        { title: 'What\'s different now', questions: [
+          { id: 'Q6.a', label: 'Since then', value: this.joinList(d.q6a, d.q6a_other), show: true },
+          { id: 'Q6.b', label: 'Proud of', value: d.q6b, show: true },
+          { id: 'Q6.c', label: 'What I\'ve learned about myself', value: d.q6c, show: true },
+        ]},
+        { title: 'Recovery', questions: [
+          { id: 'Q7.a', label: 'In recovery?', value: d.q7_skip ? '(skipped whole section)' : d.q7a, show: true },
+          { id: 'Q7.b', label: 'How long', value: d.q7_skip ? '' : d.q7b, show: d.q7a === 'Yes' },
+          { id: 'Q7.c', label: 'Workplace needs', value: d.q7_skip ? '' : (d.q7c || []).join(', '), show: d.q7a === 'Yes' },
+        ]},
+        { title: 'The job you want', questions: [
+          { id: 'Q8.a', label: 'Job', value: d.q8a, show: true },
+          { id: 'Q8.b', label: 'Why', value: d.q8b, show: true },
+          { id: 'Q8.c', label: 'What might stop me', value: d.q8c_skip ? '' : d.q8c, show: true },
+        ]},
+        { title: 'Interview & support', questions: [
+          { id: 'Q9.a', label: 'Questions that worry me', value: (d.q9a || []).join(', '), show: true },
+          { id: 'Q9.b', label: 'Question I hope they don\'t ask', value: d.q9b, show: true },
+          { id: 'Q10.a', label: 'Help I\'d like', value: (d.q10a || []).join(', '), show: true },
+          { id: 'Q10.b', label: 'Help I haven\'t asked for but probably should', value: d.q10b, show: true },
+        ]},
+      ];
+    },
+    downloadJSON() {
+      const payload = {
+        program: 'From Paper to Pathway',
+        version: 'beta-v1',
+        timestamp: new Date().toISOString(),
+        answers: this.data,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `paper-to-pathway-${(this.data.q3a || 'intake').replace(/\s+/g,'-')}-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+    copyText() {
+      const txt = this.reviewSections.map(s =>
+        `## ${s.title}\n` + s.questions.filter(q => q.show).map(q => `  ${q.id} · ${q.label}: ${q.value || '(skipped)'}`).join('\n')
+      ).join('\n\n');
+      navigator.clipboard.writeText(txt).then(() => {
+        this.copyLabel = '✓ Copied';
+        setTimeout(() => this.copyLabel = '📋 Copy text', 1500);
+      });
+    },
+  };
+}
+</script>
+</body>
+</html>
