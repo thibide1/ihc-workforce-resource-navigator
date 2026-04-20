@@ -343,6 +343,154 @@
     color: var(--color-neutral); font-style: italic;
   }
 </style>
+<script>
+// Register Alpine components BEFORE Alpine loads so alpine:init listeners are in place.
+document.addEventListener('alpine:init', () => {
+  Alpine.store('pe', {
+    ready: false,
+    occupations: [],
+    wages: {},
+    outbound: {},
+    inbound: {},
+    currentSoc: null,
+    async load() {
+      try {
+        const [occR, wagR, pthR] = await Promise.all([
+          fetch('data/occupations.json'),
+          fetch('data/wages.json'),
+          fetch('data/pathways.json'),
+        ]);
+        const occ = await occR.json();
+        const wag = await wagR.json();
+        const pth = await pthR.json();
+        this.occupations = occ.occupations || [];
+        this.wages = wag.wages || {};
+        this.outbound = pth.outbound || {};
+        this.inbound = pth.inbound || {};
+        this.ready = true;
+        const params = new URLSearchParams(window.location.search);
+        const soc = params.get('soc');
+        if (soc) this.currentSoc = soc;
+      } catch (e) {
+        console.error('Pathway Explorer data load failed:', e);
+      }
+    },
+    selectOcc(soc) {
+      this.currentSoc = soc;
+      const url = new URL(window.location);
+      url.searchParams.set('soc', soc);
+      history.pushState({ soc }, '', url);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+  });
+
+  Alpine.data('pathwayApp', () => ({
+    query: '',
+    results: [],
+    showDropdown: false,
+    focusedIndex: -1,
+    suggestions: [
+      { soc: '31-1131', label: 'Nursing Assistant' },
+      { soc: '53-7062', label: 'Warehouse Worker' },
+      { soc: '41-2011', label: 'Cashier' },
+      { soc: '51-4121', label: 'Welder' },
+      { soc: '31-1121', label: 'Home Health Aide' },
+      { soc: '53-3032', label: 'Truck Driver' },
+      { soc: '35-2014', label: 'Cook' },
+      { soc: '43-4051', label: 'Customer Service' },
+    ],
+    async init() {
+      if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
+    },
+    onSearchInput() {
+      const q = this.query.trim().toLowerCase();
+      if (q.length < 2) { this.results = []; this.showDropdown = false; return; }
+      const occs = Alpine.store('pe').occupations;
+      this.results = occs.filter(o =>
+        o.title.toLowerCase().includes(q) ||
+        (o.major_group || '').toLowerCase().includes(q)
+      ).slice(0, 12);
+      this.showDropdown = true;
+      this.focusedIndex = this.results.length > 0 ? 0 : -1;
+    },
+    focusNext() { if (this.focusedIndex < this.results.length - 1) this.focusedIndex++; },
+    focusPrev() { if (this.focusedIndex > 0) this.focusedIndex--; },
+    selectFocused() {
+      if (this.focusedIndex >= 0 && this.results[this.focusedIndex]) {
+        this.selectOcc(this.results[this.focusedIndex].soc);
+      }
+    },
+    selectOcc(soc) {
+      Alpine.store('pe').selectOcc(soc);
+      this.query = '';
+      this.results = [];
+      this.showDropdown = false;
+    },
+    formatNum(n) { return n ? n.toLocaleString() : ''; },
+  }));
+
+  Alpine.data('pathwayDetail', () => ({
+    async init() {
+      if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
+      window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(window.location.search);
+        Alpine.store('pe').currentSoc = params.get('soc') || null;
+      });
+    },
+    get loading() { return !Alpine.store('pe').ready; },
+    get selected() {
+      const soc = Alpine.store('pe').currentSoc;
+      if (!soc) return null;
+      return Alpine.store('pe').occupations.find(o => o.soc === soc) || null;
+    },
+    get wageData() {
+      const soc = Alpine.store('pe').currentSoc;
+      if (!soc) return null;
+      return Alpine.store('pe').wages[soc] || null;
+    },
+    get outbound() {
+      const soc = Alpine.store('pe').currentSoc;
+      if (!soc) return [];
+      return (Alpine.store('pe').outbound[soc] || []).slice(0, 8);
+    },
+    get inbound() {
+      const soc = Alpine.store('pe').currentSoc;
+      if (!soc) return [];
+      return (Alpine.store('pe').inbound[soc] || []).slice(0, 8);
+    },
+    selectOcc(soc) { Alpine.store('pe').selectOcc(soc); },
+    formatNum(n) { return n ? n.toLocaleString() : ''; },
+    formatWage(n) {
+      if (!n && n !== 0) return '—';
+      return '$' + Math.round(n).toLocaleString();
+    },
+    formatGrowth(n) {
+      if (n === null || n === undefined) return '—';
+      const sign = n > 0 ? '+' : '';
+      return sign + n.toFixed(1) + '%';
+    },
+    formatLift(n) {
+      if (!n && n !== 0) return 'typical move';
+      if (n > 0) return '+$' + Math.round(n).toLocaleString() + ' a year';
+      if (n < 0) return '−$' + Math.round(Math.abs(n)).toLocaleString() + ' a year';
+      return 'similar pay';
+    },
+    liftClass(n) {
+      if (!n) return 'neutral';
+      return n > 0 ? 'positive' : 'negative';
+    },
+    confidenceLabel(c) {
+      if (c === 'high') return 'Common path';
+      if (c === 'mixed') return 'Possible path';
+      return 'Less common';
+    },
+    wagePct(v) {
+      const max = 200000;
+      return Math.max(2, Math.min(98, (v / max) * 100));
+    },
+  }));
+});
+</script>
 <script defer src="alpine.min.js"></script>
 </head>
 <body data-brand="ihc-2026">
@@ -475,117 +623,7 @@
                 <div class="wage-sub">experienced</div>
               </div>
             </div>
-            <p class="wage-legend">Purple band shows the middle 50% of people in this job. Most start closer to the left and move right over time. Source: BLS Occupational Employment &amp; Wage Statistics, May 2024.</p>
-          </section>
-        </template>
-
-        <!-- Outbound: where could you go next? -->
-        <section class="pathways-block" aria-labelledby="next-title">
-          <h3 id="next-title">Where could you go from here?</h3>
-          <p class="block-sub">These are jobs people commonly move into from this role. Click any card to jump to that job's page.</p>
-          <template x-if="outbound.length > 0">
-            <ul class="pathway-list">
-              <template x-for="edge in outbound" :key="edge.target_soc">
-                <li>
-                  <button class="pathway-card" @click="selectOcc(edge.target_soc)" type="button">
-                    <div class="pathway-card-lift" :class="liftClass(edge.wage_lift)" x-text="formatLift(edge.wage_lift)"></div>
-                    <div class="pathway-card-title" x-text="edge.target_title"></div>
-                    <div class="pathway-card-wage">
-                      Typical pay: <strong x-text="formatWage(edge.target_wage)"></strong>
-                    </div>
-                    <div class="pathway-card-footer">
-                      <span class="pathway-card-confidence" :class="edge.confidence" x-text="confidenceLabel(edge.confidence)"></span>
-                      <template x-if="edge.target_hc_jobs">
-                        <span class="pathway-card-jobs"><span x-text="formatNum(edge.target_hc_jobs)"></span> jobs in Hamilton</span>
-                      </template>
-                    </div>
-                  </button>
-                </li>
-              </template>
-            </ul>
-          </template>
-          <template x-if="outbound.length === 0">
-            <div class="empty-pathways">We don't have mapped next-step pathways for this occupation yet. Most jobs have paths — we're still adding them. Try a related job from the suggestions above, or talk to your local WorkOne office at 1-800-891-6499.</div>
-          </template>
-        </section>
-
-        <!-- Inbound: how did people get here? -->
-        <section class="pathways-block" aria-labelledby="prior-title">
-          <h3 id="prior-title">How do people get into this job?</h3>
-          <p class="block-sub">If this is the job you want, here are the jobs people commonly come from. Knowing the on-ramps can help you plan.</p>
-          <template x-if="inbound.length > 0">
-            <ul class="pathway-list">
-              <template x-for="edge in inbound" :key="edge.source_soc">
-                <li>
-                  <button class="pathway-card" @click="selectOcc(edge.source_soc)" type="button">
-                    <div class="pathway-card-lift" :class="liftClass(edge.wage_lift)">
-                      <template x-if="edge.wage_lift && edge.wage_lift > 0">moves up <span x-text="formatWage(edge.wage_lift)"></span></template>
-                      <template x-if="!edge.wage_lift || edge.wage_lift <= 0">lateral / variable</template>
-                    </div>
-                    <div class="pathway-card-title" x-text="edge.source_title"></div>
-                    <div class="pathway-card-wage">
-                      Typical pay there: <strong x-text="formatWage(edge.source_wage)"></strong>
-                    </div>
-                    <div class="pathway-card-footer">
-                      <span class="pathway-card-confidence" :class="edge.confidence" x-text="confidenceLabel(edge.confidence)"></span>
-                    </div>
-                  </button>
-                </li>
-              </template>
-            </ul>
-          </template>
-          <template x-if="inbound.length === 0">
-            <div class="empty-pathways">We don't have mapped entry paths into this occupation yet. Most people enter this kind of work through a combination of education, certificates, and experience. Your facilitator or WorkOne counselor can help you plan.</div>
-          </template>
-        </section>
-
-      </div>
-    </template>
-
-    <section class="crisis-bar" aria-labelledby="crisis-heading">
-      <h2 id="crisis-heading" class="crisis-heading">If you need help right now</h2>
-      <ul class="crisis-list">
-        <li><strong>988</strong>Crisis line (call or text)</li>
-        <li><strong>2-1-1</strong>Anything in Indiana — dial</li>
-        <li><strong>1-800-869-0212</strong>Free legal help (Indiana Legal Services)</li>
-        <li><strong>1-800-891-6499</strong>WorkOne Indiana — job help</li>
-      </ul>
-    </section>
-  </main>
-
-  <footer role="contentinfo">
-    <div class="footer-inner">
-      <p class="footer-note">
-        <strong>Pathway Explorer</strong> · part of the Workforce Resource Navigator by Invest Hamilton County. Data from the U.S. Bureau of Labor Statistics, Lightcast, and O*NET. Typical pay ranges are for the Indianapolis metro area. Your actual earnings depend on employer, experience, and specific role. This tool shows patterns, not promises.
-      </p>
-    </div>
-  </footer>
-
-  <!-- Shared state across both Alpine components via Alpine store -->
-  <script>
-    document.addEventListener('alpine:init', () => {
-      Alpine.store('pe', {
-        ready: false,
-        occupations: [],
-        wages: {},
-        outbound: {},
-        inbound: {},
-        currentSoc: null,
-
-        async load() {
-          try {
-            const [occR, wagR, pthR] = await Promise.all([
-              fetch('data/occupations.json'),
-              fetch('data/wages.json'),
-              fetch('data/pathways.json'),
-            ]);
-            const occ = await occR.json();
-            const wag = await wagR.json();
-            const pth = await pthR.json();
-            this.occupations = occ.occupations || [];
-            this.wages = wag.wages || {};
-            this.outbound = pth.outbound || {};
-            this.inbound = pth.inbound || {};
+            <p class="wage-legend">Purple band shows the mid        this.inbound = pth.inbound || {};
             this.ready = true;
 
             // Deep-link support
