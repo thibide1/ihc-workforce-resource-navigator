@@ -355,7 +355,7 @@
     </div>
   </div>
 
-  <section class="hero" x-data="pathwayApp()" x-init="init()" x-cloak>
+  <section class="hero" x-data="pathwayApp" x-init="init()" x-cloak>
     <div class="hero-inner">
       <span class="hero-eyebrow">Pathway Explorer</span>
       <h1>See where your job could take you.</h1>
@@ -410,7 +410,7 @@
     </div>
   </section>
 
-  <main id="main" role="main" x-data="pathwayDetail()" x-init="init()" x-cloak>
+  <main id="main" role="main" x-data="pathwayDetail" x-init="init()" x-cloak>
 
     <template x-if="loading">
       <div class="loading">Loading data…</div>
@@ -606,9 +606,8 @@
           window.scrollTo({ top: 0, behavior: 'smooth' });
         },
       });
-    });
 
-    function pathwayApp() {
+    Alpine.data('pathwayApp', () => {
       return {
         query: '',
         results: [],
@@ -653,9 +652,9 @@
         },
         formatNum(n) { return n ? n.toLocaleString() : ''; },
       };
-    }
+      });
 
-    function pathwayDetail() {
+      Alpine.data('pathwayDetail', () => {
       return {
         async init() {
           if (!Alpine.store('pe').ready) await Alpine.store('pe').load();
@@ -718,7 +717,8 @@
           return Math.max(2, Math.min(98, (v / max) * 100));
         },
       };
-    }
+      });
+    });
   </script>
 </body>
 </html>
