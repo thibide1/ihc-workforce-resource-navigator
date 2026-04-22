@@ -894,11 +894,17 @@
         <li><strong>Most people finish in 20–40 minutes.</strong></li>
       </ul>
 
+      <noscript>
+        <p style="color:var(--color-accent); font-weight:600; margin-top:1.5rem;">
+          This tool needs JavaScript turned on. If your browser is in reader mode, exit reader mode to use the tool.
+        </p>
+      </noscript>
+
       <div class="welcome-cta">
-        <button class="btn btn-primary btn-lg" data-action="${hasSaved ? 'resume' : 'next'}">
+        <a href="#start" class="btn btn-primary btn-lg" data-action="${hasSaved ? 'resume' : 'next'}" role="button">
           ${hasSaved ? 'Resume where I left off →' : 'Get started →'}
-        </button>
-        ${hasSaved ? `<button class="btn btn-danger" data-action="restart">Start over</button>` : ''}
+        </a>
+        ${hasSaved ? `<a href="#restart" class="btn btn-danger" data-action="restart" role="button">Start over</a>` : ''}
       </div>
     </div>`;
   }
@@ -1544,10 +1550,27 @@
   });
 
   // Boot
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', render);
-  } else {
+  function boot() {
     render();
+    // Handle deep-link fragments (e.g. reader mode users tapping the link)
+    window.addEventListener('hashchange', function() {
+      const h = window.location.hash;
+      if (h === '#start') { state.pageIdx = 1; render(); window.location.hash = ''; }
+      else if (h === '#restart') {
+        if (confirm('Start over? Everything you wrote will be erased.')) {
+          localStorage.removeItem(STORAGE_KEY);
+          state.data = defaultData();
+          state.pageIdx = 0;
+          render();
+        }
+        window.location.hash = '';
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();
 </script>
