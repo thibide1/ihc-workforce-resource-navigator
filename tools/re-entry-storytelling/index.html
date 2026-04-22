@@ -3,644 +3,1522 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From Paper to Pathway — Your Story Toolkit (Beta)</title>
+<title>From Paper to Pathway — Your Story Toolkit</title>
+<meta name="description" content="A free workbook to help you prepare to talk with employers. From Invest Hamilton County's Re-Entry Workforce Initiative.">
+<meta name="theme-color" content="#413494">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens-shared.css">
 <link rel="stylesheet" href="../../assets/css/tokens-ihc-2026.css">
 <style>
-  :root {
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Lora', Georgia, serif;
-    --focus: 3px solid var(--color-secondary);
-  }
   * { box-sizing: border-box; }
-  html, body { margin:0; padding:0; background: var(--color-neutral-10); color: var(--color-text); font-family: var(--font-body); font-size: 17px; line-height: 1.55; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--color-neutral-10);
+    color: var(--color-text);
+    font-family: var(--font-family-body);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
   a { color: var(--color-primary); }
-  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, label:focus-within { outline: var(--focus); outline-offset: 2px; }
-
-  /* ---------- APP SHELL ---------- */
-  .app { max-width: 760px; margin: 0 auto; padding: 1.5rem 1.25rem 6rem; }
-  header.brand {
-    display:flex; align-items:center; justify-content:space-between;
-    padding: 0.75rem 0 1rem; border-bottom: 1px solid var(--color-neutral-20);
-    margin-bottom: 1.25rem;
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--color-secondary); outline-offset: 2px; border-radius: 4px;
   }
-  .wordmark { font-family: var(--font-heading); font-weight: 800; font-size: 0.95rem; letter-spacing: 0.08em; color: var(--color-primary); text-transform: uppercase; }
-  .beta { font-family: var(--font-heading); font-size: 0.7rem; background: var(--color-warm); color: #000; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 700; letter-spacing: 0.05em; }
 
-  /* ---------- PROGRESS ---------- */
-  .progress-wrap { position: sticky; top: 0; background: var(--color-neutral-10); z-index: 10; padding: 0.5rem 0 0.75rem; margin: 0 -1.25rem 1rem; padding-left:1.25rem; padding-right:1.25rem; border-bottom: 1px solid var(--color-neutral-20); }
-  .progress-label { font-family: var(--font-heading); font-size: 0.78rem; color: var(--color-neutral); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.3rem; display:flex; justify-content:space-between; }
-  .progress-bar { height: 6px; background: var(--color-neutral-20); border-radius: 999px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); transition: width 0.3s ease; }
+  /* ---------- Top bar ---------- */
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--color-neutral-20);
+    padding: 0.7rem 1rem; position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 720px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .topbar-back {
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: 500;
+    color: var(--color-neutral); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar-back:hover { color: var(--color-primary); }
+  .topbar-meta {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: var(--font-family-heading); font-size: 0.78rem;
+    color: var(--color-neutral); letter-spacing: 0.04em;
+  }
+  .save-indicator { color: var(--color-green); font-weight: 600; }
+  .save-indicator.saving { color: var(--color-neutral); }
+  .beta-pill {
+    background: var(--color-warm); color: #1a1a2e;
+    padding: 0.15rem 0.55rem; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.05em; font-size: 0.7rem;
+  }
 
-  /* ---------- STEP ---------- */
-  .step { background: #fff; border-radius: 14px; padding: 1.75rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.06); }
-  .eyebrow { font-family: var(--font-heading); font-size: 0.75rem; color: var(--color-accent); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.4rem; }
-  h1.page-title { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); font-size: 1.75rem; margin: 0 0 1rem; line-height: 1.15; }
-  h2 { font-family: var(--font-heading); font-weight: 600; color: var(--color-primary); font-size: 1.1rem; margin: 1.4rem 0 0.5rem; }
-  .qlabel { font-family: var(--font-heading); font-weight: 600; color: var(--color-text); font-size: 1rem; margin: 1.2rem 0 0.5rem; display: flex; align-items: baseline; gap: 0.5rem; }
-  .qlabel .qid { font-size: 0.7rem; color: var(--color-neutral); background: var(--color-neutral-10); padding: 0.1rem 0.4rem; border-radius: 4px; letter-spacing: 0.05em; }
-  .hint { font-size: 0.9rem; color: var(--color-neutral); font-style: italic; margin: 0.25rem 0 0.5rem; }
+  /* ---------- Progress bar ---------- */
+  .progress-wrap { background: #fff; padding: 0.5rem 1rem 0.75rem;
+    border-bottom: 1px solid var(--color-neutral-20); }
+  .progress-inner { max-width: 720px; margin: 0 auto; }
+  .progress-label {
+    font-family: var(--font-family-heading); font-size: 0.78rem;
+    color: var(--color-neutral); letter-spacing: 0.05em; text-transform: uppercase;
+    display: flex; justify-content: space-between; margin-bottom: 0.4rem;
+  }
+  .progress-bar {
+    height: 6px; background: var(--color-neutral-20);
+    border-radius: 999px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: 999px; transition: width 0.4s ease;
+  }
 
-  /* ---------- INPUTS ---------- */
-  input[type=text], input[type=number], textarea, select {
-    width: 100%; font-family: var(--font-body); font-size: 1rem;
-    padding: 0.65rem 0.75rem; border: 1.5px solid var(--color-neutral-33); border-radius: 8px;
+  /* ---------- Page container ---------- */
+  main {
+    max-width: 720px; margin: 0 auto;
+    padding: 1.5rem 1rem 8rem; min-height: calc(100vh - 200px);
+  }
+
+  /* ---------- Welcome / cover (page 0) ---------- */
+  .welcome-card {
+    background: #fff; border-radius: 14px;
+    padding: 2rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.08);
+    text-align: center;
+  }
+  .welcome-hero {
+    font-family: var(--font-family-heading); font-weight: 800;
+    color: var(--color-primary); font-size: 2.5rem;
+    line-height: 1.05; letter-spacing: -0.02em; margin: 1rem 0 0.5rem;
+  }
+  .welcome-tagline {
+    font-family: var(--font-family-body); font-style: italic;
+    font-size: 1.2rem; color: var(--color-neutral); margin-bottom: 2rem;
+  }
+  .welcome-letter {
+    text-align: left; padding: 1.25rem 1.4rem;
+    background: var(--color-neutral-10); border-radius: 10px;
+    margin: 1.5rem 0; font-style: italic; font-size: 1rem; line-height: 1.65;
+  }
+  .welcome-letter-sig {
+    font-family: var(--font-family-heading); font-style: normal;
+    font-weight: 600; color: var(--color-primary);
+    margin-top: 0.75rem; font-size: 0.9rem;
+  }
+  .welcome-letter-sig span { font-weight: 400; color: var(--color-neutral); }
+  .welcome-list {
+    text-align: left; max-width: 480px; margin: 1.5rem auto;
+    padding-left: 1.25rem; font-size: 1rem; line-height: 1.6;
+  }
+  .welcome-list li { margin-bottom: 0.5rem; }
+  .welcome-list strong { color: var(--color-primary); }
+
+  /* ---------- Question page ---------- */
+  .qpage {
+    background: #fff; border-radius: 14px;
+    padding: 2rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.06);
+  }
+  .qpage-eyebrow {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-accent); letter-spacing: 0.14em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .qpage-eyebrow .qid {
+    background: var(--color-accent-10); color: var(--color-accent-dark);
+    padding: 0.1rem 0.4rem; border-radius: 4px; letter-spacing: 0.04em;
+    font-size: 0.7rem;
+  }
+  .qpage-question {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.7rem;
+    line-height: 1.2; margin: 0 0 0.75rem; letter-spacing: -0.01em;
+  }
+  .qpage-hint {
+    color: var(--color-neutral); font-style: italic;
+    margin: 0 0 1.5rem; font-size: 0.95rem;
+  }
+  .qpage-hint strong { font-style: normal; color: var(--color-primary); }
+
+  /* ---------- Inputs ---------- */
+  input[type=text], input[type=number], input[type=email], textarea {
+    width: 100%; font-family: var(--font-family-body);
+    font-size: 1.1rem; padding: 0.85rem 1rem;
+    border: 1.5px solid var(--color-neutral-33); border-radius: 10px;
     background: #fff; color: var(--color-text);
+    transition: border-color 0.15s;
   }
-  textarea { min-height: 4.5rem; resize: vertical; line-height: 1.5; }
-  input[type=text]:focus, input[type=number]:focus, textarea:focus, select:focus { border-color: var(--color-primary); }
-  .inline-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-  .inline-row > label { flex: 1 1 auto; }
+  textarea { min-height: 6rem; resize: vertical; line-height: 1.55; }
+  input:focus, textarea:focus { border-color: var(--color-primary); outline: none; }
+  .compound-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .compound-row label {
+    flex: 1 1 120px;
+    font-family: var(--font-family-heading); font-weight: 500;
+    color: var(--color-neutral); font-size: 0.9rem;
+  }
+  .compound-row label input { margin-top: 0.3rem; }
+  .compound-text-label {
+    display: block; margin-top: 0.5rem;
+    font-family: var(--font-family-heading); font-weight: 500;
+    color: var(--color-neutral); font-size: 0.9rem;
+  }
+  .compound-text-label input { margin-top: 0.3rem; }
 
-  /* Checkbox list */
-  .cb-list { list-style: none; padding: 0; margin: 0.5rem 0; display: grid; gap: 0.5rem; }
-  .cb-list.two-col { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .cb-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.55rem 0.75rem; border: 1.5px solid var(--color-neutral-20); border-radius: 8px; background: #fff; cursor: pointer; transition: all 0.15s; }
-  .cb-item:hover { border-color: var(--color-secondary); }
-  .cb-item input { margin-top: 0.25rem; width: 1.1rem; height: 1.1rem; accent-color: var(--color-primary); flex-shrink: 0; }
-  .cb-item.checked { border-color: var(--color-primary); background: var(--color-primary-10); }
-  .cb-item .other-input { margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.95rem; border-width: 1px; }
+  /* Choice list */
+  .choice-list {
+    display: grid; gap: 0.6rem; margin: 0.5rem 0;
+  }
+  .choice-list.two-col { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .choice {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid var(--color-neutral-20); border-radius: 10px;
+    background: #fff; cursor: pointer; transition: all 0.15s;
+    font-size: 1rem; line-height: 1.4;
+  }
+  .choice:hover { border-color: var(--color-secondary); background: var(--color-secondary-10); }
+  .choice input {
+    margin-top: 0.2rem; width: 1.2rem; height: 1.2rem;
+    accent-color: var(--color-primary); flex-shrink: 0;
+  }
+  .choice.checked { border-color: var(--color-primary); background: var(--color-primary-10); }
+  .choice .choice-text { flex: 1; }
 
-  /* Skip box */
-  .skip-box { margin: 0.5rem 0 0.75rem; padding: 0.5rem 0.75rem; background: var(--color-neutral-10); border: 1px dashed var(--color-neutral-33); border-radius: 6px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-  .skip-box input { accent-color: var(--color-accent); }
-  .skipped { opacity: 0.45; pointer-events: none; }
-  .skipped textarea, .skipped input[type=text] { background: var(--color-neutral-10); }
+  .other-input-wrap {
+    margin-top: 0.75rem; padding: 0.75rem 1rem;
+    background: var(--color-neutral-10); border-radius: 10px;
+    border: 1.5px dashed var(--color-neutral-33);
+  }
+  .other-input-wrap label {
+    display: block; font-family: var(--font-family-heading);
+    font-size: 0.85rem; color: var(--color-neutral); margin-bottom: 0.4rem;
+  }
 
-  /* Callouts */
-  .callout { border-left: 4px solid var(--color-secondary); padding: 0.9rem 1rem; margin: 1rem 0; border-radius: 0 8px 8px 0; font-size: 0.97rem; }
-  .callout-info { background: var(--color-secondary-10); border-color: var(--color-secondary); }
-  .callout-warn { background: var(--color-accent-10); border-color: var(--color-accent); }
-  .callout-care { background: var(--color-warm-10); border-color: var(--color-warm); }
+  .triple-text input { margin-bottom: 0.6rem; }
 
-  /* Welcome letter */
-  .letter { font-family: var(--font-body); font-style: italic; font-size: 1.05rem; line-height: 1.65; color: var(--color-text); padding: 1rem 1.2rem; background: var(--color-neutral-10); border-radius: 10px; margin: 1rem 0; }
-  .letter-sig { font-family: var(--font-heading); font-style: normal; font-weight: 600; font-size: 0.9rem; color: var(--color-primary); margin-top: 0.75rem; }
+  /* Callouts on questions */
+  .qpage-callout {
+    padding: 1rem 1.2rem; border-radius: 8px; margin: 1rem 0 1.5rem;
+    font-size: 0.95rem; line-height: 1.55;
+    border-left: 4px solid;
+  }
+  .qpage-callout.care {
+    background: var(--color-warm-10); border-color: var(--color-warm);
+  }
+  .qpage-callout.warn {
+    background: var(--color-accent-10); border-color: var(--color-accent);
+  }
+  .qpage-callout.info {
+    background: var(--color-secondary-10); border-color: var(--color-secondary);
+  }
 
-  /* Nav buttons */
-  .nav { display: flex; justify-content: space-between; gap: 0.75rem; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--color-neutral-20); }
-  .btn { font-family: var(--font-heading); font-weight: 600; font-size: 1rem; padding: 0.75rem 1.4rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.15s; }
+  /* Consent block */
+  .consent-block { padding: 1.25rem; background: var(--color-neutral-10);
+    border-radius: 10px; margin-bottom: 1rem; }
+  .consent-block h3 {
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-primary); font-size: 1.1rem; margin: 0 0 0.5rem;
+  }
+  .consent-block:last-of-type { margin-bottom: 1.5rem; }
+  .consent-final {
+    background: var(--color-primary-10); border-radius: 10px;
+    padding: 1rem 1.2rem; margin: 1.5rem 0 0.5rem;
+  }
+  .consent-final label {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-weight: 500; cursor: pointer;
+  }
+  .consent-final input { margin-top: 0.3rem; width: 1.25rem; height: 1.25rem; accent-color: var(--color-primary); }
+
+  /* ---------- Nav row ---------- */
+  .nav-row {
+    max-width: 720px; margin: 1.5rem auto 0;
+    padding: 0 1rem;
+    display: flex; justify-content: space-between; gap: 0.75rem;
+    flex-wrap: wrap; align-items: center;
+  }
+  .nav-row-spacer { flex: 1; }
+  .btn {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 1rem; padding: 0.75rem 1.4rem;
+    border-radius: 10px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center;
+    gap: 0.4rem; transition: all 0.15s; line-height: 1;
+  }
   .btn-primary { background: var(--color-primary); color: #fff; }
   .btn-primary:hover { background: var(--color-primary-dark); }
-  .btn-primary:disabled { background: var(--color-neutral-33); cursor: not-allowed; }
-  .btn-ghost { background: #fff; color: var(--color-primary); border: 1.5px solid var(--color-neutral-33); }
+  .btn-primary:disabled {
+    background: var(--color-neutral-33); cursor: not-allowed; opacity: 0.7;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--color-primary);
+    border: 1.5px solid var(--color-neutral-33);
+  }
   .btn-ghost:hover { border-color: var(--color-primary); }
-  .btn-danger { background: #fff; color: var(--color-accent); border: 1.5px solid var(--color-accent); }
+  .btn-skip {
+    background: transparent; color: var(--color-neutral);
+    border: 1.5px dashed var(--color-neutral-33);
+    font-size: 0.9rem; padding: 0.65rem 1rem;
+  }
+  .btn-skip:hover { color: var(--color-accent); border-color: var(--color-accent); }
+  .btn-danger {
+    background: transparent; color: var(--color-accent);
+    border: 1.5px solid var(--color-accent);
+  }
 
-  /* Review */
-  .review-section { margin: 1rem 0; padding: 1rem; background: var(--color-neutral-10); border-radius: 8px; }
-  .review-section h3 { font-family: var(--font-heading); font-size: 0.95rem; color: var(--color-primary); margin: 0 0 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
-  .review-q { margin: 0.6rem 0; }
-  .review-q strong { font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; color: var(--color-text); display: block; margin-bottom: 0.2rem; }
-  .review-q .answer { color: var(--color-neutral); font-size: 0.95rem; white-space: pre-wrap; }
-  .review-q .answer.empty { font-style: italic; }
+  /* ---------- Review screen ---------- */
+  .review-intro {
+    text-align: center; padding: 2rem 0 1rem;
+  }
+  .review-intro h1 {
+    font-family: var(--font-family-heading); font-weight: 800;
+    color: var(--color-primary); font-size: 2.25rem;
+    margin: 0 0 0.5rem;
+  }
+  .review-intro p { font-size: 1.1rem; color: var(--color-neutral); }
 
-  /* Save indicator */
-  .save-indicator { font-family: var(--font-heading); font-size: 0.75rem; color: var(--color-neutral); }
-  .save-indicator.saved { color: var(--color-green, #82C341); }
+  /* ---------- Guide output (the FINAL PRODUCT) ---------- */
+  .guide-celebration {
+    text-align: center; padding: 2rem 1rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: #fff; border-radius: 14px; margin-bottom: 2rem;
+  }
+  .guide-celebration h1 {
+    font-family: var(--font-family-heading); font-weight: 800;
+    font-size: 2.25rem; margin: 0 0 0.5rem; color: #fff;
+  }
+  .guide-celebration p {
+    font-size: 1.1rem; color: rgba(255,255,255,0.92);
+    max-width: 480px; margin: 0 auto;
+  }
 
-  /* Utilities */
-  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
-  [x-cloak] { display: none !important; }
+  .guide-actions {
+    display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;
+    margin: 1.5rem 0 2.5rem;
+  }
 
+  .guide {
+    background: #fff; border-radius: 14px; padding: 2.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(65,52,148,0.08);
+  }
+  .guide-section { margin-bottom: 2.5rem; }
+  .guide-section:last-child { margin-bottom: 0; }
+  .guide-section-eyebrow {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-accent); letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .guide-section h2 {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.5rem;
+    line-height: 1.2; margin: 0 0 1rem; letter-spacing: -0.01em;
+  }
+  .guide-section h2 + p.guide-section-sub {
+    margin-top: -0.5rem; margin-bottom: 1rem; color: var(--color-neutral);
+    font-size: 0.95rem;
+  }
+
+  .story-part {
+    font-family: var(--font-family-body); font-size: 1.1rem;
+    line-height: 1.7; margin: 0 0 1.25rem;
+    padding: 0 0 0 1rem; border-left: 3px solid var(--color-warm);
+  }
+  .story-part:first-of-type { font-weight: 600; color: var(--color-primary); }
+  .story-part:last-of-type { font-style: italic; color: var(--color-charcoal); }
+
+  .job-card, .practice-card, .resource-card {
+    background: var(--color-neutral-10); border-radius: 10px;
+    padding: 1.1rem 1.25rem; margin-bottom: 0.75rem;
+    border-left: 4px solid var(--color-secondary);
+  }
+  .job-card .job-title, .practice-card .practice-q, .resource-card .resource-name {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.1rem; margin: 0 0 0.35rem;
+  }
+  .job-meta { font-size: 0.85rem; color: var(--color-neutral);
+    margin-bottom: 0.5rem; font-family: var(--font-family-heading); }
+  .job-meta strong { color: var(--color-text); }
+  .why-match { font-size: 0.95rem; }
+
+  .practice-card { border-left-color: var(--color-warm); }
+  .practice-banner {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-warm-dark, #8a6a00); letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 0.4rem;
+  }
+  .practice-answer {
+    font-style: italic; padding: 0.5rem 0 0.5rem 0.75rem;
+    border-left: 2px solid var(--color-warm-33);
+    margin: 0.5rem 0; color: var(--color-text);
+  }
+  .practice-coach {
+    font-size: 0.9rem; color: var(--color-neutral);
+    font-family: var(--font-family-heading);
+  }
+  .practice-coach strong { color: var(--color-primary); }
+
+  .resource-card { border-left-color: var(--color-accent); }
+  .resource-card .resource-name { color: var(--color-accent-dark); }
+  .resource-contact { font-family: var(--font-family-heading); font-weight: 600; color: var(--color-accent); margin: 0.2rem 0; }
+  .resource-contact a { color: inherit; text-decoration: underline; }
+  .resource-line { font-size: 0.9rem; color: var(--color-neutral); }
+
+  .guide-disclaimer {
+    margin-top: 2rem; padding: 1rem 1.25rem;
+    background: var(--color-warm-10); border-left: 4px solid var(--color-warm);
+    border-radius: 8px; font-size: 0.9rem; line-height: 1.55;
+  }
+
+  /* ---------- Crisis bar (always present) ---------- */
+  .crisis {
+    margin: 2rem auto 1rem; max-width: 720px; padding: 0 1rem;
+  }
+  .crisis-inner {
+    background: #fff; border: 1px solid var(--color-neutral-20);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 10px; padding: 1rem 1.25rem;
+  }
+  .crisis-heading {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-accent-dark); font-size: 0.75rem;
+    letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.5rem;
+  }
+  .crisis-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.4rem 1rem;
+  }
+  .crisis-list li { font-size: 0.95rem; }
+  .crisis-list strong {
+    color: var(--color-accent); font-family: var(--font-family-heading);
+    font-weight: 700; font-size: 1.05rem; margin-right: 0.3rem;
+  }
+
+  footer {
+    background: #fff; border-top: 1px solid var(--color-neutral-20);
+    padding: 1.5rem 1rem; text-align: center; margin-top: 2rem;
+  }
+  footer p {
+    max-width: 600px; margin: 0 auto;
+    font-size: 0.85rem; color: var(--color-neutral);
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 640px) {
+    main { padding: 1rem 0.75rem 6rem; }
+    .qpage { padding: 1.5rem 1.1rem; }
+    .qpage-question { font-size: 1.4rem; }
+    .welcome-hero { font-size: 2rem; }
+    .nav-row { padding: 0 0.75rem; }
+    .btn { font-size: 0.95rem; padding: 0.7rem 1.1rem; }
+    .guide { padding: 1.5rem 1.25rem; }
+  }
+
+  /* ---------- Print (the guide) ---------- */
   @media print {
-    .progress-wrap, .nav, header.brand .beta, .btn { display: none !important; }
-    .step { box-shadow: none; break-inside: avoid; }
+    .topbar, .progress-wrap, .nav-row, .guide-celebration,
+    .guide-actions, .crisis, footer { display: none !important; }
+    body { background: #fff; font-size: 11pt; }
+    main { padding: 0; max-width: 100%; }
+    .guide { box-shadow: none; padding: 0; border-radius: 0; }
+    .guide-section { page-break-inside: avoid; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
   }
 </style>
-<script>
-  // Hold Alpine's start until we're ready (intakeApp factory has been defined).
-  window.deferLoadingAlpine = function(alpineStart) { window.__startAlpine = alpineStart; };
-</script>
-<script defer src="alpine.min.js"></script>
 </head>
 <body>
-<div class="app" x-data="intakeApp()" x-init="init()" x-cloak>
 
-  <header class="brand">
-    <div class="wordmark">Invest Hamilton County</div>
-    <span class="beta">BETA</span>
-  </header>
-
-  <!-- Progress -->
-  <div class="progress-wrap" x-show="step > 0 && step < steps.length - 1">
-    <div class="progress-label">
-      <span x-text="`Step ${step} of ${steps.length - 2}`"></span>
-      <span class="save-indicator" :class="{ saved: saveStatus === 'saved' }" x-text="saveStatus === 'saved' ? '✓ Saved' : 'Saving…'"></span>
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="../../index.html" class="topbar-back">← Workforce Resource Navigator</a>
+      <div class="topbar-meta">
+        <span id="save-indicator" class="save-indicator">✓ Saved</span>
+        <span class="beta-pill">BETA</span>
+      </div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" :style="`width: ${(step / (steps.length - 2)) * 100}%`"></div></div>
   </div>
 
-  <!-- ================== STEP 0: COVER / WELCOME ================== -->
-  <section class="step" x-show="step === 0">
-    <div style="text-align:center; padding: 2rem 0 1rem;">
-      <div style="font-family: var(--font-heading); font-weight: 800; font-size: 2.25rem; color: var(--color-primary); line-height: 1.05; letter-spacing: -0.01em;">
-        From Paper<br>to Pathway
+  <div id="progress-wrap" class="progress-wrap" style="display:none;">
+    <div class="progress-inner">
+      <div class="progress-label">
+        <span id="progress-label"></span>
+        <span id="progress-pct"></span>
       </div>
-      <div style="font-family: var(--font-body); font-style: italic; font-size: 1.15rem; color: var(--color-neutral); margin-top: 0.75rem;">Your Story Toolkit</div>
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width:0%"></div></div>
     </div>
-    <p style="text-align:center; font-size: 1.05rem; margin: 1.5rem 0;">
-      A workbook to help you prepare to talk with employers about where you've been and where you're going.
-    </p>
+  </div>
 
-    <div class="letter">
-      You picked up this booklet, and that matters. What you write in here is yours — nobody is grading it, nobody is using it against you, and you can stop any time you want. The questions get easier the further you go, and the hard ones have a skip box right next to them. When you're done, you'll get a guide: a story draft, some job ideas, and a few interview answers to practice.
-      <div class="letter-sig">— Mike Thibideau<br><span style="font-weight:400;">President &amp; CEO, Invest Hamilton County</span></div>
-    </div>
+  <main id="main" role="main" aria-live="polite"></main>
 
-    <h2>How this works</h2>
-    <ol>
-      <li>Answer the questions at your own pace. <strong>Skip anything you don't want to answer.</strong></li>
-      <li>Your answers are saved on this device only — nothing is sent to a server.</li>
-      <li>When you're done, you'll see a summary you can print or download.</li>
-      <li>Most people finish in 30–60 minutes.</li>
-    </ol>
+  <nav id="nav-row" class="nav-row" aria-label="Page navigation"></nav>
 
-    <div class="callout callout-info">
-      <strong>What this toolkit is NOT:</strong> It is not a test. It is not a legal document. It is not a medical record. It is not shared with anyone unless you choose to share it.
-    </div>
-
-    <div class="nav" style="justify-content:flex-end;">
-      <button class="btn btn-primary" @click="next()">Get started →</button>
-    </div>
-    <div style="text-align:center; margin-top:1rem;" x-show="hasSavedData">
-      <button class="btn btn-ghost" @click="resume()">Resume where I left off</button>
-      <button class="btn btn-danger" @click="clearAll()" style="margin-left:0.5rem;">Start over</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 1: CONSENT ================== -->
-  <section class="step" x-show="step === 1">
-    <div class="eyebrow">Section 2 · Consent &amp; your rights</div>
-    <h1 class="page-title">Before you start — please read</h1>
-
-    <h2>Voluntary participation</h2>
-    <p>Filling out this toolkit is <strong>your choice</strong>. You can stop at any time and your answers stay with you.</p>
-
-    <h2>What happens to your answers</h2>
-    <p>This beta version runs entirely in your web browser. Your answers are saved <strong>only on this device</strong> (in local storage). Nothing is sent over the internet. You can delete everything with the "Start over" button.</p>
-
-    <div class="callout callout-warn">
-      <strong>One thing to know:</strong> Indiana law requires reporting of a few specific things — current child abuse, current elder abuse, or a clear plan to hurt yourself or someone else. In the full program with staff support, those things would be reported. In this self-serve beta, <strong>please do not write anything you wouldn't want shared.</strong> If you're in crisis, call or text <strong>988</strong>.
-    </div>
-
-    <h2>What you get back</h2>
-    <p>At the end, you'll see a summary of your answers. You'll be able to print it, download it as a file, or copy it to paste into another tool.</p>
-
-    <label class="cb-item" :class="{ checked: data.consent }" style="margin-top:1rem;">
-      <input type="checkbox" x-model="data.consent">
-      <span>I understand and I want to continue.</span>
-    </label>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()" :disabled="!data.consent">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 2: ABOUT YOU ================== -->
-  <section class="step" x-show="step === 2">
-    <div class="eyebrow">Section 3 · About you</div>
-    <h1 class="page-title">A little about you</h1>
-    <p class="hint">These are easy ones. Nothing sensitive yet.</p>
-
-    <div class="qlabel"><span class="qid">Q3.a</span> First name or nickname <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(optional — any name is fine)</span></div>
-    <input type="text" x-model="data.q3a" placeholder="What should we call you?">
-
-    <div class="qlabel"><span class="qid">Q3.b</span> Age range</div>
-    <ul class="cb-list two-col">
-      <template x-for="opt in ['18–24','25–34','35–44','45–54','55–64','65+']" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q3b === opt }">
-          <input type="radio" name="q3b" :value="opt" x-model="data.q3b"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-
-    <div class="qlabel"><span class="qid">Q3.c</span> City or town where you hope to work</div>
-    <input type="text" x-model="data.q3c" placeholder="Noblesville, Fishers, Indianapolis…">
-
-    <div class="qlabel"><span class="qid">Q3.d</span> The longest job you've ever held</div>
-    <div class="inline-row">
-      <label style="max-width:120px;">Years<br><input type="number" min="0" x-model="data.q3d_years"></label>
-      <label style="max-width:120px;">Months<br><input type="number" min="0" max="11" x-model="data.q3d_months"></label>
-    </div>
-    <label style="display:block; margin-top:0.5rem;">Kind of work it was<br>
-      <input type="text" x-model="data.q3d_kind" placeholder="What did you do?">
-    </label>
-
-    <div class="qlabel"><span class="qid">Q3.e</span> Industries you've worked in <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply, even short jobs)</span></div>
-    <ul class="cb-list two-col">
-      <template x-for="opt in industries" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q3e.includes(opt) }">
-          <input type="checkbox" :value="opt" x-model="data.q3e"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-    <label style="display:block; margin-top:0.5rem;">Other<br>
-      <input type="text" x-model="data.q3e_other" placeholder="Something else?">
-    </label>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 3: SKILLS ================== -->
-  <section class="step" x-show="step === 3">
-    <div class="eyebrow">Section 4 · Skills</div>
-    <h1 class="page-title">What you can do</h1>
-    <p class="hint">Check anything you've done — even once, even if you weren't paid, even if it was a long time ago. Skills count whether you learned them on a job, at home, or somewhere else.</p>
-
-    <div class="qlabel"><span class="qid">Q4.a</span> Skills checklist <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply)</span></div>
-    <ul class="cb-list two-col">
-      <template x-for="skill in skills" :key="skill">
-        <li><label class="cb-item" :class="{ checked: data.q4a.includes(skill) }">
-          <input type="checkbox" :value="skill" x-model="data.q4a"><span x-text="skill"></span>
-        </label></li>
-      </template>
-    </ul>
-
-    <div class="qlabel"><span class="qid">Q4.b</span> Three things people say I'm good at</div>
-    <p class="hint">Even small things count — "I'm patient with kids," "I can fix anything," "people trust me."</p>
-    <input type="text" x-model="data.q4b_1" placeholder="1." style="margin-bottom:0.5rem;">
-    <input type="text" x-model="data.q4b_2" placeholder="2." style="margin-bottom:0.5rem;">
-    <input type="text" x-model="data.q4b_3" placeholder="3.">
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 4: WHAT HAPPENED ================== -->
-  <section class="step" x-show="step === 4">
-    <div class="eyebrow">Section 5 · What happened</div>
-    <h1 class="page-title">What happened</h1>
-
-    <div class="callout callout-care">
-      Employers who ask about your past usually just want to know two things: <em>that you've thought about it</em>, and <em>what's different now</em>. You don't have to explain everything. A few sentences is enough. <strong>If any question here feels like too much today, check Skip and move on.</strong>
-    </div>
-
-    <div class="qlabel"><span class="qid">Q5.a</span> In one or two sentences, what happened?</div>
-    <p class="hint">Example: "I got a drug charge in 2019." That's enough.</p>
-    <label class="skip-box"><input type="checkbox" x-model="data.q5a_skip"> Skip this one</label>
-    <div :class="{ skipped: data.q5a_skip }"><textarea x-model="data.q5a" rows="3"></textarea></div>
-
-    <div class="qlabel"><span class="qid">Q5.b</span> When was it? (year is fine)</div>
-    <label class="skip-box"><input type="checkbox" x-model="data.q5b_skip"> Skip this one</label>
-    <div :class="{ skipped: data.q5b_skip }"><input type="number" min="1970" max="2026" x-model="data.q5b" placeholder="e.g. 2019" style="max-width:180px;"></div>
-
-    <div class="qlabel"><span class="qid">Q5.c</span> Is the case closed?</div>
-    <label class="skip-box"><input type="checkbox" x-model="data.q5c_skip"> Skip this one</label>
-    <ul class="cb-list" :class="{ skipped: data.q5c_skip }">
-      <template x-for="opt in ['Yes, fully closed','Still open / on probation or parole','Not sure']" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q5c === opt }">
-          <input type="radio" name="q5c" :value="opt" x-model="data.q5c"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-
-    <div class="qlabel"><span class="qid">Q5.d</span> <span style="font-weight:400;">Optional — only if you want to.</span> One thing about why — no blame, just honest.</div>
-    <p class="hint">Example: "I was using. I'm not anymore." You can leave this blank.</p>
-    <label class="skip-box"><input type="checkbox" x-model="data.q5d_skip"> Skip this one</label>
-    <div :class="{ skipped: data.q5d_skip }"><textarea x-model="data.q5d" rows="3"></textarea></div>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 5: WHAT'S DIFFERENT NOW ================== -->
-  <section class="step" x-show="step === 5">
-    <div class="eyebrow">Section 6 · What's different now</div>
-    <h1 class="page-title">What's different now</h1>
-    <p>This is the part employers listen to most. What you've done since — what you've learned, what you've changed — matters more than what happened before.</p>
-
-    <div class="qlabel"><span class="qid">Q6.a</span> Since then, I have: <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check all that apply)</span></div>
-    <ul class="cb-list">
-      <template x-for="opt in sinceThen" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q6a.includes(opt) }">
-          <input type="checkbox" :value="opt" x-model="data.q6a"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-    <label style="display:block; margin-top:0.5rem;">Other<br>
-      <input type="text" x-model="data.q6a_other" placeholder="Something else you've done?">
-    </label>
-
-    <div class="qlabel"><span class="qid">Q6.b</span> One specific thing I'm proud of since then</div>
-    <p class="hint">Example: "I've been clean 14 months." "I finished my GED."</p>
-    <textarea x-model="data.q6b" rows="3"></textarea>
-
-    <div class="qlabel"><span class="qid">Q6.c</span> What I've learned about myself</div>
-    <p class="hint">Example: "I do better with a routine." "I can stay calm when everyone else panics."</p>
-    <textarea x-model="data.q6c" rows="4"></textarea>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 6: RECOVERY (OPTIONAL) ================== -->
-  <section class="step" x-show="step === 6">
-    <div class="eyebrow">Section 7 · Recovery (optional)</div>
-    <h1 class="page-title">Recovery</h1>
-
-    <div class="callout callout-care">
-      <strong>You do not have to share this with employers. Ever.</strong> People in recovery are protected under the Americans with Disabilities Act. If recovery is part of your story and you want it to be part of your plan, answer here. You can skip this entire page.
-    </div>
-
-    <label class="skip-box" style="margin-bottom:1rem;"><input type="checkbox" x-model="data.q7_skip"> Skip this whole page</label>
-
-    <div :class="{ skipped: data.q7_skip }">
-      <div class="qlabel"><span class="qid">Q7.a</span> Are you in recovery?</div>
-      <ul class="cb-list">
-        <template x-for="opt in ['Yes','No','Prefer not to say']" :key="opt">
-          <li><label class="cb-item" :class="{ checked: data.q7a === opt }">
-            <input type="radio" name="q7a" :value="opt" x-model="data.q7a"><span x-text="opt"></span>
-          </label></li>
-        </template>
+  <section class="crisis" id="crisis-bar">
+    <div class="crisis-inner">
+      <h2 class="crisis-heading">If you need help right now</h2>
+      <ul class="crisis-list">
+        <li><strong>988</strong>Crisis line · call or text</li>
+        <li><strong>2-1-1</strong>Anything in Indiana</li>
+        <li><strong>1-800-869-0212</strong>Indiana Legal Services (free)</li>
       </ul>
-
-      <div x-show="data.q7a === 'Yes'">
-        <div class="qlabel"><span class="qid">Q7.b</span> How long?</div>
-        <ul class="cb-list two-col">
-          <template x-for="opt in ['Less than 6 months','6–12 months','1–2 years','2–5 years','5 years or more']" :key="opt">
-            <li><label class="cb-item" :class="{ checked: data.q7b === opt }">
-              <input type="radio" name="q7b" :value="opt" x-model="data.q7b"><span x-text="opt"></span>
-            </label></li>
-          </template>
-        </ul>
-
-        <div class="qlabel"><span class="qid">Q7.c</span> Do you need any of these at work?</div>
-        <ul class="cb-list">
-          <template x-for="opt in recoveryNeeds" :key="opt">
-            <li><label class="cb-item" :class="{ checked: data.q7c.includes(opt) }">
-              <input type="checkbox" :value="opt" x-model="data.q7c"><span x-text="opt"></span>
-            </label></li>
-          </template>
-        </ul>
-        <p class="hint" style="margin-top:0.75rem;">MAT medications like methadone, buprenorphine (Suboxone), and naltrexone are legal prescriptions. Employers cannot fire you for taking them as prescribed. (EEOC Opioid Guidance, 2020)</p>
-      </div>
-    </div>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
     </div>
   </section>
 
-  <!-- ================== STEP 7: THE JOB YOU WANT ================== -->
-  <section class="step" x-show="step === 7">
-    <div class="eyebrow">Section 8 · The job you want</div>
-    <h1 class="page-title">The job you want</h1>
-
-    <div class="qlabel"><span class="qid">Q8.a</span> Job or type of work I want</div>
-    <p class="hint">Example: "CDL truck driver." "Welder." "Line cook." "Something outside."</p>
-    <textarea x-model="data.q8a" rows="2"></textarea>
-
-    <div class="qlabel"><span class="qid">Q8.b</span> Why this one?</div>
-    <p class="hint">What makes it a good fit? Money? You're good at it? A friend does it?</p>
-    <textarea x-model="data.q8b" rows="3"></textarea>
-
-    <div class="qlabel"><span class="qid">Q8.c</span> Anything that might stop me that I should know about?</div>
-    <div class="callout callout-info" style="font-size:0.9rem;">
-      Some jobs have legal rules about who can be hired — healthcare, childcare, driving (CDL), banking, schools. You're not expected to know the rules. Just write what you're worried about.
-    </div>
-    <label class="skip-box"><input type="checkbox" x-model="data.q8c_skip"> Skip this one</label>
-    <div :class="{ skipped: data.q8c_skip }"><textarea x-model="data.q8c" rows="3" placeholder='Example: "I have a DUI and want to drive."'></textarea></div>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Continue →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 8: INTERVIEW + HELP ================== -->
-  <section class="step" x-show="step === 8">
-    <div class="eyebrow">Section 9 + 10 · Interview questions &amp; what would help</div>
-    <h1 class="page-title">Questions that worry you</h1>
-
-    <div class="qlabel"><span class="qid">Q9.a</span> Which of these interview questions worry you most? <span style="font-weight:400; color:var(--color-neutral); font-size:0.85rem;">(check up to 3)</span></div>
-    <ul class="cb-list">
-      <template x-for="opt in interviewQs" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q9a.includes(opt) }">
-          <input type="checkbox" :value="opt" x-model="data.q9a" @change="capChecks('q9a', 3)"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-
-    <div class="qlabel"><span class="qid">Q9.b</span> One question I hope they DON'T ask</div>
-    <textarea x-model="data.q9b" rows="2"></textarea>
-
-    <h2 style="margin-top:2rem;">What would help</h2>
-    <div class="qlabel"><span class="qid">Q10.a</span> Check what you'd like help with</div>
-    <ul class="cb-list two-col">
-      <template x-for="opt in helpOptions" :key="opt">
-        <li><label class="cb-item" :class="{ checked: data.q10a.includes(opt) }">
-          <input type="checkbox" :value="opt" x-model="data.q10a"><span x-text="opt"></span>
-        </label></li>
-      </template>
-    </ul>
-
-    <div class="qlabel"><span class="qid">Q10.b</span> One thing I haven't asked for help with, but I probably should</div>
-    <textarea x-model="data.q10b" rows="2"></textarea>
-
-    <div class="nav">
-      <button class="btn btn-ghost" @click="prev()">← Back</button>
-      <button class="btn btn-primary" @click="next()">Review my answers →</button>
-    </div>
-  </section>
-
-  <!-- ================== STEP 9: REVIEW / FINISH ================== -->
-  <section class="step" x-show="step === 9">
-    <div class="eyebrow">You're done</div>
-    <h1 class="page-title">Here's what you wrote</h1>
-    <p>Look it over. You can go back and change anything, or download it to share with a coach (or with Alex, the AI helper, in a future version).</p>
-
-    <div class="callout callout-info">
-      <strong>Next in the full program:</strong> These answers get turned into a printed guide — a story draft in your words, 2–3 job ideas that match your skills, practice answers for the interview questions that worry you, and a resource list. This beta only shows you the summary.
-    </div>
-
-    <!-- Render review sections -->
-    <template x-for="section in reviewSections" :key="section.title">
-      <div class="review-section">
-        <h3 x-text="section.title"></h3>
-        <template x-for="q in section.questions" :key="q.id">
-          <div class="review-q" x-show="q.show">
-            <strong x-text="`${q.id} · ${q.label}`"></strong>
-            <div class="answer" :class="{ empty: !q.value }" x-text="q.value || '(skipped)'"></div>
-          </div>
-        </template>
-      </div>
-    </template>
-
-    <div class="nav" style="flex-wrap:wrap; justify-content:center; gap:0.5rem;">
-      <button class="btn btn-ghost" @click="step = 2">← Edit answers</button>
-      <button class="btn btn-primary" @click="window.print()">🖨 Print</button>
-      <button class="btn btn-primary" @click="downloadJSON()">⬇ Download (.json)</button>
-      <button class="btn btn-primary" @click="copyText()" x-text="copyLabel"></button>
-      <button class="btn btn-danger" @click="clearAll()">Start over</button>
-    </div>
-
-    <div class="callout callout-care" style="margin-top:2rem;">
-      <strong>Thank you for testing this.</strong> If you have feedback on wording, flow, or anything that felt off — let Mike know. Every version gets better because of people like you.
-    </div>
-
-    <p style="font-size:0.8rem; color:var(--color-neutral); margin-top:2rem; border-top: 1px solid var(--color-neutral-20); padding-top:1rem;">
-      <em>From Paper to Pathway</em> is a program of Invest Hamilton County. It provides general information and coaching support. <strong>It is not a lawyer, does not provide legal advice, and does not create an attorney-client relationship.</strong> For advice about expungement, licensing, or disclosure obligations in regulated fields, consult a licensed attorney. Free legal help: Indiana Legal Services 1-800-869-0212. Crisis: 988.
-    </p>
-  </section>
-
-</div>
+  <footer role="contentinfo">
+    <p><strong>From Paper to Pathway</strong> · A program of Invest Hamilton County. This is general information and coaching, not legal advice. For legal questions, Indiana Legal Services is free at 1-800-869-0212.</p>
+  </footer>
 
 <script>
-window.intakeApp = function() {
-  const STORAGE_KEY = 'ihc-reentry-intake-v1';
-  const emptyData = () => ({
-    consent: false,
-    q3a: '', q3b: '', q3c: '',
-    q3d_years: '', q3d_months: '', q3d_kind: '',
-    q3e: [], q3e_other: '',
-    q4a: [], q4b_1: '', q4b_2: '', q4b_3: '',
-    q5a: '', q5a_skip: false,
-    q5b: '', q5b_skip: false,
-    q5c: '', q5c_skip: false,
-    q5d: '', q5d_skip: false,
-    q6a: [], q6a_other: '', q6b: '', q6c: '',
-    q7_skip: false, q7a: '', q7b: '', q7c: [],
-    q8a: '', q8b: '', q8c: '', q8c_skip: false,
-    q9a: [], q9b: '',
-    q10a: [], q10b: '',
+(function() {
+  'use strict';
+  // ============================================================
+  // SCHEMA — one question per page
+  // ============================================================
+  const PAGES = [
+    { id: 'welcome', type: 'welcome' },
+    { id: 'consent', type: 'consent' },
+    { id: 'q3a', section: 'About you', qid: 'Q3.a',
+      question: 'What should we call you?',
+      hint: 'Optional — any name is fine. A nickname works.',
+      type: 'text', field: 'q3a', placeholder: 'First name or nickname',
+      skippable: true },
+    { id: 'q3b', section: 'About you', qid: 'Q3.b',
+      question: 'What\'s your age range?',
+      type: 'radio', field: 'q3b',
+      options: ['18–24','25–34','35–44','45–54','55–64','65+'],
+      layout: 'two_col', skippable: true },
+    { id: 'q3c', section: 'About you', qid: 'Q3.c',
+      question: 'Where do you hope to work?',
+      hint: 'A city, town, or area. Examples: Noblesville, Fishers, Indianapolis.',
+      type: 'text', field: 'q3c', placeholder: 'City or town', skippable: true },
+    { id: 'q3d', section: 'About you', qid: 'Q3.d',
+      question: 'What\'s the longest job you\'ve held?',
+      hint: 'Even if it was years ago. Years and months are fine estimates.',
+      type: 'compound', skippable: true,
+      fields: [
+        { field: 'q3d_years', kind: 'number', label: 'Years', max: 60 },
+        { field: 'q3d_months', kind: 'number', label: 'Months', max: 11 },
+        { field: 'q3d_kind', kind: 'text', label: 'What did you do?', placeholder: 'Kind of work' },
+      ]},
+    { id: 'q3e', section: 'About you', qid: 'Q3.e',
+      question: 'What kinds of work have you done?',
+      hint: 'Check anything you\'ve done — even short jobs, even years ago.',
+      type: 'multi', field: 'q3e',
+      options: ['Food service','Warehouse / distribution','Construction','Healthcare / caregiving','Office / admin','Retail','Manufacturing / factory','Skilled trades','Driving / delivery / trucking','Landscaping / lawn care','Cleaning / janitorial','Self-employed / side hustle','Never had a paying job'],
+      other: true, layout: 'two_col', skippable: true },
+    { id: 'q4a', section: 'Skills', qid: 'Q4.a',
+      question: 'What can you do?',
+      hint: 'Check anything you\'ve done — even once, even unpaid. Skills count whether you learned them on a job, at home, or somewhere else.',
+      type: 'multi', field: 'q4a',
+      options: ['Cook for a group','Drive a car, truck, or van','Fix things','Use a computer, phone, or tablet','Care for kids, elders, or people with disabilities','Work outside in any weather','Talk to customers and handle complaints','Handle money or run a cash register','Solve problems when things go wrong fast','Lead a group or crew','Read blueprints, instructions, or manuals','Train or teach someone else','Clean to a high standard','Use hand tools or power tools','Lift and carry heavy things safely','Keep a schedule and show up on time','Stay calm around people who are upset','Write clearly'],
+      layout: 'two_col', skippable: true },
+    { id: 'q4b', section: 'Skills', qid: 'Q4.b',
+      question: 'Three things people say you\'re good at.',
+      hint: 'Even small things count — "I\'m patient with kids," "I can fix anything," "people trust me."',
+      type: 'triple', skippable: true,
+      fields: [
+        { field: 'q4b_1', placeholder: '1.' },
+        { field: 'q4b_2', placeholder: '2.' },
+        { field: 'q4b_3', placeholder: '3.' },
+      ]},
+    { id: 'q5a', section: 'What happened', qid: 'Q5.a',
+      question: 'In one or two sentences — what happened?',
+      hint: 'Example: "I got a drug charge in 2019." That\'s enough. You don\'t have to explain everything.',
+      callout: { type: 'care', text: '<strong>If this feels like too much today, just tap Skip.</strong> Employers care more about what\'s changed than what happened.' },
+      type: 'textarea', field: 'q5a', rows: 3, sensitive: true, skippable: true },
+    { id: 'q5b', section: 'What happened', qid: 'Q5.b',
+      question: 'What year was it?',
+      hint: 'A year is enough. Estimates are fine.',
+      type: 'number', field: 'q5b', min: 1970, max: 2030, sensitive: true, skippable: true },
+    { id: 'q5c', section: 'What happened', qid: 'Q5.c',
+      question: 'Is the case closed?',
+      type: 'radio', field: 'q5c', sensitive: true, skippable: true,
+      options: ['Yes, fully closed','Still open or on probation/parole','Not sure'] },
+    { id: 'q5d', section: 'What happened', qid: 'Q5.d',
+      question: 'Optional — one thing about why.',
+      hint: 'No blame, just honest. Example: "I was using. I\'m not anymore." Or skip — that\'s fine too.',
+      type: 'textarea', field: 'q5d', rows: 3, sensitive: true, skippable: true },
+    { id: 'q6a', section: "What's different now", qid: 'Q6.a',
+      question: 'Since then, you have…',
+      hint: 'Check all that apply. This is the part employers care about most.',
+      type: 'multi', field: 'q6a',
+      options: ['Completed a program (GED, treatment, class)','Earned a certificate or credential','Worked steady for 6 months or more','Stayed sober','Mentored someone else','Got stable housing','Repaired a relationship that matters','Became a parent — or became a better parent','Paid off a debt or fine'],
+      other: true, skippable: true },
+    { id: 'q6b', section: "What's different now", qid: 'Q6.b',
+      question: 'One specific thing you\'re proud of since then.',
+      hint: 'Example: "I\'ve been clean 14 months." "I finished my GED." "My daughter moved back in."',
+      type: 'textarea', field: 'q6b', rows: 3, skippable: true },
+    { id: 'q6c', section: "What's different now", qid: 'Q6.c',
+      question: 'What have you learned about yourself?',
+      hint: 'Example: "I do better with a routine." "I can stay calm when everyone else panics."',
+      type: 'textarea', field: 'q6c', rows: 4, skippable: true },
+    { id: 'q7a', section: 'Recovery (optional)', qid: 'Q7.a',
+      question: 'Are you in recovery from substance use?',
+      callout: { type: 'care', text: '<strong>You don\'t have to share this with employers. Ever.</strong> People in recovery are protected under the ADA. This question is so we can match you with the right resources — that\'s all.' },
+      type: 'radio', field: 'q7a',
+      options: ['Yes','No','Prefer not to say'], skippable: true },
+    { id: 'q7b', section: 'Recovery (optional)', qid: 'Q7.b',
+      question: 'How long?',
+      type: 'radio', field: 'q7b',
+      options: ['Less than 6 months','6–12 months','1–2 years','2–5 years','5 years or more'],
+      layout: 'two_col', skippable: true,
+      conditional: { field: 'q7a', equals: 'Yes' }},
+    { id: 'q7c', section: 'Recovery (optional)', qid: 'Q7.c',
+      question: 'Do you need any of these at work?',
+      type: 'multi', field: 'q7c',
+      options: ['Flexible schedule for treatment or meetings','A drug-test protocol that knows about my MAT','An EAP or counseling referral','A workplace that isn\'t centered around alcohol','None / not sure yet'],
+      skippable: true,
+      conditional: { field: 'q7a', equals: 'Yes' }},
+    { id: 'q8a', section: 'The job you want', qid: 'Q8.a',
+      question: 'What kind of work do you want next?',
+      hint: 'Examples: "CDL truck driver." "Welder." "Line cook." "Something outside."',
+      type: 'textarea', field: 'q8a', rows: 2, skippable: true },
+    { id: 'q8b', section: 'The job you want', qid: 'Q8.b',
+      question: 'Why this kind of work?',
+      hint: 'Money? You\'re good at it? A friend does it? You always wanted to?',
+      type: 'textarea', field: 'q8b', rows: 3, skippable: true },
+    { id: 'q8c', section: 'The job you want', qid: 'Q8.c',
+      question: 'Anything that might stop you that you should know about?',
+      callout: { type: 'info', text: 'Some jobs have legal rules — healthcare, childcare, driving (CDL), banking, schools. You don\'t need to know the rules. Just write what you\'re worried about.' },
+      hint: 'Example: "I have a DUI and want to drive." "I have a drug charge and want a hospital job."',
+      type: 'textarea', field: 'q8c', rows: 3, sensitive: true, skippable: true },
+    { id: 'q9a', section: 'Practice', qid: 'Q9.a',
+      question: 'Which interview questions worry you most?',
+      hint: 'Pick up to 3. We\'ll write practice answers for each one you pick.',
+      type: 'multi', field: 'q9a', cap: 3,
+      options: ['Tell me about yourself','Why were you out of work?','Do you have a record?','What\'s your biggest weakness?','Why should we hire you?','Are you reliable?','Where do you see yourself in 2 years?','Can you pass a drug test?','Can you pass a background check?','What were you doing during [gap year]?'],
+      skippable: true },
+    { id: 'q9b', section: 'Practice', qid: 'Q9.b',
+      question: 'One question you hope they DON\'T ask.',
+      hint: 'Naming it helps you prepare for it. Or skip if nothing comes to mind.',
+      type: 'textarea', field: 'q9b', rows: 2, skippable: true },
+    { id: 'q10a', section: 'What would help', qid: 'Q10.a',
+      question: 'Check what you\'d like help with.',
+      hint: 'We\'ll add the right phone numbers and websites to your guide.',
+      type: 'multi', field: 'q10a',
+      options: ['Expungement info','Finding a lawyer','Housing','Transportation','ID / Social Security / birth certificate','Childcare','Clothes for an interview','Mental health support','Addiction recovery support','Food / SNAP benefits','Reconnecting with family','Financial help / paying off fines'],
+      skippable: true },
+    { id: 'q10b', section: 'What would help', qid: 'Q10.b',
+      question: 'One thing you haven\'t asked for help with — but probably should.',
+      hint: 'Just say it. We won\'t hold you to it.',
+      type: 'textarea', field: 'q10b', rows: 2, skippable: true },
+    { id: 'review', type: 'review' },
+    { id: 'guide', type: 'guide' },
+  ];
+
+  // Curated resources (matches Q10.a barrier categories)
+  const RESOURCES = {
+    'Expungement info': [{ name: 'Indiana Legal Services — Expungement', phone: '1-800-869-0212', url: 'indianalegalservices.org/expungement', line: 'Free. Will tell you if your record qualifies and help you file.'}],
+    'Finding a lawyer': [{ name: 'Indiana Legal Services', phone: '1-800-869-0212', url: 'indianalegalservices.org', line: 'Free civil legal help.'}, { name: 'Neighborhood Christian Legal Clinic', phone: '317-429-4131', url: 'nclegalclinic.org', line: 'Free help with criminal, housing, family, expungement.'}],
+    'Housing': [{ name: 'Indiana 211', phone: 'Dial 2-1-1', line: 'Routes to shelters, rental help, housing programs.'}, { name: 'Hamilton County Township Trustees', phone: '317-770-4485 (Noblesville)', line: 'Emergency rent + utility help by township.'}],
+    'Transportation': [{ name: 'Hamilton County Express', phone: '317-773-5432', line: 'Demand-response rides in Hamilton County. Low fare.'}, { name: 'IndyGo (Marion County)', phone: '317-635-3344', line: 'Bus service. Half-fare for income-qualified.'}],
+    'ID / Social Security / birth certificate': [{ name: 'Indiana BMV', phone: '1-888-692-6841', line: 'State ID / driver\'s license. Fee waiver may be available.'}, { name: 'Indiana Vital Records', phone: '317-233-2700', line: 'Birth certificate copies. ~$10.'}],
+    'Childcare': [{ name: 'Brighter Futures Indiana', phone: '1-800-299-1627', url: 'brighterfuturesindiana.org', line: 'Childcare finder + CCDF financial help.'}],
+    'Clothes for an interview': [{ name: 'Dress for Success Indianapolis', phone: '317-916-1083', line: 'Free interview clothing for women.'}, { name: 'Goodwill Career Centers', phone: '317-524-4313', line: 'Job-readiness clothing + employment services.'}],
+    'Mental health support': [{ name: 'Indiana 211', phone: 'Dial 2-1-1', line: 'Routes to mental health services, sliding-scale providers.'}, { name: 'Aspire Indiana Health', phone: '1-877-574-1254', line: 'Integrated mental health + substance use, Medicaid + sliding scale.'}],
+    'Addiction recovery support': [{ name: 'SAMHSA National Helpline', phone: '1-800-662-4357', line: 'Free 24/7 confidential treatment referrals.'}, { name: 'Indiana 211', phone: 'Dial 2-1-1', line: 'Routes to treatment, MAT providers, recovery meetings.'}],
+    'Food / SNAP benefits': [{ name: 'SNAP / Indiana FSSA', phone: '1-800-403-0864', url: 'fssabenefits.in.gov', line: 'Food stamps application.'}, { name: 'Gleaners Food Bank', phone: '317-925-0191', line: 'Food pantry network — Hamilton + Marion counties.'}],
+    'Reconnecting with family': [{ name: 'Indiana 211', phone: 'Dial 2-1-1', line: 'Family-strengthening programs, mediation.'}],
+    'Financial help / paying off fines': [{ name: 'Indiana Legal Services', phone: '1-800-869-0212', line: 'Help with garnishment, collections, debt referrals.'}, { name: 'InCharge Debt Solutions', phone: '1-888-734-6229', line: 'Free nonprofit credit counseling.'}],
+    '_always': [{ name: '988 Suicide & Crisis Lifeline', phone: '988 (call or text)', line: 'Someone to talk to, anytime. Free.', priority: true }],
+  };
+
+  // Skill keyword → job-idea hints (heuristic, plain-language)
+  const JOB_HEURISTICS = [
+    { keys: ['drive','driving','truck','cdl','delivery'], title: 'Truck driver', wage: '$45,000–$70,000/year', credential: 'CDL Class A (3–8 weeks of training, often employer-paid)', why: 'You named driving as a strength. CDL Class A pays well and is one of the most consistently hiring fields in central Indiana.' },
+    { keys: ['warehouse','forklift','distribution','lift'], title: 'Warehouse / forklift operator', wage: '$35,000–$45,000/year', credential: 'Forklift certification (often employer-paid in 1–2 days)', why: 'Warehouse work is plentiful around Hamilton County. Forklift adds a few dollars an hour.' },
+    { keys: ['care','caregiving','kids','elder','nursing','home health','disabilities'], title: 'Nursing assistant (CNA) or home health aide', wage: '$32,000–$42,000/year', credential: 'CNA: ~75 hours of training. HHA: agency-specific.', why: 'You\'re already experienced caring for people. Going formal opens benefits + steadier hours.' },
+    { keys: ['cook','kitchen','food'], title: 'Cook (line cook or institutional)', wage: '$28,000–$40,000/year', credential: 'Usually no formal credential — start as line cook, move up.', why: 'Restaurants and institutional kitchens (schools, hospitals) hire continuously.' },
+    { keys: ['fix','tools','repair','maintenance','blueprint'], title: 'Maintenance technician', wage: '$40,000–$55,000/year', credential: 'No specific credential; on-the-job training. Trade school helps.', why: 'You have repair instincts. Apartment complexes, schools, and warehouses all need maintenance staff.' },
+    { keys: ['weld','welding'], title: 'Welder', wage: '$45,000–$65,000/year', credential: 'Ivy Tech welding certificate: ~6 months. Often eligible for funding.', why: 'You named welding. Indiana manufacturing pays well for welders and there are training grants.' },
+    { keys: ['cash','register','customer','retail','complaints'], title: 'Customer service representative', wage: '$32,000–$42,000/year', credential: 'No specific credential. Communication skills matter most.', why: 'You\'re comfortable handling people. Indoor, schedule-stable, lots of openings.' },
+    { keys: ['construction','outside'], title: 'Construction laborer', wage: '$35,000–$50,000/year', credential: 'No specific credential. OSHA-10 helps.', why: 'You said you can work outside. Indiana has a construction shortage right now.' },
+    { keys: ['clean','janitor','cleaning'], title: 'Cleaning / janitorial supervisor', wage: '$30,000–$42,000/year', credential: 'No specific credential. Reliability matters most.', why: 'You named cleaning to a high standard. Schools and commercial buildings hire steadily; supervisor adds pay.' },
+    { keys: ['lead','crew','train','teach','mentored'], title: 'Lead / crew supervisor', wage: '$40,000–$55,000/year', credential: 'No specific credential — usually promoted from within.', why: 'You\'ve led a group. That\'s rare. Crew lead at any of your past jobs is a real path.' },
+    { keys: ['computer','tablet','phone','admin','office','write'], title: 'Office / admin assistant', wage: '$32,000–$42,000/year', credential: 'No specific credential. Word/Excel basics help.', why: 'Office roles are stable, indoors, schedule-friendly. Lots of openings post-pandemic.' },
+  ];
+
+  // Practice answer templates (interview Q → coached example structure)
+  const PRACTICE_TEMPLATES = {
+    'Tell me about yourself': function(d) {
+      const skills = pickStrengths(d, 2);
+      const want = (d.q8a || '').trim();
+      const lines = [];
+      lines.push("I'm someone who shows up.");
+      if (skills.length) lines.push("I'm good at " + skills.join(' and ') + ".");
+      if (want) lines.push("I'm looking for " + want.toLowerCase() + " — that's why I applied here.");
+      else lines.push("I'm looking for steady work I can build on — that's why I applied.");
+      return {
+        answer: lines.join(' '),
+        coach: 'Lead with the present, not the past. Two strengths plus one forward statement. Aim for 30 seconds. Lets the interviewer ask follow-ups.'
+      };
+    },
+    'Why were you out of work?': function(d) {
+      const accomplishments = (d.q6a || []).slice(0, 2);
+      const ack = accomplishments.length ? "I took the time to " + accomplishments.map(a => a.toLowerCase()).join(' and ') + "." : "I took the time to get steady.";
+      return {
+        answer: "I had a period where I wasn't working. " + ack + " I'm ready to put that work into a job now.",
+        coach: 'Brief acknowledgment, name what you DID, return to the present. Don\'t over-explain.'
+      };
+    },
+    'Do you have a record?': function(d) {
+      const ack = (d.q5a || '').trim();
+      const since = (d.q6b || '').trim();
+      const status = d.q5c || '';
+      let answer = '';
+      if (ack && !d.q5a_skip) {
+        answer = ack;
+        if (status === 'Yes, fully closed') answer += " It's fully closed.";
+        else if (status === 'Still open or on probation/parole') answer += " I'm still under supervision and I'm fully compliant.";
+      } else {
+        answer = "I do. I had a closed case. ";
+        if (status === 'Still open or on probation/parole') answer = "I do. I'm still under supervision and I'm fully compliant. ";
+      }
+      if (since) answer += " " + since + ".";
+      else answer += " Since then I've been working steady.";
+      answer += " I'm looking for steady work I can stick with.";
+      return {
+        answer: answer.trim(),
+        coach: 'Three parts: brief acknowledgment, then responsibility/status, then pivot to what\'s changed. Research (Pager 2003, Ali et al. 2017) shows employers respond best to this exact structure. Short is better than long.'
+      };
+    },
+    'What\'s your biggest weakness?': function(d) {
+      return {
+        answer: "I like routine, and I know that about myself — so when I take a new job I ask early what the day looks like, before I commit. It helps me show up consistently.",
+        coach: 'Pick something real and workable that you actively manage. Avoid the "I care too much" cliche. Show self-awareness + a system you use.'
+      };
+    },
+    'Why should we hire you?': function(d) {
+      const skills = pickStrengths(d, 2);
+      const why = (d.q8b || '').trim();
+      let s = '';
+      if (skills.length) s = "Two things: I'm good at " + skills.join(' and ') + ", and I take this seriously.";
+      else s = "Two things: I show up, and I take this seriously.";
+      if (why) s += " " + why;
+      return { answer: s, coach: 'Two concrete strengths plus one forward statement. Avoid empty self-praise. Specifics beat adjectives.' };
+    },
+    'Are you reliable?': function(d) {
+      const learned = (d.q6c || '').trim();
+      let s = "Yes.";
+      if (learned) s += " " + learned + ".";
+      else s += " I keep a routine and I show up early.";
+      return { answer: s, coach: 'Yes plus one specific habit that proves it. "Yes" alone sounds defensive; "yes plus a system" sounds true.' };
+    },
+    'Where do you see yourself in 2 years?': function(d) {
+      return {
+        answer: "Getting good at this job, then seeing what's next. I'd rather build a career one solid step at a time than chase the next thing.",
+        coach: 'Don\'t over-promise a future you can\'t guarantee. Show you can commit + that you think long-term.'
+      };
+    },
+    'Can you pass a drug test?': function(d) {
+      const inRecovery = d.q7a === 'Yes';
+      const matNeed = (d.q7c || []).indexOf('A drug-test protocol that knows about my MAT') >= 0;
+      if (inRecovery && matNeed) {
+        return {
+          answer: "Yes. I do take a prescription my doctor prescribes as part of medication-assisted treatment. I'll show documentation to the right person in HR. I've been in treatment and it's working.",
+          coach: 'Direct yes, then short MAT disclosure with the documentation offer. EEOC Opioid Guidance (2020) protects MAT use as prescribed. Talk to your facilitator about WHEN to disclose — it doesn\'t have to be day one.'
+        };
+      }
+      return { answer: "Yes.", coach: 'One word. If they want more they\'ll ask.' };
+    },
+    'Can you pass a background check?': function(d) {
+      const ack = (d.q5a || '').trim();
+      const status = d.q5c || '';
+      let s = '';
+      if (ack && !d.q5a_skip) {
+        s = "I have a closed case from " + ((d.q5b && !d.q5b_skip) ? d.q5b + ". " : "a few years ago. ");
+        s += "I'm not going to walk through the details unless that's something you need for the role. I'd be happy to answer specific questions HR needs answered.";
+      } else if (status === 'Still open or on probation/parole') {
+        s = "I'm still under supervision. I'm fully compliant. For specific questions about my record I'm happy to put you in touch with my counsel through Indiana Legal Services.";
+      } else {
+        s = "I have a record. It's closed. I've been working steadily since then. Happy to answer the specific questions HR needs.";
+      }
+      return { answer: s, coach: 'Same three-part structure as "do you have a record?" Stay calm; keep control of the conversation.' };
+    },
+    'What were you doing during [gap year]?': function(d) {
+      const accomplishments = (d.q6a || []).slice(0, 2);
+      if (accomplishments.length) {
+        return {
+          answer: "I used that time to " + accomplishments.map(a => a.toLowerCase()).join(' and ') + ". That work shapes how I show up now.",
+          coach: 'Specific concrete things you did. The interviewer wants to see you used the time intentionally — even if it was just learning to manage a routine.'
+        };
+      }
+      return {
+        answer: "I had a stretch where I wasn't working a traditional job. I used that time to get steadier. I'm ready to put that into a job now.",
+        coach: 'Honest, brief, returns to the present. Don\'t over-explain.'
+      };
+    }
+  };
+
+  function pickStrengths(d, n) {
+    const out = [];
+    if (d.q4b_1) out.push(String(d.q4b_1).toLowerCase());
+    if (d.q4b_2) out.push(String(d.q4b_2).toLowerCase());
+    if (d.q4b_3) out.push(String(d.q4b_3).toLowerCase());
+    if (out.length === 0 && d.q4a && d.q4a.length) {
+      d.q4a.slice(0, 2).forEach(s => out.push(s.toLowerCase()));
+    }
+    return out.slice(0, n);
+  }
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  const STORAGE_KEY = 'reentry_intake_v2';
+  const state = {
+    pageIdx: 0,
+    data: loadData(),
+    sequence: [], // pages to actually show, recomputed when conditional inputs change
+  };
+
+  function defaultData() {
+    return {
+      consent: false,
+      q3a: '', q3b: '', q3c: '',
+      q3d_years: '', q3d_months: '', q3d_kind: '',
+      q3e: [], q3e_other: '',
+      q4a: [], q4b_1: '', q4b_2: '', q4b_3: '',
+      q5a: '', q5a_skip: false, q5b: '', q5b_skip: false,
+      q5c: '', q5c_skip: false, q5d: '', q5d_skip: false,
+      q6a: [], q6a_other: '', q6b: '', q6b_skip: false, q6c: '', q6c_skip: false,
+      q7a: '', q7b: '', q7c: [],
+      q8a: '', q8b: '', q8c: '', q8c_skip: false,
+      q9a: [], q9b: '',
+      q10a: [], q10b: '',
+    };
+  }
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return Object.assign(defaultData(), JSON.parse(raw));
+    } catch (e) {}
+    return defaultData();
+  }
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+      const ind = document.getElementById('save-indicator');
+      ind.textContent = '✓ Saved';
+      ind.classList.remove('saving');
+    } catch (e) { /* localStorage might be disabled */ }
+  }
+
+  function recomputeSequence() {
+    state.sequence = PAGES.filter(p => {
+      if (p.conditional) {
+        const v = state.data[p.conditional.field];
+        return v === p.conditional.equals;
+      }
+      return true;
+    });
+  }
+
+  // ============================================================
+  // RENDER
+  // ============================================================
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  }
+
+  function renderProgress() {
+    const wrap = document.getElementById('progress-wrap');
+    const page = state.sequence[state.pageIdx];
+    if (!page || page.type === 'welcome' || page.type === 'guide') {
+      wrap.style.display = 'none';
+      return;
+    }
+    wrap.style.display = 'block';
+    const total = state.sequence.length - 2;  // exclude welcome + guide
+    const idx = state.pageIdx;  // welcome=0, then questions+consent
+    const current = idx;  // not counting welcome
+    document.getElementById('progress-label').textContent =
+      page.type === 'review' ? 'Review' : `Question ${current} of ${total}`;
+    document.getElementById('progress-pct').textContent = Math.round((current / total) * 100) + '%';
+    document.getElementById('progress-fill').style.width = (current / total * 100) + '%';
+  }
+
+  function renderWelcome() {
+    const hasSaved = localStorage.getItem(STORAGE_KEY) && hasAnyAnswer();
+    return `<div class="welcome-card">
+      <div class="welcome-hero">From Paper<br>to Pathway</div>
+      <div class="welcome-tagline">Your Story Toolkit</div>
+      <p style="font-size:1.1rem; max-width:480px; margin:1rem auto 0;">A workbook to help you prepare to talk with employers about where you've been and where you're going.</p>
+      <div class="welcome-letter">
+        You picked this up, and that matters. What you write here is yours — nobody is grading it, nobody is using it against you, and you can stop any time. The questions get easier the further you go, and the hard ones have a Skip button right next to them. When you're done, you'll get a guide: a story draft, three job ideas, practice answers for interviews, and a list of people who can help.
+        <div class="welcome-letter-sig">— Mike Thibideau<br><span>President &amp; CEO, Invest Hamilton County</span></div>
+      </div>
+      <ul class="welcome-list">
+        <li><strong>One question at a time.</strong> No long pages.</li>
+        <li><strong>Skip anything.</strong> Sensitive questions have a Skip button.</li>
+        <li><strong>On-device only.</strong> Nothing is sent over the internet.</li>
+        <li><strong>Most people finish in 20–40 minutes.</strong></li>
+      </ul>
+      ${hasSaved ? `
+        <div style="margin-top:1.5rem; padding:1rem; background:var(--color-warm-10); border-radius:10px;">
+          <p style="margin:0 0 0.75rem; font-weight:500;">You started this before. Pick up where you left off?</p>
+          <button class="btn btn-primary" data-action="resume">Resume</button>
+          <button class="btn btn-danger" data-action="restart" style="margin-left:0.5rem;">Start over</button>
+        </div>
+      ` : `
+        <div style="margin-top:1.5rem;">
+          <button class="btn btn-primary" data-action="next" style="font-size:1.1rem; padding:0.9rem 2rem;">Get started →</button>
+        </div>
+      `}
+    </div>`;
+  }
+
+  function renderConsent() {
+    return `<div class="qpage">
+      <div class="qpage-eyebrow">Before you start</div>
+      <h1 class="qpage-question">A quick read.</h1>
+
+      <div class="consent-block">
+        <h3>Voluntary</h3>
+        <p style="margin:0;">Filling out this toolkit is your choice. You can stop at any time and your answers stay with you.</p>
+      </div>
+
+      <div class="consent-block">
+        <h3>Where your answers live</h3>
+        <p style="margin:0;">This runs entirely in your web browser. Your answers are saved <strong>only on this device</strong>. Nothing is sent over the internet.</p>
+      </div>
+
+      <div class="qpage-callout warn">
+        <strong>One thing to know:</strong> Indiana law requires reporting of three specific things — current child abuse, current elder abuse, or a clear plan to hurt yourself or someone else. In this self-serve version, please don't write anything you wouldn't want shared. If you're in crisis, call or text <strong>988</strong>.
+      </div>
+
+      <div class="consent-final">
+        <label>
+          <input type="checkbox" data-field="consent" ${state.data.consent ? 'checked' : ''}>
+          <span>I understand. Let's go.</span>
+        </label>
+      </div>
+    </div>`;
+  }
+
+  function renderQuestion(page) {
+    const h = [];
+    h.push(`<div class="qpage">`);
+    h.push(`<div class="qpage-eyebrow">${esc(page.section)} <span class="qid">${esc(page.qid)}</span></div>`);
+    h.push(`<h1 class="qpage-question">${esc(page.question)}</h1>`);
+    if (page.callout) {
+      h.push(`<div class="qpage-callout ${esc(page.callout.type)}">${page.callout.text}</div>`);
+    }
+    if (page.hint) {
+      h.push(`<p class="qpage-hint">${page.hint}</p>`);
+    }
+    h.push(renderInput(page));
+    h.push(`</div>`);
+    return h.join('');
+  }
+
+  function renderInput(p) {
+    const v = state.data[p.field];
+    if (p.type === 'text') {
+      return `<input type="text" data-field="${esc(p.field)}" value="${esc(v || '')}" placeholder="${esc(p.placeholder || '')}" autocomplete="off">`;
+    }
+    if (p.type === 'number') {
+      return `<input type="number" data-field="${esc(p.field)}" value="${esc(v || '')}" ${p.min!=null?`min="${p.min}"`:''} ${p.max!=null?`max="${p.max}"`:''} inputmode="numeric" style="max-width:200px;">`;
+    }
+    if (p.type === 'textarea') {
+      return `<textarea data-field="${esc(p.field)}" rows="${p.rows||3}" placeholder="">${esc(v || '')}</textarea>`;
+    }
+    if (p.type === 'radio') {
+      const list = (p.options || []).map(opt => `
+        <label class="choice ${v === opt ? 'checked' : ''}">
+          <input type="radio" name="${esc(p.field)}" value="${esc(opt)}" data-field="${esc(p.field)}" ${v === opt ? 'checked' : ''}>
+          <span class="choice-text">${esc(opt)}</span>
+        </label>`).join('');
+      return `<div class="choice-list ${p.layout === 'two_col' ? 'two-col' : ''}">${list}</div>`;
+    }
+    if (p.type === 'multi') {
+      const arr = Array.isArray(v) ? v : [];
+      const cap = p.cap;
+      const list = (p.options || []).map(opt => {
+        const checked = arr.indexOf(opt) >= 0;
+        return `
+        <label class="choice ${checked ? 'checked' : ''}">
+          <input type="checkbox" name="${esc(p.field)}" value="${esc(opt)}" data-field="${esc(p.field)}" data-multi="1" ${cap ? `data-cap="${cap}"` : ''} ${checked ? 'checked' : ''}>
+          <span class="choice-text">${esc(opt)}</span>
+        </label>`;
+      }).join('');
+      let html = `<div class="choice-list ${p.layout === 'two_col' ? 'two-col' : ''}">${list}</div>`;
+      if (cap) html += `<p style="font-size:0.85rem; color:var(--color-neutral); margin:0.5rem 0 0;">Pick up to ${cap}.</p>`;
+      if (p.other) {
+        const ov = state.data[p.field + '_other'] || '';
+        html += `<div class="other-input-wrap"><label>Other</label><input type="text" data-field="${esc(p.field)}_other" value="${esc(ov)}" placeholder="Something else?"></div>`;
+      }
+      return html;
+    }
+    if (p.type === 'compound') {
+      const fields = (p.fields || []).map(f => {
+        const fv = state.data[f.field] || '';
+        if (f.kind === 'number') {
+          return `<label>${esc(f.label)}<input type="number" data-field="${esc(f.field)}" value="${esc(fv)}" ${f.max?`max="${f.max}"`:''} min="0" inputmode="numeric"></label>`;
+        }
+        return `<label class="compound-text-label">${esc(f.label)}<input type="text" data-field="${esc(f.field)}" value="${esc(fv)}" placeholder="${esc(f.placeholder || '')}"></label>`;
+      });
+      // numbers in row, text on its own row
+      const numbers = fields.filter((_, i) => p.fields[i].kind === 'number');
+      const texts = fields.filter((_, i) => p.fields[i].kind !== 'number');
+      let html = '';
+      if (numbers.length) html += `<div class="compound-row">${numbers.join('')}</div>`;
+      if (texts.length) html += texts.join('');
+      return html;
+    }
+    if (p.type === 'triple') {
+      return `<div class="triple-text">` + (p.fields || []).map(f => {
+        const fv = state.data[f.field] || '';
+        return `<input type="text" data-field="${esc(f.field)}" value="${esc(fv)}" placeholder="${esc(f.placeholder)}">`;
+      }).join('') + `</div>`;
+    }
+    return '';
+  }
+
+  function renderReview() {
+    const sections = sectionsForReview();
+    let h = '';
+    h += `<div class="review-intro"><h1>Here's what you wrote.</h1><p>Look it over. Click any answer to edit. When ready, build your guide.</p></div>`;
+    h += `<div class="qpage" style="padding:1.5rem;">`;
+    sections.forEach(sec => {
+      h += `<div style="margin-bottom:1.75rem;">`;
+      h += `<h2 style="font-family:var(--font-family-heading); color:var(--color-primary); font-size:1.05rem; letter-spacing:0.06em; text-transform:uppercase; margin:0 0 0.75rem;">${esc(sec.title)}</h2>`;
+      sec.items.forEach(item => {
+        h += `<div style="margin-bottom:0.75rem; padding:0.75rem 1rem; background:var(--color-neutral-10); border-radius:8px; cursor:pointer;" data-jump="${esc(item.pageId)}">`;
+        h += `<div style="font-family:var(--font-family-heading); font-size:0.85rem; color:var(--color-primary); margin-bottom:0.2rem;"><strong>${esc(item.qid)}</strong> · ${esc(item.q)}</div>`;
+        h += `<div style="color:${item.value ? 'var(--color-text)' : 'var(--color-neutral)'}; font-style:${item.value ? 'normal' : 'italic'}; white-space:pre-wrap;">${esc(item.value || '— skipped —')}</div>`;
+        h += `</div>`;
+      });
+      h += `</div>`;
+    });
+    h += `</div>`;
+    return h;
+  }
+
+  function sectionsForReview() {
+    const sections = [];
+    let currentSection = null;
+    state.sequence.forEach(p => {
+      if (p.type !== 'welcome' && p.type !== 'review' && p.type !== 'guide' && p.type !== 'consent' && p.qid) {
+        if (!currentSection || currentSection.title !== p.section) {
+          currentSection = { title: p.section, items: [] };
+          sections.push(currentSection);
+        }
+        currentSection.items.push({
+          pageId: p.id, qid: p.qid, q: p.question,
+          value: getDisplayValue(p)
+        });
+      }
+    });
+    return sections;
+  }
+
+  function getDisplayValue(p) {
+    if (p.type === 'multi') {
+      const arr = state.data[p.field] || [];
+      const ov = state.data[p.field + '_other'];
+      const all = [...arr, ...(ov ? [ov] : [])];
+      return all.join(' · ');
+    }
+    if (p.type === 'compound') {
+      return (p.fields || []).map(f => {
+        const v = state.data[f.field];
+        return v ? `${f.label}: ${v}` : '';
+      }).filter(Boolean).join(' · ');
+    }
+    if (p.type === 'triple') {
+      return (p.fields || []).map(f => state.data[f.field]).filter(Boolean).join(' · ');
+    }
+    return state.data[p.field] || '';
+  }
+
+  function renderGuide() {
+    const d = state.data;
+    const name = (d.q3a || '').trim();
+    const story = buildStory(d);
+    const jobs = buildJobs(d);
+    const practice = buildPractice(d);
+    const resources = buildResources(d);
+
+    let h = '';
+    h += `<div class="guide-celebration">
+      <h1>${name ? esc(name) + ', your guide is ready.' : 'Your guide is ready.'}</h1>
+      <p>You did the work. Here's everything you wrote, turned into a guide you can take into interviews. It's yours.</p>
+    </div>`;
+    h += `<div class="guide-actions">
+      <button class="btn btn-primary" data-action="print">🖨 Print my guide</button>
+      <button class="btn btn-ghost" data-action="copy">📋 Copy as text</button>
+      <button class="btn btn-ghost" data-action="download">⬇ Download (.txt)</button>
+      <button class="btn btn-ghost" data-action="back-to-review">← Edit answers</button>
+    </div>`;
+
+    h += `<article class="guide">`;
+
+    // Story
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Your story</div>
+      <h2>A draft in your own words.</h2>
+      <p class="guide-section-sub">Read it out loud. Change what isn't quite you. Practice it until it feels natural.</p>
+      ${story.brief ? `<p class="story-part">${esc(story.brief)}</p>` : ''}
+      ${story.respons ? `<p class="story-part">${esc(story.respons)}</p>` : ''}
+      ${story.pivot ? `<p class="story-part">${esc(story.pivot)}</p>` : ''}
+    </section>`;
+
+    // Jobs
+    if (jobs.length) {
+      h += `<section class="guide-section">
+        <div class="guide-section-eyebrow">Three job ideas</div>
+        <h2>What fits what you can do.</h2>
+        <p class="guide-section-sub">Based on the skills and interests you named. Not a complete list — starting points.</p>`;
+      jobs.forEach(j => {
+        h += `<div class="job-card">
+          <div class="job-title">${esc(j.title)}</div>
+          <div class="job-meta"><strong>Typical pay:</strong> ${esc(j.wage)} · <strong>How to start:</strong> ${esc(j.credential)}</div>
+          <div class="why-match">${esc(j.why)}</div>
+        </div>`;
+      });
+      h += `</section>`;
+    }
+
+    // Practice
+    if (practice.length) {
+      h += `<section class="guide-section">
+        <div class="guide-section-eyebrow">Practice answers</div>
+        <h2>For the questions that worry you.</h2>
+        <p class="guide-section-sub"><em>Examples you can adapt — not scripts to memorize.</em> Your voice matters more than getting it word-perfect.</p>`;
+      practice.forEach(p => {
+        h += `<div class="practice-card">
+          <div class="practice-banner">Question</div>
+          <div class="practice-q">"${esc(p.q)}"</div>
+          <div class="practice-answer">${esc(p.answer)}</div>
+          <div class="practice-coach"><strong>Why this works:</strong> ${esc(p.coach)}</div>
+        </div>`;
+      });
+      h += `</section>`;
+    }
+
+    // Resources
+    if (resources.length) {
+      h += `<section class="guide-section">
+        <div class="guide-section-eyebrow">People who can help</div>
+        <h2>Resources for what you said you needed.</h2>
+        <p class="guide-section-sub">Always call first — places change. If a number doesn't work, dial 2-1-1 and they'll route you.</p>`;
+      resources.forEach(r => {
+        h += `<div class="resource-card">
+          <div class="resource-name">${esc(r.name)}</div>
+          <div class="resource-contact">${esc(r.phone)}${r.url ? ` · <a href="https://${esc(r.url)}" target="_blank" rel="noopener">${esc(r.url)}</a>` : ''}</div>
+          <div class="resource-line">${esc(r.line)}</div>
+        </div>`;
+      });
+      h += `</section>`;
+    }
+
+    h += `<div class="guide-disclaimer">
+      <strong>One reminder:</strong> This is general information and coaching, not legal advice. For legal questions, Indiana Legal Services is free at <strong>1-800-869-0212</strong>. For specific employer or licensing questions, talk to a lawyer. If you're in crisis, call or text <strong>988</strong>.
+    </div>`;
+    h += `</article>`;
+
+    return h;
+  }
+
+  // ============================================================
+  // GUIDE GENERATORS
+  // ============================================================
+  function buildStory(d) {
+    const parts = { brief: '', respons: '', pivot: '' };
+    // Brief acknowledgment
+    if (d.q5a && !d.q5a_skip) {
+      parts.brief = d.q5a.trim();
+      if (d.q5b && !d.q5b_skip && parts.brief.indexOf(String(d.q5b)) < 0) {
+        // year already in narrative? otherwise add
+        // skip for cleanliness
+      }
+    } else {
+      const yr = (d.q5b && !d.q5b_skip) ? ' ' + d.q5b : '';
+      const stat = d.q5c === 'Yes, fully closed' ? "It's fully closed." :
+                   d.q5c === 'Still open or on probation/parole' ? "I'm still under supervision and I'm fully compliant." :
+                   "";
+      parts.brief = "I have a closed case from a few years back" + yr + ". " + stat + " I'd rather focus on what's been going on since.";
+      parts.brief = parts.brief.replace(/\s+/g, ' ').trim();
+    }
+    // Responsibility
+    if (d.q5d && !d.q5d_skip) {
+      parts.respons = d.q5d.trim() + " That was my call, and I own it.";
+    } else if (d.q6c) {
+      parts.respons = "I own the work it took to get here. " + d.q6c.trim();
+    } else {
+      parts.respons = "I own that part of my history, and I own the work it took to be where I am now.";
+    }
+    // Pivot
+    const accomplishments = d.q6a || [];
+    const proud = (d.q6b || '').trim();
+    const learned = (d.q6c || '').trim();
+    let pivot = "Since then ";
+    if (accomplishments.length) {
+      pivot += "I've " + accomplishments.slice(0, 3).map(a => a.toLowerCase()).join(', ') + ".";
+    } else {
+      pivot += "I've been working on getting steady.";
+    }
+    if (proud) pivot += " " + proud;
+    if (learned && learned !== proud) pivot += " " + learned;
+    if (d.q8a) pivot += " I'm looking for " + d.q8a.toLowerCase().trim() + ".";
+    parts.pivot = pivot.replace(/\s+/g, ' ').trim();
+    return parts;
+  }
+
+  function buildJobs(d) {
+    const text = [
+      ...(d.q4a || []),
+      ...(d.q3e || []),
+      d.q4b_1, d.q4b_2, d.q4b_3,
+      d.q3d_kind, d.q8a, d.q8b
+    ].filter(Boolean).join(' ').toLowerCase();
+
+    const scored = JOB_HEURISTICS.map(j => {
+      let score = 0;
+      j.keys.forEach(k => { if (text.indexOf(k) >= 0) score++; });
+      return { j, score };
+    }).filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map(x => x.j);
+
+    // If we have fewer than 3, fill with generic strong choices
+    if (scored.length < 3) {
+      const fill = [
+        JOB_HEURISTICS.find(j => j.title.startsWith('Warehouse')),
+        JOB_HEURISTICS.find(j => j.title.startsWith('Customer service')),
+        JOB_HEURISTICS.find(j => j.title.startsWith('Maintenance')),
+      ];
+      for (const f of fill) { if (f && scored.indexOf(f) < 0 && scored.length < 3) scored.push(f); }
+    }
+    return scored;
+  }
+
+  function buildPractice(d) {
+    const picked = (d.q9a || []).slice(0, 3);
+    return picked.map(q => {
+      const tmpl = PRACTICE_TEMPLATES[q];
+      if (!tmpl) return null;
+      const r = tmpl(d);
+      return { q: q, answer: r.answer, coach: r.coach };
+    }).filter(Boolean);
+  }
+
+  function buildResources(d) {
+    const out = [];
+    // Always include 988
+    if (RESOURCES._always) RESOURCES._always.forEach(r => out.push(r));
+    // Filter by Q10.a
+    (d.q10a || []).forEach(barrier => {
+      const list = RESOURCES[barrier];
+      if (list) list.forEach(r => out.push(r));
+    });
+    // If recovery-related and not already added
+    if ((d.q7a === 'Yes') && !d.q10a.includes('Addiction recovery support')) {
+      RESOURCES['Addiction recovery support'].forEach(r => out.push(r));
+    }
+    // Dedupe by name
+    const seen = new Set();
+    return out.filter(r => { if (seen.has(r.name)) return false; seen.add(r.name); return true; }).slice(0, 12);
+  }
+
+  // ============================================================
+  // RENDER + NAV
+  // ============================================================
+  function render() {
+    recomputeSequence();
+    const page = state.sequence[state.pageIdx];
+    const main = document.getElementById('main');
+    const nav = document.getElementById('nav-row');
+    const crisis = document.getElementById('crisis-bar');
+
+    let html = '';
+    let navHtml = '';
+
+    if (!page) return;
+
+    if (page.type === 'welcome') {
+      html = renderWelcome();
+      navHtml = '';
+      crisis.style.display = 'none';
+    } else if (page.type === 'consent') {
+      html = renderConsent();
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next" ${state.data.consent ? '' : 'disabled'}>Continue →</button>`;
+      crisis.style.display = 'block';
+    } else if (page.type === 'review') {
+      html = renderReview();
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next">Build my guide →</button>`;
+      crisis.style.display = 'block';
+    } else if (page.type === 'guide') {
+      html = renderGuide();
+      navHtml = '';
+      crisis.style.display = 'block';
+    } else {
+      html = renderQuestion(page);
+      const skip = page.skippable ? `<button class="btn btn-skip" data-action="skip">Skip this one</button>` : '';
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        ${skip}
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next">Continue →</button>`;
+      crisis.style.display = 'block';
+    }
+
+    main.innerHTML = html;
+    nav.innerHTML = navHtml;
+
+    renderProgress();
+    wireInputs(page);
+    wireNav(page);
+    // focus first input for accessibility
+    setTimeout(() => {
+      const firstInput = main.querySelector('input, textarea');
+      if (firstInput && page.type !== 'guide') firstInput.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
+  }
+
+  function wireInputs(page) {
+    document.querySelectorAll('[data-field]').forEach(el => {
+      const field = el.dataset.field;
+      const isMulti = el.dataset.multi === '1';
+
+      el.addEventListener('change', function(e) {
+        const ind = document.getElementById('save-indicator');
+        ind.textContent = 'Saving…'; ind.classList.add('saving');
+
+        if (el.type === 'checkbox' && !isMulti) {
+          state.data[field] = el.checked;
+        } else if (el.type === 'checkbox' && isMulti) {
+          if (!Array.isArray(state.data[field])) state.data[field] = [];
+          const arr = state.data[field];
+          const val = el.value;
+          if (el.checked) {
+            if (arr.indexOf(val) < 0) arr.push(val);
+            const cap = parseInt(el.dataset.cap, 10);
+            if (cap && arr.length > cap) {
+              const removed = arr.shift();
+              const removedEl = document.querySelector(`input[data-field="${field}"][value="${CSS.escape(removed)}"]`);
+              if (removedEl) {
+                removedEl.checked = false;
+                removedEl.closest('.choice')?.classList.remove('checked');
+              }
+            }
+          } else {
+            const i = arr.indexOf(val);
+            if (i >= 0) arr.splice(i, 1);
+          }
+          el.closest('.choice')?.classList.toggle('checked', el.checked);
+        } else if (el.type === 'radio') {
+          state.data[field] = el.value;
+          // Update visual checked state on all radio choices
+          document.querySelectorAll(`.choice input[name="${field}"]`).forEach(r => {
+            r.closest('.choice')?.classList.toggle('checked', r.checked);
+          });
+        } else {
+          state.data[field] = el.value;
+        }
+        save();
+
+        // Re-enable Continue if consent toggled
+        if (field === 'consent') {
+          const nextBtn = document.querySelector('[data-action="next"]');
+          if (nextBtn) nextBtn.disabled = !state.data.consent;
+        }
+      });
+
+      // For text inputs, also save on input (debounced)
+      if (el.type === 'text' || el.type === 'number' || el.type === 'email' || el.tagName === 'TEXTAREA') {
+        let to;
+        el.addEventListener('input', function() {
+          state.data[field] = el.value;
+          if (to) clearTimeout(to);
+          const ind = document.getElementById('save-indicator');
+          ind.textContent = 'Saving…'; ind.classList.add('saving');
+          to = setTimeout(save, 600);
+        });
+      }
+    });
+
+    // Review screen: clicking an item jumps to that page
+    document.querySelectorAll('[data-jump]').forEach(el => {
+      el.addEventListener('click', function() {
+        const targetId = el.dataset.jump;
+        const idx = state.sequence.findIndex(p => p.id === targetId);
+        if (idx >= 0) { state.pageIdx = idx; render(); }
+      });
+    });
+  }
+
+  function wireNav(page) {
+    document.querySelectorAll('[data-action]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        const action = el.dataset.action;
+        if (action === 'next') goNext();
+        else if (action === 'prev') goPrev();
+        else if (action === 'skip') goSkip(page);
+        else if (action === 'resume') { state.pageIdx = 1; render(); }
+        else if (action === 'restart') {
+          if (confirm('Start over? Everything you wrote will be erased.')) {
+            localStorage.removeItem(STORAGE_KEY);
+            state.data = defaultData();
+            state.pageIdx = 0;
+            render();
+          }
+        }
+        else if (action === 'print') window.print();
+        else if (action === 'copy') copyGuideText();
+        else if (action === 'download') downloadGuide();
+        else if (action === 'back-to-review') {
+          const idx = state.sequence.findIndex(p => p.type === 'review');
+          if (idx >= 0) { state.pageIdx = idx; render(); }
+        }
+      });
+    });
+  }
+
+  function goNext() {
+    if (state.pageIdx < state.sequence.length - 1) {
+      state.pageIdx++;
+      render();
+    }
+  }
+  function goPrev() {
+    if (state.pageIdx > 0) {
+      state.pageIdx--;
+      render();
+    }
+  }
+  function goSkip(page) {
+    // Mark _skip flag if this is a sensitive question
+    if (page.sensitive && page.field) {
+      state.data[page.field + '_skip'] = true;
+    }
+    save();
+    goNext();
+  }
+
+  function hasAnyAnswer() {
+    const d = state.data;
+    return !!(d.q3a || d.q3b || d.q3c || (d.q3e && d.q3e.length) || (d.q4a && d.q4a.length) || d.q5a || d.consent);
+  }
+
+  function copyGuideText() {
+    const text = guideAsText();
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('[data-action="copy"]');
+      if (btn) { const o = btn.textContent; btn.textContent = '✓ Copied'; setTimeout(() => btn.textContent = o, 1500); }
+    });
+  }
+
+  function downloadGuide() {
+    const text = guideAsText();
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const name = (state.data.q3a || 'guide').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    a.href = url; a.download = 'from-paper-to-pathway-' + name + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function guideAsText() {
+    const d = state.data;
+    const story = buildStory(d);
+    const jobs = buildJobs(d);
+    const practice = buildPractice(d);
+    const resources = buildResources(d);
+    const lines = [];
+    lines.push('FROM PAPER TO PATHWAY');
+    lines.push((d.q3a ? 'For ' + d.q3a + ' · ' : '') + new Date().toLocaleDateString());
+    lines.push('');
+    lines.push('================');
+    lines.push('YOUR STORY');
+    lines.push('================');
+    lines.push(story.brief);
+    lines.push('');
+    lines.push(story.respons);
+    lines.push('');
+    lines.push(story.pivot);
+    lines.push('');
+    if (jobs.length) {
+      lines.push('================');
+      lines.push('THREE JOB IDEAS');
+      lines.push('================');
+      jobs.forEach((j, i) => {
+        lines.push((i+1) + '. ' + j.title);
+        lines.push('   Typical pay: ' + j.wage);
+        lines.push('   How to start: ' + j.credential);
+        lines.push('   Why it fits: ' + j.why);
+        lines.push('');
+      });
+    }
+    if (practice.length) {
+      lines.push('================');
+      lines.push('PRACTICE ANSWERS');
+      lines.push('================');
+      practice.forEach(p => {
+        lines.push('Q: ' + p.q);
+        lines.push('A: ' + p.answer);
+        lines.push('   (' + p.coach + ')');
+        lines.push('');
+      });
+    }
+    if (resources.length) {
+      lines.push('================');
+      lines.push('PEOPLE WHO CAN HELP');
+      lines.push('================');
+      resources.forEach(r => {
+        lines.push('• ' + r.name);
+        lines.push('  ' + r.phone + (r.url ? ' · ' + r.url : ''));
+        lines.push('  ' + r.line);
+        lines.push('');
+      });
+    }
+    lines.push('---');
+    lines.push('General info & coaching, not legal advice.');
+    lines.push('Indiana Legal Services (free): 1-800-869-0212');
+    lines.push('Crisis (call or text): 988');
+    lines.push('Invest Hamilton County · From Paper to Pathway');
+    return lines.join('\n');
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // Don't intercept if typing
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      // but allow Enter to advance from single-input pages
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        const page = state.sequence[state.pageIdx];
+        if (page && (page.type !== 'welcome' && page.type !== 'guide')) {
+          e.preventDefault(); goNext();
+        }
+      }
+      return;
+    }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
   });
 
-  return {
-    step: 0,
-    steps: Array(10).fill(0), // 0..9
-    data: emptyData(),
-    saveStatus: 'saved',
-    hasSavedData: false,
-    copyLabel: '📋 Copy text',
-
-    industries: ['Food service','Warehouse / distribution','Construction','Healthcare / caregiving','Office / admin','Retail','Manufacturing / factory','Skilled trades','Driving / delivery / trucking','Landscaping / lawn care','Cleaning / janitorial','Self-employed / side hustle','Never had a paying job'],
-    skills: ['Cook for a group','Drive a car, truck, or van','Fix things','Use a computer, phone, or tablet','Care for kids, elders, or people with disabilities','Work outside in any weather','Talk to customers and handle complaints','Handle money or run a cash register','Solve problems when things go wrong fast','Lead a group or crew','Read blueprints, instructions, or manuals','Train or teach someone else','Clean to a high standard','Use hand tools or power tools','Lift and carry heavy things safely','Keep a schedule and show up on time','Stay calm around people who are upset','Write clearly'],
-    sinceThen: ['Completed a program (GED, treatment, class)','Earned a certificate or credential','Worked steady for 6 months or more','Stayed sober','Mentored someone else','Got stable housing','Repaired a relationship that matters to me','Became a parent, or became a better parent','Paid off a debt or fine'],
-    recoveryNeeds: ['Flexible schedule for treatment or meetings','A drug-test protocol that knows about my MAT','An EAP or counseling referral','A workplace that isn\'t centered around alcohol','None / not sure yet'],
-    interviewQs: ['Tell me about yourself','Why were you out of work?','Do you have a record?','What\'s your biggest weakness?','Why should we hire you?','Are you reliable?','Where do you see yourself in 2 years?','Can you pass a drug test?','Can you pass a background check?','What were you doing during [gap year]?'],
-    helpOptions: ['Expungement info','Finding a lawyer','Housing','Transportation','ID / Social Security / birth certificate','Childcare','Clothes for an interview','Mental health support','Addiction recovery support','Food / SNAP benefits','Reconnecting with family','Financial help / paying off fines'],
-
-    init() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) { this.hasSavedData = true; }
-      // autosave on every change
-      this.$watch('data', () => this.save(), { deep: true });
-    },
-    save() {
-      this.saveStatus = 'saving';
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
-      setTimeout(() => { this.saveStatus = 'saved'; }, 300);
-    },
-    resume() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) { this.data = { ...emptyData(), ...JSON.parse(saved) }; this.step = 1; }
-    },
-    clearAll() {
-      if (!confirm('Start over? Everything you wrote will be erased.')) return;
-      localStorage.removeItem(STORAGE_KEY);
-      this.data = emptyData();
-      this.hasSavedData = false;
-      this.step = 0;
-    },
-    next() { this.step++; window.scrollTo({top:0, behavior:'smooth'}); },
-    prev() { this.step--; window.scrollTo({top:0, behavior:'smooth'}); },
-    capChecks(field, max) {
-      if (this.data[field].length > max) this.data[field] = this.data[field].slice(0, max);
-    },
-    joinList(arr, other) {
-      let items = [...(arr || [])];
-      if (other && other.trim()) items.push(other.trim());
-      return items.length ? items.join(', ') : '';
-    },
-    get reviewSections() {
-      const d = this.data;
-      return [
-        { title: 'About you', questions: [
-          { id: 'Q3.a', label: 'Name / nickname', value: d.q3a, show: true },
-          { id: 'Q3.b', label: 'Age range', value: d.q3b, show: true },
-          { id: 'Q3.c', label: 'Where you hope to work', value: d.q3c, show: true },
-          { id: 'Q3.d', label: 'Longest job', value: [d.q3d_years && `${d.q3d_years}y`, d.q3d_months && `${d.q3d_months}m`, d.q3d_kind].filter(Boolean).join(' · '), show: true },
-          { id: 'Q3.e', label: 'Industries', value: this.joinList(d.q3e, d.q3e_other), show: true },
-        ]},
-        { title: 'Skills', questions: [
-          { id: 'Q4.a', label: 'Skills', value: (d.q4a || []).join(', '), show: true },
-          { id: 'Q4.b', label: 'Three things I\'m good at', value: [d.q4b_1, d.q4b_2, d.q4b_3].filter(Boolean).join(' · '), show: true },
-        ]},
-        { title: 'What happened', questions: [
-          { id: 'Q5.a', label: 'What happened', value: d.q5a_skip ? '' : d.q5a, show: true },
-          { id: 'Q5.b', label: 'When', value: d.q5b_skip ? '' : d.q5b, show: true },
-          { id: 'Q5.c', label: 'Case status', value: d.q5c_skip ? '' : d.q5c, show: true },
-          { id: 'Q5.d', label: 'Optional context', value: d.q5d_skip ? '' : d.q5d, show: true },
-        ]},
-        { title: 'What\'s different now', questions: [
-          { id: 'Q6.a', label: 'Since then', value: this.joinList(d.q6a, d.q6a_other), show: true },
-          { id: 'Q6.b', label: 'Proud of', value: d.q6b, show: true },
-          { id: 'Q6.c', label: 'What I\'ve learned about myself', value: d.q6c, show: true },
-        ]},
-        { title: 'Recovery', questions: [
-          { id: 'Q7.a', label: 'In recovery?', value: d.q7_skip ? '(skipped whole section)' : d.q7a, show: true },
-          { id: 'Q7.b', label: 'How long', value: d.q7_skip ? '' : d.q7b, show: d.q7a === 'Yes' },
-          { id: 'Q7.c', label: 'Workplace needs', value: d.q7_skip ? '' : (d.q7c || []).join(', '), show: d.q7a === 'Yes' },
-        ]},
-        { title: 'The job you want', questions: [
-          { id: 'Q8.a', label: 'Job', value: d.q8a, show: true },
-          { id: 'Q8.b', label: 'Why', value: d.q8b, show: true },
-          { id: 'Q8.c', label: 'What might stop me', value: d.q8c_skip ? '' : d.q8c, show: true },
-        ]},
-        { title: 'Interview & support', questions: [
-          { id: 'Q9.a', label: 'Questions that worry me', value: (d.q9a || []).join(', '), show: true },
-          { id: 'Q9.b', label: 'Question I hope they don\'t ask', value: d.q9b, show: true },
-          { id: 'Q10.a', label: 'Help I\'d like', value: (d.q10a || []).join(', '), show: true },
-          { id: 'Q10.b', label: 'Help I haven\'t asked for but probably should', value: d.q10b, show: true },
-        ]},
-      ];
-    },
-    downloadJSON() {
-      const payload = {
-        program: 'From Paper to Pathway',
-        version: 'beta-v1',
-        timestamp: new Date().toISOString(),
-        answers: this.data,
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `paper-to-pathway-${(this.data.q3a || 'intake').replace(/\s+/g,'-')}-${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    },
-    copyText() {
-      const txt = this.reviewSections.map(s =>
-        `## ${s.title}\n` + s.questions.filter(q => q.show).map(q => `  ${q.id} · ${q.label}: ${q.value || '(skipped)'}`).join('\n')
-      ).join('\n\n');
-      navigator.clipboard.writeText(txt).then(() => {
-        this.copyLabel = '✓ Copied';
-        setTimeout(() => this.copyLabel = '📋 Copy text', 1500);
-      });
-    },
-  };
-}
-
-
-// Kick off Alpine now that intakeApp() is defined on window.
-if (window.__startAlpine) { window.__startAlpine(); }
+  // Boot
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+})();
 </script>
 </body>
 </html>
