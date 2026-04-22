@@ -112,6 +112,10 @@
     .step { box-shadow: none; break-inside: avoid; }
   }
 </style>
+<script>
+  // Hold Alpine's start until we're ready (intakeApp factory has been defined).
+  window.deferLoadingAlpine = function(alpineStart) { window.__startAlpine = alpineStart; };
+</script>
 <script defer src="alpine.min.js"></script>
 </head>
 <body>
@@ -498,7 +502,7 @@
 </div>
 
 <script>
-function intakeApp() {
+window.intakeApp = function() {
   const STORAGE_KEY = 'ihc-reentry-intake-v1';
   const emptyData = () => ({
     consent: false,
@@ -633,6 +637,10 @@ function intakeApp() {
     },
   };
 }
+
+
+// Kick off Alpine now that intakeApp() is defined on window.
+if (window.__startAlpine) { window.__startAlpine(); }
 </script>
 </body>
 </html>
