@@ -48,6 +48,7 @@
     font-family: var(--font-family-heading); font-size: 0.78rem;
     color: var(--color-neutral); letter-spacing: 0.04em;
   }
+  .topbar-logo { height: 26px; width: auto; }
   .save-indicator { color: var(--color-green); font-weight: 600; }
   .save-indicator.saving { color: var(--color-neutral); }
   .beta-pill {
@@ -82,6 +83,33 @@
   }
 
   /* ---------- Welcome / cover (page 0) ---------- */
+  .welcome-band {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff; padding: 1.4rem 1.5rem;
+    border-radius: 14px 14px 0 0;
+    text-align: center;
+    position: relative; overflow: hidden;
+    margin-bottom: -1px;
+  }
+  .welcome-band::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 26px);
+    pointer-events: none;
+  }
+  .welcome-band-eyebrow {
+    position: relative; z-index: 1;
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-warm);
+  }
+  .welcome-card.has-band, .welcome-band + .welcome-card { border-radius: 0 0 14px 14px; }
+  .welcome-cta {
+    margin-top: 2rem; display: flex; gap: 0.75rem;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .btn-lg { font-size: 1.1rem; padding: 0.95rem 2rem; }
   .welcome-card {
     background: #fff; border-radius: 14px;
     padding: 2rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.08);
@@ -435,9 +463,10 @@
 
   <div class="topbar" role="banner">
     <div class="topbar-inner">
-      <a href="../../index.html" class="topbar-back">← Workforce Resource Navigator</a>
+      <a href="../../index.html" class="topbar-back" aria-label="Back to Workforce Resource Navigator">← Workforce Resource Navigator</a>
       <div class="topbar-meta">
-        <span id="save-indicator" class="save-indicator">✓ Saved</span>
+        <img src="../../assets/img/ihc-logo-fullcolor.png" alt="Invest Hamilton County" class="topbar-logo">
+        <span id="save-indicator" class="save-indicator" aria-live="polite">✓ Saved</span>
         <span class="beta-pill">BETA</span>
       </div>
     </div>
@@ -843,32 +872,34 @@
   }
 
   function renderWelcome() {
-    const hasSaved = localStorage.getItem(STORAGE_KEY) && hasAnyAnswer();
-    return `<div class="welcome-card">
+    const hasSaved = !!(localStorage.getItem(STORAGE_KEY) && hasAnyAnswer());
+    return `
+    <div class="welcome-band">
+      <div class="welcome-band-eyebrow">From the Re-Entry Workforce Initiative · Invest Hamilton County</div>
+    </div>
+    <div class="welcome-card">
       <div class="welcome-hero">From Paper<br>to Pathway</div>
       <div class="welcome-tagline">Your Story Toolkit</div>
       <p style="font-size:1.1rem; max-width:480px; margin:1rem auto 0;">A workbook to help you prepare to talk with employers about where you've been and where you're going.</p>
+
       <div class="welcome-letter">
         You picked this up, and that matters. What you write here is yours — nobody is grading it, nobody is using it against you, and you can stop any time. The questions get easier the further you go, and the hard ones have a Skip button right next to them. When you're done, you'll get a guide: a story draft, three job ideas, practice answers for interviews, and a list of people who can help.
         <div class="welcome-letter-sig">— Mike Thibideau<br><span>President &amp; CEO, Invest Hamilton County</span></div>
       </div>
+
       <ul class="welcome-list">
         <li><strong>One question at a time.</strong> No long pages.</li>
         <li><strong>Skip anything.</strong> Sensitive questions have a Skip button.</li>
         <li><strong>On-device only.</strong> Nothing is sent over the internet.</li>
         <li><strong>Most people finish in 20–40 minutes.</strong></li>
       </ul>
-      ${hasSaved ? `
-        <div style="margin-top:1.5rem; padding:1rem; background:var(--color-warm-10); border-radius:10px;">
-          <p style="margin:0 0 0.75rem; font-weight:500;">You started this before. Pick up where you left off?</p>
-          <button class="btn btn-primary" data-action="resume">Resume</button>
-          <button class="btn btn-danger" data-action="restart" style="margin-left:0.5rem;">Start over</button>
-        </div>
-      ` : `
-        <div style="margin-top:1.5rem;">
-          <button class="btn btn-primary" data-action="next" style="font-size:1.1rem; padding:0.9rem 2rem;">Get started →</button>
-        </div>
-      `}
+
+      <div class="welcome-cta">
+        <button class="btn btn-primary btn-lg" data-action="${hasSaved ? 'resume' : 'next'}">
+          ${hasSaved ? 'Resume where I left off →' : 'Get started →'}
+        </button>
+        ${hasSaved ? `<button class="btn btn-danger" data-action="restart">Start over</button>` : ''}
+      </div>
     </div>`;
   }
 
