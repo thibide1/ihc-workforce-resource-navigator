@@ -95,6 +95,27 @@
       "badge": "New"
     },
     {
+      "id": "funding-finder",
+      "name": "Funding Finder",
+      "tagline": "Answer 5 questions, see what'll pay for you",
+      "description": "A 5-question eligibility quiz that surfaces the Indiana and federal programs you may qualify for — Pell, Workforce Pell (new July 2026), WIOA, Workforce Ready Grant, 21st Century Scholars, Frank O'Bannon Grant, Adult Student Grant, foster-care ETV, HIRE for justice-involved, and dozens more. 64 individual programs in the database.",
+      "category": "training",
+      "status": "live",
+      "audience": "Anyone considering training, a degree, or a credential — and not sure what they qualify to receive",
+      "time_estimate": "3 minutes",
+      "what_you_get": [
+        "A ranked list of programs you may qualify for, with strong-match flags",
+        "Award amounts, eligibility rules, deadlines, and how to apply",
+        "Filter by agency (CHE, DWD, FSSA, USDOL, USDOE, IEDC, DOC)",
+        "Workforce Pell Grant alert — landmark new program effective July 2026"
+      ],
+      "launch_path": "tools/funding-finder/index.html",
+      "icon": "💰",
+      "brand_color": "purple",
+      "privacy_note": "Your answers stay in your browser. No account, no tracking.",
+      "badge": "New"
+    },
+    {
       "id": "placeholder-support-map",
       "name": "Support Services Directory",
       "tagline": "Housing, childcare, transportation, legal help",

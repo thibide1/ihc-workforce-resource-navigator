@@ -1001,6 +1001,11 @@
       body: "Indiana has hundreds of Registered Apprenticeships where you earn a paycheck while you train for a skilled trade. Many pay $18–$30/hour during training. Fields that hire people with records: electrical, plumbing, welding, HVAC, carpentry, culinary, and some healthcare support roles.",
       action: "Browse Hamilton County apprenticeship programs free on Career Coach (paid for by IHC). Or search apprenticeship.gov for the federal database. Or call DWD Apprenticeship Indiana: 317-232-7670.",
     },
+    funding_finder: {
+      title: "What's going to pay for any of this? Take 3 minutes to find out.",
+      body: "There are 64 Indiana and federal programs that can help pay for training, certificates, and degrees — but figuring out which ones you qualify for is the hard part. Some are specifically for people who are justice-involved (HIRE), in recovery, on SNAP/TANF, or coming back to work after time away. The Funding Finder asks 5 questions and shows you the ones you may qualify for.",
+      action: "Open the Funding Finder — free, ~3 minutes, your answers stay in your browser.",
+    },
     fcra: {
       title: "What employers actually see on a background check",
       body: "Federal law (FCRA §1681c) limits most background checks to a 7-year lookback for arrests that didn't end in conviction. Convictions can show up longer in Indiana. You have the right to pull your own Indiana State Police record before any interview so you know what the employer will see.",
@@ -1802,6 +1807,11 @@
         <p class="info-card-body">${esc(GUIDE_EXTRAS.apprenticeship.body)}</p>
         <p class="info-card-body"><strong>Where:</strong> ${esc(GUIDE_EXTRAS.apprenticeship.action)}</p>
         <p class="info-card-body"><a href="${CAREER_COACH.searchPrograms('apprenticeship')}" target="_blank" rel="noopener" class="info-card-action">Open Hamilton County apprenticeship programs in Career Coach →</a></p>
+      </div>
+      <div class="info-card highlight">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.funding_finder.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.funding_finder.body)}</p>
+        <p class="info-card-body"><a href="../funding-finder/" class="info-card-action">${esc(GUIDE_EXTRAS.funding_finder.action)} →</a></p>
       </div>
       <div class="info-card green">
         <div class="info-card-title">${esc(GUIDE_EXTRAS.second_chance.title)}</div>

@@ -48,3 +48,6 @@ services:
       - type: rewrite
         source: /tools/training-finder
         destination: /tools/training-finder/index.html
+      - type: rewrite
+        source: /tools/funding-finder
+        destination: /tools/funding-finder/index.html

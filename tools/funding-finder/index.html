@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funding Finder — Workforce Resource Navigator</title>
+<meta name="description" content="Answer 5 questions to find the state and federal programs that can help pay for your training, degree, or certificate. Free Hamilton County tool from Invest Hamilton County.">
+<meta name="theme-color" content="#413494">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens-shared.css">
+<link rel="stylesheet" href="../../assets/css/tokens-ihc-2026.css">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--color-neutral-10);
+    color: var(--color-text);
+    font-family: var(--font-family-body);
+    font-size: 17px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--color-primary); }
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--color-secondary); outline-offset: 2px; border-radius: 4px;
+  }
+
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--color-neutral-20);
+    padding: 0.7rem 1rem; position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .topbar-back {
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: 500;
+    color: var(--color-neutral); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar-back:hover { color: var(--color-primary); }
+  .topbar-meta { display: flex; align-items: center; gap: 0.75rem; }
+  .topbar-logo { height: 26px; width: auto; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff; border-radius: 14px;
+    padding: 2.25rem 1.75rem; margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-warm); margin-bottom: 0.5rem;
+  }
+  .hero h1 {
+    font-family: var(--font-family-heading); font-weight: 800;
+    font-size: 2.1rem; line-height: 1.1; letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+  .hero-sub { font-size: 1.1rem; line-height: 1.55; max-width: 620px; margin: 0; opacity: 0.96; }
+
+  .quiz-wrap {
+    background: #fff; border-radius: 14px;
+    padding: 2rem 1.75rem;
+    box-shadow: 0 2px 10px rgba(65,52,148,0.08);
+  }
+  .quiz-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.5rem; margin: 0 0 0.4rem;
+  }
+  .quiz-subtitle { color: var(--color-neutral); margin: 0 0 1.25rem; }
+  .quiz-progress {
+    height: 6px; background: var(--color-neutral-20);
+    border-radius: 999px; overflow: hidden; margin-bottom: 1.5rem;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: 999px; transition: width 0.4s ease;
+  }
+
+  .question { display: none; }
+  .question.active { display: block; }
+  .question-text {
+    font-family: var(--font-family-heading); font-weight: 700;
+    font-size: 1.35rem; line-height: 1.25; color: var(--color-primary);
+    margin: 0 0 0.4rem; letter-spacing: -0.005em;
+  }
+  .question-help {
+    color: var(--color-neutral); font-size: 0.95rem; margin: 0 0 1rem; font-style: italic;
+  }
+
+  .options { display: grid; gap: 0.65rem; }
+  .options.two-col { grid-template-columns: 1fr; }
+  @media (min-width: 640px) {
+    .options.two-col { grid-template-columns: 1fr 1fr; }
+  }
+  .option-btn {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.9rem 1.1rem;
+    border: 1.5px solid var(--color-neutral-20); border-radius: 10px;
+    background: #fff; cursor: pointer; transition: all 0.15s;
+    font-size: 1rem; line-height: 1.4; text-align: left;
+  }
+  .option-btn:hover { border-color: var(--color-secondary); background: var(--color-secondary-10); }
+  .option-btn.selected { border-color: var(--color-primary); background: var(--color-primary-10); }
+  .option-check {
+    width: 20px; height: 20px; border: 1.5px solid var(--color-neutral-33);
+    border-radius: 4px; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .option-btn.selected .option-check {
+    background: var(--color-primary); border-color: var(--color-primary);
+    color: #fff;
+  }
+  .option-btn.selected .option-check::after { content: "✓"; font-weight: 700; font-size: 0.85rem; }
+
+  .quiz-nav {
+    display: flex; gap: 0.6rem; margin-top: 1.75rem;
+    border-top: 1px solid var(--color-neutral-20); padding-top: 1.25rem;
+  }
+  .btn {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 1rem; padding: 0.75rem 1.4rem;
+    border-radius: 10px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center;
+    gap: 0.4rem; transition: all 0.15s; line-height: 1;
+  }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+  .btn-primary:hover { background: var(--color-primary-dark); }
+  .btn-primary:disabled { background: var(--color-neutral-33); cursor: not-allowed; opacity: 0.7; }
+  .btn-secondary {
+    background: transparent; color: var(--color-primary);
+    border: 1.5px solid var(--color-neutral-33);
+  }
+  .btn-secondary:hover { border-color: var(--color-primary); }
+  .btn-reset {
+    background: transparent; color: var(--color-accent);
+    border: 1.5px solid var(--color-accent);
+    font-size: 0.88rem; padding: 0.55rem 1rem;
+  }
+  .btn-reset:hover { background: var(--color-accent); color: #fff; }
+
+  /* RESULTS */
+  .results-wrap { display: none; }
+  .results-wrap.visible { display: block; }
+  .results-header {
+    background: #fff; border-radius: 14px; padding: 1.5rem 1.75rem;
+    margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(65,52,148,0.06);
+  }
+  .results-summary {
+    font-family: var(--font-family-heading); font-size: 0.8rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--color-neutral); font-weight: 600; margin-bottom: 0.2rem;
+  }
+  .results-count {
+    font-family: var(--font-family-heading); font-weight: 800;
+    color: var(--color-primary); font-size: 2.5rem; line-height: 1;
+  }
+
+  .pell-banner {
+    background: linear-gradient(135deg, var(--color-warm) 0%, var(--color-warm-dark) 100%);
+    color: var(--color-text); border-radius: 10px;
+    padding: 1rem 1.25rem; margin-bottom: 1rem;
+  }
+  .pell-banner-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    font-size: 1rem; margin-bottom: 0.3rem;
+  }
+  .pell-banner-text { font-size: 0.92rem; line-height: 1.55; }
+
+  .filter-bar {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem;
+  }
+  .filter-chip {
+    background: #fff; border: 1px solid var(--color-neutral-20);
+    border-radius: 999px; padding: 0.4rem 0.95rem;
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: 500;
+    color: var(--color-primary); cursor: pointer; transition: all 0.15s;
+  }
+  .filter-chip:hover { background: var(--color-primary-10); border-color: var(--color-primary); }
+  .filter-chip.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+  .program-card {
+    background: #fff; border-radius: 12px;
+    padding: 1.2rem 1.3rem; margin-bottom: 0.9rem;
+    box-shadow: 0 2px 8px rgba(65,52,148,0.08);
+    border-left: 4px solid var(--color-secondary);
+  }
+  .program-card.highlight { border-left-color: var(--color-primary); background: var(--color-primary-10); }
+  .program-card.featured { border-left-color: var(--color-warm); background: var(--color-warm-10); }
+  .program-card.workone { border-left-color: var(--color-green); }
+  .program-name {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.1rem; margin: 0 0 0.4rem;
+    line-height: 1.3;
+  }
+  .program-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.5rem; }
+  .tag {
+    font-family: var(--font-family-heading); font-size: 0.7rem;
+    font-weight: 600; letter-spacing: 0.04em;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .tag-new { background: var(--color-accent); color: #fff; }
+  .tag-ihc { background: var(--color-primary); color: #fff; }
+  .tag-state { background: var(--color-secondary-20); color: var(--color-secondary-dark); }
+  .tag-federal { background: var(--color-primary-20); color: var(--color-primary-dark); }
+  .tag-individual { background: var(--color-green-20); color: var(--color-green-dark); }
+  .tag-youth { background: var(--color-warm-20); color: var(--color-warm-dark); }
+  .tag-veteran { background: var(--color-primary-dark); color: #fff; }
+  .tag-workone { background: var(--color-green); color: #fff; }
+  .tag-match { background: var(--color-primary); color: #fff; }
+  .tag-employer, .tag-childcare, .tag-compliance, .tag-incentive { background: var(--color-neutral-20); color: var(--color-text); }
+  .program-summary { font-size: 0.95rem; line-height: 1.55; margin: 0 0 0.6rem; color: var(--color-text); }
+  .expand-btn {
+    background: transparent; border: none; cursor: pointer;
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-primary); font-size: 0.9rem; padding: 0.3rem 0;
+  }
+  .expand-btn:hover { text-decoration: underline; }
+  .program-details {
+    display: none; margin-top: 0.75rem;
+    padding-top: 0.75rem; border-top: 1px dashed var(--color-neutral-20);
+  }
+  .program-details.open { display: block; }
+  .detail-row {
+    display: grid; grid-template-columns: 140px 1fr; gap: 0.75rem;
+    padding: 0.35rem 0; font-size: 0.88rem; line-height: 1.5;
+    border-bottom: 1px solid var(--color-neutral-10);
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label {
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-neutral); font-size: 0.78rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .detail-value { color: var(--color-text); }
+  .detail-value a { color: var(--color-primary); word-break: break-all; }
+  @media (max-width: 560px) {
+    .detail-row { grid-template-columns: 1fr; gap: 0.1rem; }
+  }
+
+  .cta-box {
+    background: var(--color-secondary-10); border-left: 5px solid var(--color-secondary);
+    border-radius: 10px; padding: 1.25rem 1.5rem; margin-top: 1.5rem;
+  }
+  .cta-box h3 {
+    font-family: var(--font-family-heading); color: var(--color-primary);
+    font-size: 1.15rem; margin: 0 0 0.4rem;
+  }
+  .cta-contact {
+    margin-top: 0.7rem; font-size: 0.92rem; line-height: 1.65;
+    font-family: var(--font-family-heading);
+  }
+
+  .cc-strip {
+    margin-top: 1.5rem; padding: 1.1rem 1.25rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff; border-radius: 10px;
+  }
+  .cc-strip-eyebrow {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-warm); font-weight: 600; margin-bottom: 0.3rem;
+  }
+  .cc-strip a { color: #fff; text-decoration: underline; font-weight: 600; }
+
+  footer {
+    max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 2rem;
+    color: var(--color-neutral); font-size: 0.85rem; line-height: 1.55;
+  }
+  footer p { margin: 0.5rem 0; }
+</style>
+</head>
+<body data-brand="ihc-2026">
+  <span style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">Invest Hamilton County — Where Insight Becomes Action</span>
+
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="../../index.html" class="topbar-back" aria-label="Back to Workforce Resource Navigator">← Workforce Resource Navigator</a>
+      <div class="topbar-meta">
+        <img src="../../assets/img/ihc-logo-fullcolor.png" alt="Invest Hamilton County" class="topbar-logo">
+      </div>
+    </div>
+  </div>
+
+  <main role="main">
+
+    <section class="hero">
+      <div class="hero-eyebrow">Free · 5 questions · ~3 minutes</div>
+      <h1>What will pay for your training?</h1>
+      <p class="hero-sub">Indiana and federal programs offer real money for training, credentials, and degrees — but figuring out which ones you qualify for is the hard part. Answer five questions and we'll narrow it down.</p>
+    </section>
+
+    <section class="quiz-wrap" id="quiz-section">
+      <div class="quiz-title">Let's find programs for you</div>
+      <div class="quiz-subtitle">Your answers stay in this browser. No account, no tracking.</div>
+      <div class="quiz-progress"><div class="quiz-progress-fill" id="progress-fill" style="width: 20%"></div></div>
+
+      <div class="question active" data-q="ind-age">
+        <div class="question-text">What is your age range?</div>
+        <div class="options">
+          <div class="option-btn" onclick="selectOption(this, 'ind-age', '14-17')"><div class="option-check"></div>14–17 (high school student)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-age', '18-24')"><div class="option-check"></div>18–24 (young adult)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-age', '25-54')"><div class="option-check"></div>25–54 (working-age adult)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-age', '55+')"><div class="option-check"></div>55 or older</div>
+        </div>
+      </div>
+
+      <div class="question" data-q="ind-status">
+        <div class="question-text">What best describes your current situation?</div>
+        <div class="options">
+          <div class="option-btn" onclick="selectOption(this, 'ind-status', 'student')"><div class="option-check"></div>Currently a student (high school or college)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-status', 'employed')"><div class="option-check"></div>Currently employed, looking to advance or retrain</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-status', 'unemployed')"><div class="option-check"></div>Currently unemployed or recently laid off</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-status', 'underemployed')"><div class="option-check"></div>Employed but seeking better opportunities</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-status', 'returning')"><div class="option-check"></div>Returning to the workforce after a gap</div>
+        </div>
+      </div>
+
+      <div class="question" data-q="ind-goal">
+        <div class="question-text">What is your primary goal?</div>
+        <div class="options">
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'degree')"><div class="option-check"></div>Earn a college degree (associate or bachelor's)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'certificate')"><div class="option-check"></div>Earn an industry certificate or credential</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'apprenticeship')"><div class="option-check"></div>Start an apprenticeship (earn while I learn)</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'job')"><div class="option-check"></div>Find a job or get career coaching</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'tuition')"><div class="option-check"></div>Get help paying for education or training</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-goal', 'upskill')"><div class="option-check"></div>Upgrade my current skills / get promoted</div>
+        </div>
+      </div>
+
+      <div class="question" data-q="ind-circumstances">
+        <div class="question-text">Do any of these apply to you? <span style="font-weight:400; font-size: 0.85rem;">(select all that apply)</span></div>
+        <div class="question-help">These help us find additional programs you may qualify for. Skip if none apply.</div>
+        <div class="options two-col">
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'veteran')"><div class="option-check"></div>Veteran or active-duty military / National Guard</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'disability')"><div class="option-check"></div>Person with a disability</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'low-income')"><div class="option-check"></div>Low income or receiving public assistance (SNAP, TANF)</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'justice')"><div class="option-check"></div>Justice-involved (past legal involvement)</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'foster')"><div class="option-check"></div>Aged out of foster care</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'minority-educator')"><div class="option-check"></div>Minority student interested in teaching</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'dislocated')"><div class="option-check"></div>Recently lost a job due to layoff or plant closure</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'no-diploma')"><div class="option-check"></div>Do not have a high school diploma or GED</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'refugee')"><div class="option-check"></div>Refugee, asylee, or immigrant</div>
+          <div class="option-btn" onclick="toggleOption(this, 'ind-circumstances', 'none')"><div class="option-check"></div>None of these apply</div>
+        </div>
+      </div>
+
+      <div class="question" data-q="ind-field">
+        <div class="question-text">What industry or field interests you most?</div>
+        <div class="options two-col">
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'manufacturing')"><div class="option-check"></div>Advanced Manufacturing</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'healthcare')"><div class="option-check"></div>Healthcare &amp; Life Sciences</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'it')"><div class="option-check"></div>IT &amp; Technology</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'construction')"><div class="option-check"></div>Building &amp; Construction / Trades</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'logistics')"><div class="option-check"></div>Transportation &amp; Logistics</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'education')"><div class="option-check"></div>Education &amp; Teaching</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'business')"><div class="option-check"></div>Business &amp; Professional Services</div>
+          <div class="option-btn" onclick="selectOption(this, 'ind-field', 'any')"><div class="option-check"></div>Not sure / Open to anything</div>
+        </div>
+      </div>
+
+      <div class="quiz-nav">
+        <button class="btn btn-secondary" onclick="prevQuestion()">← Back</button>
+        <div style="flex:1;"></div>
+        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </section>
+
+    <section class="results-wrap" id="results-section">
+      <div class="results-header">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+          <div>
+            <div class="results-summary">Programs matched for you</div>
+            <div class="results-count" id="results-count">0</div>
+          </div>
+          <button class="btn btn-reset" onclick="resetQuiz()">Start over</button>
+        </div>
+      </div>
+
+      <div id="pell-banner-container"></div>
+      <div class="filter-bar" id="filter-bar"></div>
+      <div id="results-list"></div>
+
+      <div class="cc-strip">
+        <div class="cc-strip-eyebrow">Next step · free Hamilton County tool</div>
+        <p style="margin:0;">Once you know what'll pay for it, open <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles" target="_blank" rel="noopener">Career Coach</a> to browse the actual training programs near you — Ivy Tech, IUPUI, apprenticeships, and more. Paid for by Invest Hamilton County. Free.</p>
+      </div>
+
+      <div class="cta-box">
+        <h3>Need help navigating these programs?</h3>
+        <p style="margin:0;">Invest Hamilton County can connect you with the right contacts and help you understand which programs best fit your situation.</p>
+        <div class="cta-contact">
+          <strong>Invest Hamilton County</strong> · <a href="https://investhamiltoncounty.com" target="_blank" rel="noopener">investhamiltoncounty.com</a><br>
+          <strong>WorkOne Central (Hamilton County):</strong> Kristal Heffley · 317-431-8383 · <a href="mailto:kheffley@workonecentral.org">kheffley@workonecentral.org</a><br>
+          <strong>Youth Programs:</strong> Dorothee Cooke · 317-480-4283 · <a href="mailto:dcooke@workonecentral.org">dcooke@workonecentral.org</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><strong>Funding Finder</strong> · A program of Invest Hamilton County. This is general information, not an eligibility determination. Programs change — always confirm with the agency or the school's financial aid office before relying on any award.</p>
+    <p>Your answers stay in your browser. No account, no tracking.</p>
+  </footer>
+
+<script>
+// ============================================================
+// PROGRAM DATABASE — Indiana + federal programs (97 entries)
+// Preserved from original WRN funding-eligibility engine
+// ============================================================
+const PROGRAMS = [
+    // === STATE EDUCATION PROGRAMS (CHE) ===
+    { id: 1, name: "Frank O'Bannon Grant (Freedom of Choice Grant)", summary: "Need-based grant for Indiana students attending eligible postsecondary institutions including proprietary (for-profit) schools. Lower award amounts than the Higher Education Award. Based on FAFSA eligibility.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["14-17","18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Indiana resident, US citizen/eligible noncitizen, high school grad or GED, enrolled full-time (12+ credits) pursuing first associate or bachelor's degree", income: "Need-based via FAFSA Student Aid Index (SAI). Awards scale from SAI -1500 (max) to SAI 7000 (min). No fixed income cutoff.", award: "$350–$10,600/year depending on institution type and enrollment intensity", gpa: "No minimum GPA for initial eligibility. Must maintain Satisfactory Academic Progress. Academic Honors adds $800/yr (requires 3.0 GPA)", deadline: "FAFSA by April 15 annually", apply: "File FAFSA — no separate application needed. Awards determined via ScholarTrack.", duration: "Up to 8 semesters within 8 years", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/frank-obannon-grant/" } },
+    { id: 2, name: "Frank O'Bannon Grant (Higher Education Award)", summary: "Need-based grant for Indiana students at public or private nonprofit postsecondary institutions (not proprietary). Awards are generally higher than the Freedom of Choice Grant. Based on FAFSA eligibility.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["14-17","18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Indiana resident, US citizen/eligible noncitizen, high school grad or GED, enrolled full-time (12+ credits) at a public or private nonprofit Indiana institution pursuing first associate or bachelor’s degree. (Freedom of Choice Grant covers proprietary/for-profit schools at lower amounts.)", income: "Need-based via FAFSA Student Aid Index (SAI). Awards scale from SAI -1500 (max) to SAI 7000 (min). No fixed income cutoff.", award: "$350–$10,600/year depending on institution type and enrollment intensity. Generally higher than Freedom of Choice Grant.", gpa: "No minimum GPA for initial eligibility. Must maintain Satisfactory Academic Progress. Academic Honors adds $800/yr (requires 3.0 GPA)", deadline: "FAFSA by April 15 annually", apply: "File FAFSA — no separate application needed. Awards determined via ScholarTrack.", duration: "Up to 8 semesters within 8 years", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/frank-obannon-grant/" } },
+    { id: 3, name: "21st Century Scholars Program", summary: "Pays up to 100% of tuition at public colleges in Indiana and part of tuition at private colleges. Must enroll in the program by 8th grade. Does not cover books, room & board, or fees.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["degree","tuition"], circumstances: ["low-income"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Must enroll in 7th or 8th grade (or auto-enrolled if eligible for free/reduced lunch). Indiana resident.", income: "Must meet free/reduced lunch income guidelines at enrollment. Family of 4: ~$51,338. During college: 400% of FRPL guidelines.", award: "Up to 100% tuition at Indiana public colleges. At private institutions, equivalent to average public tuition.", gpa: "Minimum 2.5 GPA at high school graduation. Must complete 12 Scholar Success activities via ScholarTrack.", deadline: "Enrollment by June 30 of 8th-grade year. FAFSA annually in college.", apply: "Create ScholarTrack account, sign Scholar Pledge by end of 9th grade", duration: "Up to 4 years of college tuition", url: "https://scholars.in.gov" } },
+    { id: 4, name: "Teacher Residency Program", summary: "State-funded one-year, post-graduate residencies for aspiring K-12 teachers. Residents receive intensive classroom training under a mentor teacher in participating Indiana school corporations or charter schools.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student","employed","returning"], goal: ["degree","certificate"], circumstances: [], field: ["education"] }, details: { eligibility: "Post-baccalaureate students entering an approved teacher residency program. Must have a bachelor’s degree and be pursuing initial teaching certification. Must commit to teaching in Indiana after completion.", award: "Funded residency position with stipend (amount varies by participating school corporation, typically $25,000–$35,000). Some residencies also cover tuition for the licensure coursework.", commitment: "Typically 3-year teaching commitment in the sponsoring school corporation or an Indiana high-need school after completing the residency.", apply: "Apply directly to participating school corporations or approved residency programs. Check CHE’s approved program list. Contact: NextTeacher@che.in.gov", deadline: "Varies by program — most recruit January–April for fall start", url: "https://www.in.gov/che/educator-workforce/teacher-residency-grant-program/" } },
+    { id: 5, name: "Tuition Exemption for Children of Disabled Veterans / Purple Heart Recipients", summary: "Up to 100% tuition and fees for up to 124 credit hours at Indiana public colleges at the undergraduate resident tuition rate.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["14-17","18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Children of veterans with VA disability rating (0-100%), Purple Heart recipients, or POWs. Biological/adopted children only (not stepchildren). Must apply before age 33.", award: "Up to 100% tuition at public institutions (124 credit hours max). Up to $5,000/yr at private non-profits.", apply: "One-time application through ScholarTrack. Reviewed by Indiana DVA.", documentation: "Birth certificate, DD-214, VA disability rating letter", deadline: "Must apply before age 33. File FAFSA annually.", duration: "Up to 8 academic years from first use", url: "https://www.in.gov/dva/state-of-indiana-benefits-and-services/tuition-and-fee-exemption/" } },
+    { id: 6, name: "Earline S. Rogers Student Teaching Scholarship for Minorities", summary: "For minority students pursuing teaching careers in underserved Indiana counties. Must agree to teach in Indiana for at least 3 years if hired.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["minority-educator"], field: ["education"] }, details: { eligibility: "Black or Hispanic/Latino minority students completing student teaching in underserved counties (Allen, Marion, Lake, St. Joseph, or Vanderburgh)", award: "Up to $5,000", gpa: "Must meet institution's education school GPA requirement", deadline: "Fall: October 1 / Spring: January 31", commitment: "3-year teaching commitment in underserved county", apply: "FAFSA + ScholarTrack application", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/earline-s-rogers-student-teaching-stipend-for-minorities/" } },
+    { id: 7, name: "Student Teaching Scholarship for High-Need Fields", summary: "Scholarship for students planning to teach special education, middle/high school math, or science. Priority given to those with remaining state financial aid eligibility.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["education"] }, details: { eligibility: "Students completing student teaching in special education, or middle/high school math or science", award: "Up to $4,000", deadline: "Fall: September 30 / Spring: January 31", commitment: "3-year teaching commitment in Indiana", apply: "FAFSA + ScholarTrack", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/student-teaching-stipend-for-high-need-fields/" } },
+    { id: 8, name: "Next Generation Hoosier Educators Scholarship", summary: "Up to $10,000/year (renewable for 4 years) for high-achieving students pursuing education careers. Must agree to teach full-time for 5 years at an eligible Indiana school.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["education"] }, details: { eligibility: "High school seniors or college freshmen/sophomores committed to teaching. Must meet ONE: top 20% of class, top 20% ACT/SAT, or 3.0+ GPA", award: "Up to $10,000/year, renewable for 4 years (total $40,000)", commitment: "5-year full-time teaching at eligible Indiana school or repay pro-rated amount", deadline: "Application opens in fall; priority for HS seniors", apply: "ScholarTrack + Interview Days participation", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/next-generation-hoosier-educators-scholarship/" } },
+    { id: 9, name: "Transition to Teaching Scholarship", summary: "One-time, non-renewable scholarship up to $10,000 for students pursuing education careers. Must agree to teach full-time for 5 years at an eligible Indiana school.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student","employed","returning"], goal: ["degree","certificate","tuition"], circumstances: [], field: ["education"] }, details: { eligibility: "Adults with a bachelor's degree enrolling in Transition to Teaching program. Household income must be $100,000 or less.", award: "One-time up to $10,000 (non-renewable)", commitment: "5-year teaching commitment at Indiana public/eligible school", deadline: "April 1-15, 2026 (very narrow 2-week window)", apply: "ScholarTrack. Contact NextTeacher@che.in.gov", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/transition-to-teaching-scholarship/" } },
+    { id: 10, name: "William A. Crawford Minority Teaching Scholarship", summary: "For minority students pursuing teaching in underserved Indiana counties. Must agree to teach in Indiana for at least 3 years.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["minority-educator"], field: ["education"] }, details: { eligibility: "Black or Hispanic first-time undergraduates seeking teaching certification at eligible Indiana institution", award: "Up to $4,000/yr with financial need; up to $1,000/yr without", gpa: "2.0+ GPA for renewal", deadline: "August 31 for upcoming academic year", commitment: "3-year teaching commitment in Indiana", apply: "FAFSA + ScholarTrack", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/william-a-crawford-minority-teacher-scholarship/" } },
+    { id: 11, name: "EARN Indiana (Work-Study Program)", summary: "State work-study program providing paid internships for students with financial need. Employers receive 50% state matching funds on the student's hourly rate.", funding: "State", agency: "CHE", audience: "both", tags: ["individual","employer"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["job","degree","tuition"], circumstances: ["low-income"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Indiana high school and college students. College students need FAFSA-determined financial aid eligibility. High school: any Indiana secondary school student.", award: "Employers receive 50% wage reimbursement (up to $45,000/yr). Students paid directly by employers at 10-20 hrs/wk during school, 10-40 hrs/wk summer.", apply: "Create account at workandlearnindiana.com, check 'EARN Indiana' box", deadline: "Rolling — positions posted year-round", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/earn-indiana/" } },
+    { id: 12, name: "Mitch Daniels Early Graduation Scholarship", summary: "One-time scholarship for students who graduate from a publicly supported high school at least one year early. May be used toward tuition and fees.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Students graduating from public Indiana high school at least 1 year early (by end of grade 11). Must earn Core 40 diploma minimum.", award: "One-time $4,000 (not renewable). Can be used for tuition/fees.", deadline: "August 31 for academic year following early graduation", apply: "ScholarTrack + FAFSA", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/mitch-daniels-early-graduation-scholarship/" } },
+    { id: 13, name: "Adult Student Grant", summary: "Up to $2,000/year for working adults starting or completing an associate degree, bachelor's degree, or certificate. Covers tuition and regularly assessed fees.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["25-54","55+"], status: ["employed","underemployed","returning"], goal: ["degree","certificate","tuition","upskill"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Financially independent adults (per FAFSA) attending Ivy Tech or Vincennes University. Must be enrolled in 6+ credit hours pursuing associate degree, bachelor's, or certificate.", income: "Must demonstrate financial need via FAFSA", award: "$500–$2,000/year toward tuition and fees", deadline: "Application opens June 1 — first-come, first-served", apply: "Adult Student Grant application through ScholarTrack", note: "Only available at Ivy Tech and Vincennes University", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/adult-student-grant/" } },
+
+    // === WORKFORCE DEVELOPMENT (DWD) ===
+    { id: 14, name: "Workforce Ready Grant", summary: "Pays tuition and mandatory fees for high-value certificate programs at Ivy Tech, Vincennes University, and other approved providers. Covers advanced manufacturing, building & construction, health sciences, IT & business services, and transportation & logistics.", funding: "State", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning","employed"], goal: ["certificate","apprenticeship","tuition","upskill"], circumstances: [], field: ["manufacturing","healthcare","it","construction","logistics"] }, details: { eligibility: "Indiana resident with HS diploma/GED but NO college degree. Must enroll in qualifying certificate program at Ivy Tech, Vincennes, Indiana Tech, or other approved provider.", fields: "Advanced Manufacturing, Building & Construction, Health Sciences, IT & Business Services, Transportation & Logistics", award: "Tuition-free certificate training. Average earnings boost ~$7,000 post-completion.", apply: "Call 888-436-9092 or visit WorkOne Center", note: "Last-dollar grant — reduced by Pell Grant amounts. Cannot hold a college degree.", url: "https://www.in.gov/dwd/workforce-ready-grant/" } },
+    { id: 15, name: "WIOA Adult Program", summary: "Federally funded job training, education, and support services for eligible adults (18+). Provides job search help, intensive services for those with barriers, and funding for vocational training through American Job Centers (WorkOne).", funding: "Federal", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning","employed"], goal: ["job","certificate","upskill","apprenticeship"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Age 18+, US citizen or authorized to work, Selective Service registered. Priority: (1) veterans who are low-income/basic skills deficient, (2) non-veteran low-income/public assistance/basic skills deficient, (3) veterans not low-income, (4) all others.", income: "No income requirement for basic eligibility. Priority of service for low-income (at or below poverty line or 70% LLSIL). Some local areas use 250% FPL.", services: "Career assessments, job search assistance, individual employment plans, occupational skills training, OJT, apprenticeships", apply: "Register at IndianaCareerConnect.com, then visit WorkOne Center", url: "https://www.in.gov/dwd/" } },
+    { id: 16, name: "WIOA Dislocated Worker Program", summary: "Helps workers who have been laid off get back to work quickly. Services include retraining, career counseling, job search assistance, and support services through WorkOne centers.", funding: "Federal", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed"], goal: ["job","certificate","upskill"], circumstances: ["dislocated"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Must meet 'dislocated' definition: (1) terminated/laid off and unlikely to return to same industry, (2) employed at facility announcing closure, (3) self-employed and unemployed due to economic conditions, (4) displaced homemakers, (5) military spouses who lost jobs due to relocation. Those earning <80% of pre-dislocation wage also qualify.", documentation: "WARN notice, employer verification, DD-214, business closure notice, or self-attestation", apply: "Visit WorkOne Center with documentation", url: "https://www.dol.gov/agencies/eta/workforce-investment/adult" } },
+    { id: 17, name: "WIOA Youth Program", summary: "Education and employment services for eligible youth (ages 14-24) facing barriers. Includes tutoring, work experience (paid/unpaid), skills training, mentoring, and career guidance. Focus on out-of-school youth.", funding: "Federal", agency: "DWD", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student","unemployed","underemployed"], goal: ["job","certificate","apprenticeship"], circumstances: ["low-income"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "In-School Youth: ages 14-21, must be low-income AND face at least one barrier. Out-of-School Youth: ages 16-24, not currently attending school. 75% of funds must go to OSY.", barriers: "School dropout, justice-involved, homeless, foster care, pregnant/parenting, disability, English learner, basic skills deficient", income: "ISY must be low-income. Most OSY categories do NOT require low-income. Youth in Census tracts with 25%+ poverty rate automatically qualify as low-income.", services: "Tutoring, paid/unpaid work experience, skills training, mentoring, career guidance. Min 20% of funds on work experiences.", apply: "Contact WorkOne Center", url: "https://www.dol.gov/agencies/eta/youth" } },
+    { id: 18, name: "Power Up Indiana", summary: "Reimburses companies up to $5,000 per trainee ($50,000 max per company) for employee training that results in industry-recognized credentials, cross-training/reskilling, leadership development, or registered apprenticeships. Minimum starting wage: $23.50/hr.", funding: "State", agency: "DWD", audience: "employer", tags: ["employer"], empEligibility: { need: ["training","retention","hiring","tax-credits"], hiring: [], wage: ["23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana employers registered with Secretary of State, with physical IN location, current DWD unemployment tax account. Nonprofits NOT eligible.", award: "Up to $5,000 per employee trained, $50,000 max per employer per year. $10M total program funding.", wageReq: "Worker pay must rise 25%+ after training AND exceed regional median wages", training: "ETPL programs, USDOL Registered Apprenticeships, SEAL programs, or specialized company training evaluated by local workforce board", apply: "3-step process through Power Up Portal at in.gov/dwd/power-up", url: "https://www.in.gov/dwd/power-up/" } },
+    { id: 19, name: "Registered Apprenticeship Programs", summary: "Federal grant funding to support registered apprenticeship expansion, employer partnerships, and new apprenticeship pathways. Earn-and-learn model with DOL-registered credentials.", funding: "Federal", agency: "DWD", audience: "both", tags: ["individual","employer"], eligibility: { age: ["18-24","25-54"], status: ["employed","unemployed","underemployed","returning"], goal: ["apprenticeship","certificate","upskill"], circumstances: [], field: ["manufacturing","healthcare","it","construction","logistics","business"] }, empEligibility: { need: ["pipeline","training","hiring"], hiring: ["youth","any"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Open to any employer. Must provide progressive wages, Related Technical Instruction, and OJT. Ideal for roles requiring 1+ year of training.", award: "Power Up reimburses $5,000/apprentice. $6.25M federal expansion grant in Indiana. Veteran apprentices get GI Bill stipend. Average ROI: 44% ($144 per $100 invested).", apply: "Use Standards Builder at apprenticeship.gov. Contact Indiana OWBLA.", url: "https://www.apprenticeship.gov" } },
+    { id: 20, name: "Adult Basic Education", summary: "Free math, reading, and writing instruction to help adults acquire skills for a high school equivalency diploma, college readiness, or entry-level occupational certification.", funding: "State", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["certificate","job","degree"], circumstances: ["no-diploma"], field: ["any","manufacturing","healthcare","it","construction","logistics","business","education"] }, details: { eligibility: "Indiana resident (30+ days), age 16+ not enrolled in K-12. Must NOT have diploma from accredited US high school. Online: must be 18+, commit 9+ hrs/week.", award: "100% FREE — no cost for classes, HSE prep, or support services", localLocations: "Noblesville WorkOne (Ivy Tech campus, 300 N 17th St) — 765-552-4122. Noblesville Educational Services Center, 18025 S River Rd — 317-259-5275. Indiana Online Only at iooadulted.com.", apply: "Walk in to local site or enroll online. Contact: AdultEd@dwd.IN.gov or 866-220-6675", url: "https://www.in.gov/dwd/career-training-adult-ed/adult-ed/" } },
+    { id: 21, name: "Wagner-Peyser Employment Services", summary: "Free job matching, career services, and labor market resources for job seekers through WorkOne centers. Helps employers find workers and job seekers find jobs.", funding: "Federal", agency: "DWD", audience: "both", tags: ["individual","employer"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["job"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, empEligibility: { need: ["hiring","pipeline"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Universal access — ALL job seekers and employers, no requirements. Free.", services: "Job search/placement, resume building, labor market info, career counseling, employer recruitment", apply: "Create free account at IndianaCareerConnect.com or visit WorkOne Center. Call 888-436-9092.", url: "https://www.indianacareerconnect.com" } },
+    { id: 22, name: "RESEA (Reemployment Services)", summary: "Mandatory reemployment services for unemployment insurance claimants. Provides WorkOne orientation, career planning, and job search help to return to full-time work faster.", funding: "Federal", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed"], goal: ["job"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "UI claimants identified as likely to exhaust benefits. Selected by algorithm after 4 weeks of UI. MANDATORY — failure to participate suspends UI benefits.", requirements: "Initial RESEA at Week 6: WorkOne orientation, career plan, ICC enrollment. Subsequent at Week 15 if still unemployed.", waivers: "Return-to-work date within 60 days, Union Hiring Halls, WIOA-approved training, moved out of state", url: "https://www.in.gov/dwd/indiana-unemployment/resea/" } },
+    { id: 23, name: "Senior Community Service Employment Program (SCSEP)", summary: "Provides paid work training experiences for low-income job seekers 55 years of age and older.", funding: "Federal", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["55+"], status: ["unemployed","underemployed","returning"], goal: ["job","upskill"], circumstances: ["low-income"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Age 55+, unemployed, family income at or below 125% federal poverty level. Priority: (1) veterans/veteran spouses, (2) individuals over 65.", award: "20 hrs/week paid work training at minimum wage. Placed at nonprofit/public facilities.", apply: "Contact local SCSEP provider or American Job Center", url: "https://www.ncoa.org/article/about-the-senior-community-service-employment-program-scsep/" } },
+
+    // === FEDERAL (USDOL, USDOE) ===
+    { id: 24, name: "YouthBuild 2025", summary: "Pre-apprenticeship program that prepares participants for quality jobs by providing construction training and hands-on experience building affordable housing. Includes wrap-around supportive services.", funding: "Federal", agency: "USDOL", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["unemployed","underemployed"], goal: ["apprenticeship","certificate","job"], circumstances: ["low-income","justice","no-diploma"], field: ["construction","manufacturing"] }, details: { eligibility: "Ages 16-24, most without HS diploma. Must meet at least one barrier: low-income family, foster care, homeless, offender, disability, child of incarcerated parent, migrant youth.", award: "Free construction training, GED prep, career pathways, AmeriCorps service, wrap-around support", indianaPrograms: "YouthBuild Indy (EmployIndy) — Indianapolis, 24-week program. Skilled Indy YouthBuild (Skilled US) — $1.3M DOL grant, free construction/HVAC/green energy training.", apply: "Through local grantee organizations. 2025 FOA: $98M total, $700K-$1.5M individual grants.", url: "https://www.dol.gov/agencies/eta/youth/youthbuild" } },
+    { id: 25, name: "Workforce Pell Grant", summary: "Landmark expansion of Pell Grants to short-term workforce training programs (150-599 hours, 8-15 weeks). Signed into law July 4, 2025 as part of the One Big Beautiful Bill Act. Effective July 1, 2026. Unlike traditional Pell, bachelor's degree holders ARE eligible. NPRM published March 9, 2026 — comment period closes April 8, 2026.", funding: "Federal", agency: "USDOE", audience: "individual", tags: ["individual","new-2026"], eligibility: { age: ["18-24","25-54","55+"], status: ["student","employed","unemployed","underemployed","returning"], goal: ["certificate","upskill","tuition"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "FAFSA required. US citizen/permanent resident/eligible noncitizen. Bachelor's degree holders ARE eligible (major departure from traditional Pell). Graduate degree holders NOT eligible. Cannot be enrolled in another program simultaneously.", income: "Need-based via Student Aid Index (SAI) from FAFSA. No hard income cutoff — strongest eligibility at/below 175% FPL (dependent) or 225% FPL (independent).", award: "Prorated based on program cost and length. Estimated max ~$3,980-$4,310 (not full Pell). Typical mid-range: $1,800-$2,500 for a 300-hour/10-week program.", programReqs: "Programs must be 150-599 clock hours, 8-15 weeks. Must lead to a portable, stackable credential in high-skill/high-wage/in-demand occupations. Must have existed at institution for 1+ year.", accountability: "70/70 Test: Programs must achieve 70% completion rate AND 70% job placement rate. Tuition cannot exceed value-added earnings of completers. Independent auditor verification required.", timeline: "Law signed July 4, 2025. NPRM published March 9, 2026. Comments due April 8, 2026. FAFSA updates April 26, 2026. Effective July 1, 2026. Realistic first enrollment: Fall 2026 or Spring 2027.", indianaImpact: "Ivy Tech, Vincennes University, Indiana Tech likely early adopters (EMT, CNA, CDL, welding, phlebotomy programs). IMPORTANT: Indiana's Workforce Ready Grant is last-dollar — it is reduced by Pell amount, so they do NOT stack. But Workforce Pell serves people WRG cannot: those with bachelor's degrees.", commentDocket: "Federal Register Document 2026-04520. Docket: ED-2026-OPE-0133. Comment at regulations.gov under ED-2026-SCC-0199 by April 8, 2026.", budgetImpact: "ED estimates $3 billion impact FY2026-FY2035, averaging 187,000 students/year. Expected to increase short-term certificate enrollment by ~13%.", url: "https://www.federalregister.gov/documents/2026/03/09/2026-04520/" } },
+
+    // === OTHER STATE AGENCIES ===
+    { id: 26, name: "Indiana Education and Training Voucher (ETV) Program", summary: "Financial and academic support for youth who have aged out of foster care. Covers tuition/fees, room and board, books, transportation, childcare, and medical costs at accredited institutions.", funding: "Federal", agency: "DCS", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24"], status: ["student","unemployed","returning"], goal: ["degree","certificate","tuition"], circumstances: ["foster"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Youth who aged out of foster care (turned 18 in care), or adopted/placed in kinship guardianship on/after 16th birthday. US citizen/qualified noncitizen. Must enroll before 21st birthday, can receive until age 26.", award: "Up to $5,000/year based on cost of attendance", coveredExpenses: "Tuition/fees, room and board, books, transportation, childcare, medical costs", apply: "Rolling applications through Foster Success Indiana (fostersuccess.org). Deadline: July 31, 2026 for current academic year.", note: "Foster youth are independent students for FAFSA (family of one) — also eligible for Pell Grants and 21st Century Scholars.", url: "https://fostersuccess.org/educational-success/education-and-training-voucher-indiana/" } },
+    { id: 27, name: "Hoosier Initiative for Re-Entry (HIRE)", summary: "Connects individuals with past legal involvement to jobs, training, and support services. Provides job readiness skills, resume building, and long-term career coaching with partner businesses.", funding: "State", agency: "DOC", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","returning"], goal: ["job","certificate","upskill"], circumstances: ["justice"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Individuals with any past criminal justice involvement — currently incarcerated (pre-release) or formerly incarcerated. Also operates in juvenile facilities.", services: "Job development, placement, career training, pre-screening for employers, sustained re-entry support. Regional coordinators statewide.", outcomes: "14% recidivism (vs 30%+ statewide). 85% three-year success rate. 40%+ wage increase. 15,000+ placements, 3,000+ employer partners since 2012.", apply: "Contact HIRE at 812-549-8634 or HIRE@idoc.IN.gov. Regional coordinator map at in.gov/idoc/hire", url: "https://www.in.gov/idoc/hire/" } },
+    { id: 28, name: "TANF Impact Program", summary: "Employment resources and support for Hoosiers receiving SNAP or TANF, including free job skills training, HSE/ESL classes, certified training programs, career assessments, resume assistance, and wrap-around support.", funding: "Federal", agency: "FSSA", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["job","certificate","upskill"], circumstances: ["low-income"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Families receiving SNAP or TANF. TANF income limits: gross income ~35% FPL ($457/mo for 1 person, $938/mo for family of 4). Asset limit: $1,000 at application. Mandatory IMPACT participation for able-bodied adults.", services: "Job skills training, HSE prep, supervised job search, employment counseling, placement, wrap-around support. Must complete 6 employer contacts minimum.", award: "TANF cash: $248-$1,241/month based on family size. Plus free employment services.", apply: "Online via FSSA Benefits Portal or in-person at local DFR office. Phone: 800-403-0864.", url: "https://www.in.gov/fssa/dfr/tanf-cash-assistance/" } },
+    { id: 29, name: "Vocational Rehabilitation Services", summary: "Helps individuals with disabilities achieve employment through personalized services, training, and employer partnerships.", funding: "Federal", agency: "FSSA", audience: "both", tags: ["individual","employer"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning","employed"], goal: ["job","certificate","upskill"], circumstances: ["disability"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, empEligibility: { need: ["hiring","pipeline","diversity"], hiring: ["disability"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Must have a documented disability that poses a barrier to employment. NOT income-based. Eligibility determined within 60 days of application. Order of Selection: most significant disabilities served first due to resource constraints.", services: "Employment exploration, job placement, assistive technology, career retraining, career advancement, Pre-Employment Transition Services for students", apply: "Submit referral form online or contact one of 25 Area Offices statewide at in.gov/fssa/ddars/brs/", note: "BRS maintains employer partnership program — employers can connect with qualified candidates with disabilities.", url: "https://www.in.gov/fssa/ddars/brs/vocational-rehabilitation-employment/" } },
+    { id: 30, name: "Career Scholarship Accounts", summary: "$5,000 annually ($1,250/quarter) for eligible students to pursue apprenticeships, applied learning, work-based learning, and career credentials. Covers education, transportation, equipment, career coaching, and certification exams.", funding: "State", agency: "DOE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["apprenticeship","certificate","tuition"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Indiana high school students in grades 10-12 enrolled in eligible CTE programs aligned with Next Level Programs of Study.", award: "$5,000/year ($1,250/quarter) for up to 3 years (total $15,000)", coveredExpenses: "Postsecondary education/training, transportation, equipment, career coaching, certification exams", deadline: "2026-27: March 1 - October 1, 2026. Priority window: March 1 - April 15 for returning students.", apply: "Through Indiana DOE CSA portal (transfers from Treasurer to IDOE July 1, 2026). Contact: CSA@doe.in.gov", url: "https://www.in.gov/doe/eoq/csa/" } },
+    { id: 31, name: "Skills Enhancement Fund (SEF)", summary: "Reimburses businesses (typically 50%) for eligible training costs over 2 years. Training must lead to postsecondary credentials, industry credentials, or specialized training resulting in wage increases. Tied to new capital investment.", funding: "State", agency: "IEDC", audience: "employer", tags: ["employer"], empEligibility: { need: ["training","retention","hiring","expansion"], hiring: ["any"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana businesses supporting training tied to new capital investment. Training must lead to credentials or specialized skills resulting in wage increases.", award: "Typically 50% reimbursement of eligible training costs over a 2-year grant term", commitment: "Must continue operations at training location for 5+ years after grant completion. Annual reporting for ~7 years.", apply: "Apply directly to IEDC at iedc.in.gov", url: "https://iedc.in.gov/indiana-advantages/investments/skills-enhancement-fund-sef/overview" } },
+    { id: 32, name: "National Guard Tuition Supplement Grant", summary: "100% of tuition at public Indiana institutions or up to $5,000 at private non-profits for eligible Indiana Air and Army National Guard members. Full-time or part-time enrollment.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["18-24","25-54"], status: ["student","employed"], goal: ["degree","tuition"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Active drilling members of Indiana Air or Army National Guard. Must not have been AWOL in past 12 months. Army must exhaust ArmyIgnitED first.", award: "100% tuition at public Indiana institutions. Up to $5,000/yr at private non-profits. Up to 15 credits/semester.", apply: "ScholarTrack annually. Guard unit verifies eligibility.", note: "Full-time or part-time enrollment accepted. Extension available for honorably discharged members who served overseas since Sept 10, 2001.", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/national-guard-tuition-supplement-grant/" } },
+    { id: 33, name: "Child of Deceased or Disabled Veteran", summary: "100% tuition at Indiana public colleges or up to $5,000 at private non-profits for children of deceased or disabled veterans. Covers undergraduate and professional-level programs. Up to 124 credit hours.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["14-17","18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Children of Indiana veterans who are deceased from service-connected causes or have a VA service-connected disability rating. Includes children of Purple Heart recipients and POWs. Biological or legally adopted children only (not stepchildren). Must apply before age 33.", award: "100% tuition and regularly assessed fees at Indiana public institutions (up to 124 credit hours). Up to $5,000/yr at eligible private nonprofits.", income: "No income requirement — benefit is based on parent’s veteran status, not family income.", apply: "File FAFSA + submit one-time application through ScholarTrack. Indiana Department of Veterans Affairs reviews eligibility.", documentation: "Birth certificate, parent’s DD-214, VA disability rating letter or death certificate with service connection", deadline: "Must apply before age 33. File FAFSA annually during college.", duration: "Up to 8 academic years from first use (124 credit hours max)", url: "https://www.in.gov/dva/state-of-indiana-benefits-and-services/tuition-and-fee-exemption/" } },
+    { id: 34, name: "Workforce Retention & Recruitment Program", inactive: true, summary: "Indiana statute (IC 36-1-29.5) authorizes local governments to establish workforce retention and recruitment programs. Hamilton County has not yet enacted this program — listed here for awareness.", funding: "State", agency: "DLGF", audience: "employer", tags: ["employer"], empEligibility: { need: ["retention","hiring","pipeline"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Local government units (county, city, town, township, school corporation) can establish programs under IC 36-1-29.5. 5 workforce fund managers appointed by executive.", funding: "Private grants/contributions + local budget appropriations. Funds do not revert at year-end.", capabilities: "Incentives (grants/loans) to qualified workers, recruit out-of-state workers, custom recruitment strategies", note: "Hamilton County has NOT yet established a program under this statute. Contact Invest Hamilton County if you are interested in advocating for local adoption.", warning: "NOT YET ACTIVE in Hamilton County — this is an available state framework, not a current program.", url: "https://law.justia.com/codes/indiana/title-36/article-1/chapter-29-5/" } },
+
+    // === K-12 / CTE PROGRAMS ===
+    { id: 35, name: "Career & Technical Education (Perkins Act)", summary: "Hands-on, skills-based education across 14 career clusters. Programs of study focus on in-demand occupations. Provides federal funding for CTE equipment, instruction, and career guidance.", funding: "Federal", agency: "CHE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["certificate","apprenticeship","job"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Indiana high school students enrolled in Career & Technical Education pathways. CTE Concentrator: must complete Principles, Concentrator A, and Concentrator B courses with C+ average. One of 9 Graduation Pathways competencies.", award: "Students pay nothing — Perkins funds support program equipment, instructional materials, and career guidance at no cost to the student. Some programs lead to free industry certifications.", services: "14 career clusters including Advanced Manufacturing, Health Sciences, IT, Building & Construction, Transportation, Business. Indiana uses Next Level Programs of Study (NLPS).", apply: "Enroll in CTE courses through your high school’s course selection process. Talk to your school’s career counselor.", note: "Federal administration may transfer from Dept of Education to Dept of Labor under recent legislation. Indiana’s CTE infrastructure is well-established regardless.", url: "https://www.in.gov/che/cte/" } },
+    { id: 36, name: "Education Readiness Grants (Industry 4.0)", summary: "Grants for Indiana secondary schools to purchase Industry 4.0 technologies (robotics, automation, cybersecurity labs) that prepare students for high-tech manufacturing careers. Students benefit through hands-on access.", funding: "State", agency: "CHE", audience: "both", tags: ["individual","youth","employer"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["certificate"], circumstances: [], field: ["manufacturing","it"] }, details: { eligibility: "Indiana secondary schools offering CTE in 5 pathways: Industry 4.0 Smart Manufacturing, Industrial Automation & Robotics, Biotechnology, Cybersecurity, Software Development.", award: "Up to $100,000 per school. 2025: $1M awarded to 23 schools.", apply: "Applications open December-January annually via Conexus Indiana", partnerReq: "Must demonstrate direct connection with local advanced manufacturers", url: "https://www.conexusindiana.com/activate-talent/education-readiness-grants/" } },
+    { id: 37, name: "Dual Credit Programs", summary: "High school students earn both high school and college credits simultaneously, reducing time and cost to earn a degree or credential.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17"], status: ["student"], goal: ["degree","certificate","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Any Indiana high school student. Largely free — Ivy Tech charges no tuition for dual credit. State subsidizes priority courses.", award: "Free or minimal cost. Completing 30-credit Indiana College Core earns Enrollment Honors Plus Seal — guarantees acceptance to all Indiana public institutions.", note: "312 high schools offered Indiana College Core in 2025-26. Credits transfer to all Indiana public institutions by state law.", url: "https://www.in.gov/doe/students/dual-credit/" } },
+    { id: 38, name: "Career Coaching Grant", summary: "Free career coaching for Indiana students through state-funded intermediaries. Provides career assessments, exploration of career pathways, and connections to employers and postsecondary options.", funding: "State", agency: "DOE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["job","certificate","apprenticeship"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business","education"] }, details: { eligibility: "Indiana K-12 students. Career coaching is delivered through approved intermediary organizations (not applied for by students directly). Your school or district partners with a coaching provider.", award: "Free to students. $25M state funding over biennium supports approved intermediaries.", services: "One-on-one career coaching, career assessments, exploration of industry pathways, connections to employers, college and credential guidance, labor market information", apply: "Ask your school counselor if career coaching services are available through your school or district. Administered by IDOE (transferred from CHE under SEA 365-2025).", url: "https://www.in.gov/doe/students/career-readiness/" } },
+    { id: 39, name: "Promoted Industry Certification Exams", summary: "State-approved industry certifications that high school students can earn for free through CTE pathways. These employer-vetted credentials satisfy Graduation Pathway requirements and lead to high-demand careers.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["certificate"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics"] }, details: { eligibility: "Indiana high school students enrolled in Career & Technical Education (CTE) pathways. Must complete required coursework before sitting for certification exam.", award: "Free certification exams (state-funded). Credentials include: AWS Welding, CompTIA IT Fundamentals, CNA, OSHA 10/30, Microsoft Office Specialist, Autodesk Certified User, NCCER, ServSafe, EMT, Pharmacy Technician, and 100+ others.", apply: "Enroll in CTE courses through your high school. Exams administered by your school’s CTE department upon course completion.", note: "Promoted certifications are vetted by DWD and Indiana employers. They satisfy one of 9 Graduation Pathway competencies and are the foundation for Credential Completion Grants to schools.", url: "https://www.in.gov/che/cte/promoted-industry-certifications/" } },
+    { id: 40, name: "Credential Completion Grants", summary: "State incentive that pays schools when students earn approved industry credentials before graduation. While the grant goes to the school (not the student), it funds more CTE programs and exam opportunities for you.", funding: "State", agency: "DOE", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17"], status: ["student"], goal: ["certificate","apprenticeship"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics"] }, details: { eligibility: "Indiana high school students who complete approved industry-recognized credentials, certifications, or designated apprenticeship sequences before graduation.", award: "Grant paid to your school (not directly to you). But this funding incentivizes schools to offer more CTE programs, pay for your certification exams, and invest in career pathways.", apply: "No student application needed. Earn your industry credential through your school’s CTE program and the school automatically qualifies for the grant.", note: "The more students who earn credentials, the more funding the school receives to expand CTE offerings. This program works alongside Career Scholarship Accounts and Promoted Industry Certifications.", url: "https://www.in.gov/doe/students/career-readiness/" } },
+
+    // === WORKONE EMPLOYER SERVICES (from Synergy Guide) ===
+    { id: 50, name: "On-the-Job Training (OJT) — WorkOne", summary: "WorkOne reimburses employers up to 50% of a new employee's wage during a contracted training period. Minimum wage: $13.50/hr for adults, $11/hr for youth. WorkOne pre-screens and refers qualified candidates.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["hiring","training","pipeline"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Participant must be WIOA Adult/Dislocated Worker eligible. Employer: public, nonprofit, or private sector. Must not show pattern of failing to retain OJT workers.", wageReq: "Minimum $15/hr preferred, absolute minimum $13.50/hr per Indiana DWD policy", award: "50% wage reimbursement (up to 75% in exceptional cases). Only hours worked — no overtime, PTO, or commissions.", duration: "Maximum 6 months (exceptions case-by-case)", apply: "Contact WorkOne Center. Staff develop OJT contracts between participant and employer.", contact: "Kristal Heffley — 317-431-8383, kheffley@workonecentral.org", url: "https://www.in.gov/dwd/" } },
+    { id: 51, name: "Youth Work Experience (WEX) — WorkOne", summary: "Places youth ages 16-24 in employer worksites at ZERO cost to the employer. WorkOne pays all wages and workers' compensation. Youth attend weekly career workshops. Hamilton County contact: Dorothee Cooke.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone","youth"], empEligibility: { need: ["hiring","pipeline"], hiring: ["youth","any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Youth meeting WIOA Youth eligibility. In-School: 14-21. Out-of-School: 16-24. Must be low-income (ISY) or face barriers (OSY).", award: "WorkOne pays ALL wages + workers' comp. Zero cost to employer.", hours: "Typically 20-36 hrs/week, up to 40 max. Overtime NOT authorized. Must comply with child labor laws for minors.", requirements: "Employer must not displace existing employees. Must provide supervision and mentoring.", contact: "Dorothee Cooke — 317-480-4283, dcooke@workonecentral.org (Hamilton County)", url: "https://www.dol.gov/agencies/eta/youth/wioa-formula" } },
+    { id: 52, name: "Work Opportunity Tax Credit (WOTC)", summary: "Federal tax credit of $2,400 to $9,600 per qualified hire from targeted groups: veterans, TANF/SNAP recipients, ex-felons, vocational rehabilitation referrals, empowerment zone residents, and others.", funding: "Federal", agency: "DWD/IRS", audience: "employer", tags: ["employer"], empEligibility: { need: ["hiring","tax-credits","diversity"], hiring: ["veterans","justice","public-assist","disability","any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Employer hires from targeted groups. 14 categories including: TANF recipients ($2,400), veterans ($2,400-$9,600), disabled veterans ($4,800-$9,600), ex-felons ($2,400), SNAP recipients ages 18-39 ($2,400), SSI recipients ($2,400), long-term unemployed 27+ weeks ($2,400), long-term TANF 18+ months ($9,000 over 2 years).", minimumHours: "120 hours worked minimum. 40% credit for 400+ hours, 25% for 120-399 hours.", apply: "IRS Form 8850 completed ON or BEFORE job offer date. Submit Form 8850 + DOL ETA Form 9061 to state workforce agency within 28 days of hire start date.", warning: "WOTC authorized only through December 31, 2025. Check for congressional extension.", url: "https://www.irs.gov/businesses/small-businesses-self-employed/work-opportunity-tax-credit" } },
+    { id: 53, name: "Federal Bonding Program", summary: "Free fidelity bonds ($5,000-$25,000) for employers hiring individuals with barriers: ex-offenders, individuals in recovery, poor credit history, or dishonorable discharge. Covers first 6 months of employment.", funding: "Federal", agency: "USDOL/DWD", audience: "employer", tags: ["employer"], empEligibility: { need: ["hiring","diversity"], hiring: ["justice","disability","any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "At-risk individuals: ex-offenders, poor credit/bankruptcy, recovering substance abusers, dishonorable discharge, lacking work history, TANF recipients.", award: "Free fidelity bonds: $5,000 standard (up to $25,000 with justification). $0 deductible. Covers first 6 months.", covers: "Theft, forgery, larceny, embezzlement. NOT poor workmanship, injuries, or accidents.", requirements: "Must have verified job offer with start date. Must be legal working age with taxes auto-deducted.", apply: "Employer or job seeker contacts State Federal Bonding Program Coordinator by phone. Bond issued online, received by mail in 10 business days.", url: "https://bonds4jobs.com" } },
+    { id: 54, name: "Rapid Response Services — WorkOne", summary: "Early-intervention outplacement services for workers affected by layoffs or plant closures. On-site orientations covering UI filing, job search, resume/interview workshops, retraining, and community resources.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["layoff"], hiring: [], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Triggered by WARN notice (employers with 100+ employees, 60 days advance notice required) or any employer-initiated layoff/closure.", employerServices: "Rapid Response team dispatched on-site. Transition coordination. Layoff aversion strategies using Dun & Bradstreet data.", workerServices: "Skills upgrading, resume workshops, job referrals, job fairs (held pre-layoff when possible). DWD Market Insight analytics finds matching employers in the area.", apply: "WARN notices submitted at in.gov/dwd/warn-notices. Non-WARN: contact local WorkOne Business Services team.", url: "https://www.in.gov/dwd/warn-notices/" } },
+    { id: 55, name: "Indiana Career Connect (ICC) — Free Job Posting", summary: "State's free online labor exchange platform. Employers post jobs, search resumes, screen applicants at no cost. Postings syndicated to the National Labor Exchange for broader reach.", funding: "State", agency: "DWD", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["hiring","pipeline"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Universal access — free for all job seekers and employers. 90,000+ job listings.", forJobSeekers: "Free account, resume builder, job alerts, Virtual Recruiter, GEO-based mobile app (ICC Jobs)", forEmployers: "Free job posting, resume search (Quick Search, Resume Ranking, Skills Matching), labor market data", apply: "Register at IndianaCareerConnect.com. If you've filed for UI, account already exists.", url: "https://www.indianacareerconnect.com" } },
+    { id: 56, name: "Hiring Events & Job Fairs — WorkOne", summary: "WorkOne hosts, promotes, and manages hiring events at no cost to employers. Includes pre-screened candidates, social media promotion, and interview rooms/computer labs.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["hiring","pipeline"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer. WorkOne hosts and manages at no cost. Pre-screened candidates.", services: "Event hosting, social media promotion, interview rooms, computer labs", contact: "Kristal Heffley — 317-431-8383, kheffley@workonecentral.org", url: "https://www.workonecentral.org" } },
+    { id: 57, name: "Veteran Employment Services — WorkOne", summary: "Priority access for veterans in all DOL-funded programs. Includes Disabled Veterans Outreach Program (DVOP), Local Veterans Employment Representatives (LVER), and WOTC veteran credits up to $9,600.", funding: "Federal", agency: "WorkOne/DWD", audience: "both", tags: ["individual","employer","veteran","workone"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning","employed"], goal: ["job","certificate","upskill"], circumstances: ["veteran"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, empEligibility: { need: ["hiring","pipeline"], hiring: ["veterans"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Veterans receive priority of service in ALL DOL-funded programs. Includes DVOP (Disabled Veterans Outreach), LVER (Local Veterans Employment Representatives).", award: "WOTC veteran credits up to $9,600. Priority access to all WorkOne services.", apply: "Visit any WorkOne Center — veterans are served first.", url: "https://www.in.gov/dwd/" } },
+    // === MISSING FROM SPREADSHEET ===
+    { id: 41, name: "Next Generation Minority Educator Scholarship", summary: "Scholarship for minority students pursuing education degrees at Indiana colleges. Aims to increase diversity in the teaching profession.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["minority-educator"], field: ["education"] }, details: { eligibility: "Minority (Black or Hispanic/Latino) students enrolled in an accredited Indiana postsecondary institution pursuing a degree in education/teaching. Must be Indiana resident.", award: "Up to $1,000/year (renewable)", gpa: "Must maintain satisfactory academic progress", apply: "FAFSA + ScholarTrack application", deadline: "Check ScholarTrack for current deadlines", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/" } },
+    { id: 42, name: "Primary Care Shortage Area Scholarship", summary: "Scholarship for Indiana students pursuing primary care medical degrees who commit to practicing in a designated shortage area in Indiana.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["healthcare"] }, details: { eligibility: "Indiana resident enrolled in an eligible medical program pursuing primary care (family medicine, internal medicine, pediatrics, OB/GYN). Must commit to practicing in a designated Health Professional Shortage Area (HPSA) in Indiana after graduation.", award: "Varies — contact CHE for current award amounts", commitment: "Must practice in an Indiana HPSA for a designated period after completing residency", apply: "ScholarTrack application + FAFSA", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/" } },
+    { id: 43, name: "Work and Learn Indiana", summary: "Indiana’s work-based learning platform connecting students with employers for internships, co-ops, and other experiential learning opportunities.", funding: "State", agency: "CHE", audience: "both", tags: ["individual","employer"], eligibility: { age: ["14-17","18-24","25-54"], status: ["student","employed"], goal: ["job","apprenticeship","upskill"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, empEligibility: { need: ["pipeline","hiring"], hiring: ["youth","any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana high school and postsecondary students. Employers must register on the platform.", services: "Internship and co-op matching, work-based learning tracking, employer-student connections, career exploration", apply: "Students and employers register at workandlearnindiana.com", url: "https://workandlearnindiana.com" } },
+    { id: 44, name: "Veterans Career and Relocation Assistance", summary: "Indiana program providing career counseling, relocation assistance, and employment support for veterans transitioning to civilian careers in Indiana.", funding: "State", agency: "IDDC", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","employed","returning"], goal: ["job","upskill"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics"] }, details: { eligibility: "Veterans and transitioning service members relocating to or within Indiana.", services: "Career counseling, resume assistance, relocation support, employer connections, job placement assistance", apply: "Contact Indiana Department of Defense and Community (IDDC) or your local WorkOne Center", url: "https://www.in.gov/dva/" } },
+
+    // === P1: MAJOR MISSING PROGRAMS ===
+    { id: 60, name: "Employer Training Grant (Next Level Jobs)", summary: "Reimburses Indiana employers up to $5,000 per employee ($50,000 max) for training that results in industry-recognized credentials. Covers 6 priority sectors plus early childhood education.", funding: "State", agency: "DWD", audience: "employer", tags: ["employer"], empEligibility: { need: ["training","retention","hiring","pipeline","tax-credits"], hiring: ["any","youth"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana employers registered with Secretary of State, with physical Indiana location, current DWD unemployment tax account. Must train in priority sectors: advanced manufacturing, agriculture, building/construction, health/life sciences, IT/business services, transportation/logistics, or early childhood education.", award: "Up to $5,000 per employee trained and retained 6 months. Up to $50,000 per employer. High school students: up to $1,000.", wageReq: "Minimum $17/hr starting wage for trained positions", training: "Must result in industry-recognized credential. 40+ hours of training required.", apply: "Apply online at in.gov/dwd/nextleveljobs/employer/. 3-step process: (1) review eligible credentials, (2) submit employer application, (3) submit training plan.", url: "https://www.in.gov/dwd/nextleveljobs/employer/how-it-works/" } },
+    { id: 61, name: "Post-9/11 GI Bill (Chapter 33)", summary: "Up to 36 months of education benefits covering 100% tuition/fees at public institutions, monthly housing allowance, and $1,000/year book stipend for veterans with qualifying active-duty service.", funding: "Federal", agency: "VA", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["18-24","25-54","55+"], status: ["student","employed","returning","unemployed"], goal: ["degree","certificate","tuition","apprenticeship"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Veterans with at least 90 days of aggregate active-duty service on or after September 10, 2001. Benefits scale from 50% (90 days) to 100% (36+ months). Transferable to spouse/dependents with 6+ years of service.", award: "100% tier: full tuition/fees at public schools (or up to ~$27,120/yr at private schools), monthly housing allowance at E-5 BAH rate, $1,000/yr books/supplies stipend. Up to 36 months of benefits (48 with Rudisill Act extension).", apply: "Apply at va.gov/education/how-to-apply/. Submit VA Form 22-1990. Use GI Bill Comparison Tool to estimate benefits by school.", deadline: "No application deadline — benefits do not expire for veterans who separated after January 1, 2013.", url: "https://www.va.gov/education/about-gi-bill-benefits/post-9-11/" } },
+    { id: 62, name: "Yellow Ribbon Program", summary: "Additional tuition coverage beyond the GI Bill cap for veterans attending private or out-of-state schools. School contributes extra funds and VA matches dollar-for-dollar.", funding: "Federal", agency: "VA", audience: "individual", tags: ["individual","veteran"], eligibility: { age: ["18-24","25-54","55+"], status: ["student"], goal: ["degree","tuition"], circumstances: ["veteran"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Veterans with 100% Post-9/11 GI Bill entitlement attending a participating Yellow Ribbon school. Active-duty service members and their spouses also eligible.", award: "School contributes additional tuition funds (amount varies). VA matches the school’s contribution dollar-for-dollar. Combined with GI Bill, can cover full tuition at expensive private schools.", apply: "No separate application — participating schools automatically apply Yellow Ribbon benefits. Check VA’s Yellow Ribbon school directory.", note: "Indiana participants include Purdue (up to $7,000/semester for 50 students), Butler, University of Indianapolis, Rose-Hulman, and others.", url: "https://www.va.gov/education/about-gi-bill-benefits/post-9-11/yellow-ribbon-program/" } },
+    { id: 63, name: "American Opportunity Tax Credit (AOTC)", summary: "Federal tax credit of up to $2,500/year per student for the first 4 years of postsecondary education. 40% refundable — you can get up to $1,000 back even if you owe no taxes.", funding: "Federal", agency: "IRS", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Students in first 4 years of postsecondary education. Must be enrolled at least half-time in a program leading to a degree or recognized credential. No felony drug conviction.", income: "Full credit for MAGI under $80,000 (single) or $160,000 (joint). Phases out between $80K-$90K/$160K-$180K.", award: "100% of first $2,000 + 25% of next $2,000 = up to $2,500/year per eligible student. 40% refundable (up to $1,000 refund even with zero tax liability).", apply: "Claim on federal tax return using IRS Form 8863. School provides Form 1098-T for qualified tuition/fees.", deadline: "Claimed annually when filing taxes. Keep tuition receipts and Form 1098-T.", duration: "Up to 4 tax years per student", url: "https://www.irs.gov/credits-deductions/individuals/education-credits-aotc-and-llc" } },
+    { id: 64, name: "Lifetime Learning Credit (LLC)", summary: "Federal tax credit of up to $2,000/year for any postsecondary education including graduate school, professional development, and non-degree courses. No limit on years claimed.", funding: "Federal", agency: "IRS", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["student","employed","returning"], goal: ["degree","certificate","upskill","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Any postsecondary education at an eligible institution — undergraduate, graduate, professional, non-degree courses, and continuing education. No enrollment intensity requirement. No limit on number of years.", income: "Full credit for MAGI under $80,000 (single) or $160,000 (joint). Phases out between $80K-$90K/$160K-$180K.", award: "20% of first $10,000 in qualified expenses = up to $2,000/year. Non-refundable (reduces tax to zero but no refund beyond that).", apply: "Claim on federal tax return using IRS Form 8863. Cannot claim both AOTC and LLC for the same student in the same year.", note: "Unlike AOTC, LLC covers graduate programs, professional development, and upskilling courses with no 4-year limit.", url: "https://www.irs.gov/credits-deductions/individuals/education-credits-aotc-and-llc" } },
+    { id: 65, name: "Section 127 Employer Educational Assistance", summary: "Employers can provide up to $5,250/year tax-free per employee for tuition, fees, books, and student loan repayment. Made permanent by the One Big Beautiful Bill Act (July 2025). Indexed for inflation starting 2026.", funding: "Federal", agency: "IRS", audience: "both", tags: ["individual","employer"], eligibility: { age: ["18-24","25-54","55+"], status: ["employed"], goal: ["degree","certificate","tuition","upskill"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, empEligibility: { need: ["training","retention","benefits"], hiring: ["any"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer with a written Section 127 educational assistance plan. Employees receiving the benefit. Cannot discriminate in favor of highly compensated employees.", award: "Up to $5,250/year tax-free per employee for: tuition, fees, books, supplies, equipment, AND student loan repayment (made permanent July 2025). Indexed for inflation starting 2026.", apply: "Employers: establish a written Section 127 plan. Employees: check with HR department about educational assistance benefits.", note: "Student loan repayment inclusion was made permanent by the One Big Beautiful Bill Act (signed July 4, 2025). Previously a temporary COVID provision. Major retention tool.", url: "https://www.irs.gov/newsroom/tax-benefits-for-education-information-center" } },
+
+    // === P2: EDUCATION & HEALTHCARE WORKFORCE ===
+    { id: 70, name: "TEACH Grant", summary: "Up to $4,000/year ($16,000 total) for students completing teacher preparation programs who commit to teaching in high-need fields at low-income schools for 4 years. Converts to a loan if commitment is not met.", funding: "Federal", agency: "USDOE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["education"] }, details: { eligibility: "Enrolled in TEACH Grant-eligible program at participating institution. Must meet ONE: top 25% of class, 3.25+ GPA, or qualifying score on admissions test. Must agree to teach in a high-need field at a school serving low-income students.", award: "Up to $4,000/year (undergrad: $16,000 total; graduate: $8,000 total)", commitment: "4 years of full-time teaching in a high-need field at a low-income elementary/secondary school within 8 years of completing the program. If not fulfilled, entire amount converts to an unsubsidized Direct Loan with interest from the date of disbursement.", apply: "File FAFSA, then complete TEACH Grant Agreement to Serve and initial/entrance counseling at studentaid.gov. Must recertify annually.", deadline: "Recertify each year you receive the grant", url: "https://studentaid.gov/understand-aid/types/grants/teach" } },
+    { id: 71, name: "Teacher Loan Forgiveness", summary: "Up to $17,500 in federal student loan forgiveness for teachers who complete 5 consecutive years teaching at a qualifying low-income school.", funding: "Federal", agency: "USDOE", audience: "individual", tags: ["individual"], eligibility: { age: ["25-54"], status: ["employed"], goal: ["tuition"], circumstances: [], field: ["education"] }, details: { eligibility: "Completed 5 consecutive full academic years of teaching at a qualifying low-income school. Must be a highly qualified teacher. Must have had no outstanding balance on Direct Loans or FFEL before Oct 1, 1998.", award: "Up to $17,500 for math, science, or special education teachers. Up to $5,000 for other qualifying subject areas.", apply: "Submit Teacher Loan Forgiveness Application (Common Form) through your loan servicer after completing 5 years.", url: "https://studentaid.gov/manage-loans/forgiveness-cancellation/teacher" } },
+    { id: 72, name: "Public Service Loan Forgiveness (PSLF)", summary: "Complete forgiveness of remaining federal student loan balance after 120 qualifying payments while working full-time for a qualifying public service employer (government or nonprofit).", funding: "Federal", agency: "USDOE", audience: "individual", tags: ["individual"], eligibility: { age: ["25-54","55+"], status: ["employed"], goal: ["tuition"], circumstances: [], field: ["any","healthcare","education","business"] }, details: { eligibility: "Full-time employment at a qualifying public service employer: federal/state/local/tribal government, 501(c)(3) nonprofits, AmeriCorps, Peace Corps. Must make 120 qualifying payments under an income-driven repayment (IDR) plan on Direct Loans.", award: "Complete forgiveness of remaining federal student loan balance (tax-free). Average forgiven amount: $70,000-$100,000+.", apply: "Submit PSLF Form (employer certification) annually and when you reach 120 payments. File at studentaid.gov/pslf.", note: "Verify employer eligibility early and submit certification forms annually — don’t wait until 120 payments. Use the PSLF Help Tool at studentaid.gov.", url: "https://studentaid.gov/manage-loans/forgiveness-cancellation/public-service" } },
+    { id: 73, name: "NHSC Loan Repayment Program", summary: "Up to $75,000–$80,000 in student loan repayment for primary care, dental, and behavioral health providers who serve in Health Professional Shortage Areas (HPSAs) for 2+ years.", funding: "Federal", agency: "HRSA", audience: "individual", tags: ["individual"], eligibility: { age: ["25-54"], status: ["employed"], goal: ["tuition","job"], circumstances: [], field: ["healthcare"] }, details: { eligibility: "Licensed primary care physicians, dentists, psychiatrists, nurse practitioners, physician assistants, certified nurse midwives, clinical psychologists, licensed clinical social workers, and other behavioral health providers. Must serve at an approved NHSC site in a HPSA.", award: "Full-time: up to $75,000 for initial 2-year commitment (tax-free). Half-time available at reduced amounts. Continuation awards available for additional years. Language Access Enhancement: additional $5,000.", apply: "Apply during annual NHSC application cycle (typically spring). Application at nhsc.hrsa.gov.", note: "Indiana has multiple designated HPSAs, particularly in rural counties. Hamilton County’s neighboring Madison and Tipton counties have HPSA designations.", url: "https://nhsc.hrsa.gov/loan-repayment/nhsc-loan-repayment-program" } },
+    { id: 74, name: "Nurse Corps Loan Repayment Program", summary: "Repays up to 85% of qualifying nursing education loans for registered nurses, advanced practice nurses, and nursing faculty who work at Critical Shortage Facilities or nursing schools.", funding: "Federal", agency: "HRSA", audience: "individual", tags: ["individual"], eligibility: { age: ["25-54"], status: ["employed"], goal: ["tuition"], circumstances: [], field: ["healthcare"] }, details: { eligibility: "Registered Nurses (RNs), Advanced Practice Registered Nurses (APRNs), and nursing faculty at eligible nursing schools. Must work at a Critical Shortage Facility (CSF) or accredited school of nursing.", award: "60% of qualifying nursing education loans for initial 2-year commitment. Optional 3rd year: additional 25% (total up to 85% of loan balance).", apply: "Apply during annual Nurse Corps application cycle at bhw.hrsa.gov. Must document employment at CSF or nursing school.", url: "https://bhw.hrsa.gov/programs/nurse-corps/loan-repayment" } },
+    { id: 75, name: "Federal Supplemental Educational Opportunity Grant (FSEOG)", summary: "Federal campus-based grant of $100–$4,000/year for undergraduates with exceptional financial need. Priority given to Pell Grant recipients.", funding: "Federal", agency: "USDOE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: ["low-income"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Undergraduate students with the lowest Student Aid Index (SAI) scores at participating institutions. Pell Grant recipients get priority. Must file FAFSA.", income: "Exceptional financial need as determined by FAFSA. Awards go to students with lowest SAI first.", award: "$100–$4,000/year depending on financial need and institutional allocation. Limited funding — apply early.", apply: "File FAFSA as early as possible. No separate application. Financial aid office at your school determines award.", deadline: "File FAFSA by school’s priority deadline (typically March 1 for best consideration)", url: "https://studentaid.gov/understand-aid/types/grants/fseog" } },
+
+    // === P3: EMPLOYER TAX CREDITS & INCENTIVES ===
+    { id: 80, name: "Section 45F Employer Child Care Tax Credit", summary: "Federal tax credit covering 25% of childcare facility costs and 10% of childcare resource/referral costs for employers who provide childcare for their employees. Up to $150,000/year.", funding: "Federal", agency: "IRS", audience: "employer", tags: ["employer"], empEligibility: { need: ["retention","hiring","childcare","tax-credits","benefits"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer that incurs qualified childcare facility expenditures or qualified childcare resource and referral expenditures for their employees.", award: "25% of qualified childcare facility costs + 10% of qualified resource/referral costs. Maximum $150,000/year total credit. Stackable with Indiana’s Employer Child Care Expenditure Credit (IC 6-3.1-39.5).", apply: "Claim on federal tax return using IRS Form 8882.", note: "Stackable with Indiana’s state credit (50% of qualified expenditures, up to $100,000). Combined federal + state benefit can cover 75%+ of childcare facility costs.", url: "https://www.irs.gov/forms-pubs/about-form-8882" } },
+    { id: 81, name: "Indiana Employer Child Care Expenditure Credit", summary: "Indiana state tax credit covering 50% of qualified expenditures (up to $100,000) for employers with 100 or fewer employees who establish new childcare facilities for their workers.", funding: "State", agency: "DOR", audience: "employer", tags: ["employer"], empEligibility: { need: ["retention","hiring","childcare","tax-credits","benefits"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana employers with 100 or fewer employees who establish a new Indiana-licensed childcare facility for employees’ children. Must not already be operating a childcare business.", award: "50% of qualified childcare facility expenditures, up to $100,000 per employer. Non-refundable. Statewide cap: $2.5M/year.", apply: "Claim on Indiana state income tax return. Must obtain childcare license from FSSA.", note: "Stackable with federal Section 45F credit. Combined benefit can cover 75%+ of facility costs. HB 1378 (2026 session) may expand to include operating costs and third-party contracts.", url: "https://www.in.gov/dor/individual-income-taxes/filing-my-taxes/tax-credits/" } },
+    { id: 82, name: "EDGE Tax Credit (Economic Development for a Growing Economy)", summary: "Refundable Indiana tax credit for companies creating new jobs — up to 100% of projected payroll tax withholdings from new positions for up to 20 years. Indiana’s primary job creation incentive.", funding: "State", agency: "IEDC", audience: "employer", tags: ["employer"], empEligibility: { need: ["hiring","pipeline","expansion","tax-credits"], hiring: ["any"], wage: ["13-23","23+"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Companies creating new quality jobs in Indiana with competitive wages and benefits. Must demonstrate that the project would not occur in Indiana without the incentive.", award: "Refundable tax credits calculated as a percentage of projected payroll tax withholdings from new jobs. Credits awarded over agreed-upon period (up to 20 years). Can be accelerated via direct payments.", apply: "Apply through IEDC. Requires formal proposal including job creation targets, wage commitments, and capital investment plans.", url: "https://iedc.in.gov/indiana-advantages/investments/economic-development-for-a-growing-economy-tax-credit/overview" } },
+    { id: 83, name: "Indiana R&D Tax Credit", summary: "State tax credit of 15% on the first $1 million in qualified research expenses plus 10% above $1 million for companies conducting R&D in Indiana.", funding: "State", agency: "DOR", audience: "employer", tags: ["employer"], empEligibility: { need: ["training","retention","tax-credits"], hiring: ["any"], wage: ["23+","varies"], industry: ["manufacturing","healthcare","it","construction","professional","other"] }, details: { eligibility: "Indiana businesses with qualified research expenses (QREs) in Indiana. Generally follows federal IRC Section 41 definitions.", award: "15% of first $1M in qualified research expenses + 10% of QREs above $1M. Non-refundable, 10-year carryforward.", apply: "Claim on Indiana corporate income tax return.", url: "https://www.in.gov/dor/business-tax/tax-credits/" } },
+
+    // === P3: SPECIAL POPULATIONS ===
+    { id: 85, name: "IMPACT Program (SNAP Employment & Training)", summary: "Free employment services, job skills training, and support for Hoosiers receiving SNAP benefits. Includes clothing assistance ($300/year), transportation ($125/month), and paid work training.", funding: "Federal", agency: "FSSA", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["job","certificate","upskill"], circumstances: ["low-income"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Indiana residents receiving SNAP benefits. Mandatory for able-bodied adults without dependents (ABAWDs) ages 18-49. Voluntary for other SNAP recipients.", services: "Job search assistance, vocational training, GED/HSE prep, ESL classes, OJT, work experience, career assessments", award: "Clothing assistance up to $300/year, transportation up to $125/month, tools/equipment for employment, paid work training positions", apply: "Enrolled automatically when approved for SNAP benefits. Contact local DFR office or call 800-403-0864.", url: "https://www.in.gov/fssa/dfr/snap-food-assistance/" } },
+    { id: 86, name: "Indiana HSE Test Remittance (Free GED/HiSET)", summary: "Indiana pays the full cost of GED or HiSET exams for residents through June 30, 2026. Normally $90–$144, now completely free.", funding: "State", agency: "DWD", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["certificate","job","degree"], circumstances: ["no-diploma"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Indiana residents without a high school diploma who are testing between July 1, 2025 and June 30, 2026. Must be 16+ and not enrolled in K-12.", award: "Full cost of GED or HiSET exam paid by the state (normally $90–$144).", apply: "Register for exam at GED.com or HiSET.ETS.org. State remittance applied automatically at Indiana testing centers.", deadline: "Must test before June 30, 2026", url: "https://www.in.gov/dwd/career-training-adult-ed/adult-ed/indiana-hse/" } },
+    { id: 87, name: "Jobs for America’s Graduates (JAG Indiana)", summary: "Largest in-the-nation JAG program. Free 2-credit employability skills class for at-risk middle/high school and community college students, plus 12 months of post-graduation follow-up.", funding: "State", agency: "DWD", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["job","certificate"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "At-risk youth in Indiana middle schools, high schools, and community colleges. 250+ programs statewide — largest state JAG program nationally. Also compatible with Pre-ETS for students with disabilities.", services: "2-credit-hour elective class covering resume writing, interview skills, financial literacy, workplace readiness, career exploration. Plus 12 months of post-graduation follow-up and job placement.", apply: "Enroll through your school’s JAG specialist. Ask your school counselor if JAG is offered.", url: "https://www.in.gov/dwd/jag/" } },
+    { id: 88, name: "Ticket to Work Program", summary: "Free employment services for adults ages 18–64 receiving Social Security disability benefits (SSDI or SSI). Test working without immediately losing disability benefits.", funding: "Federal", agency: "SSA", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","returning"], goal: ["job","upskill"], circumstances: ["disability"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Adults ages 18-64 currently receiving SSDI or SSI disability benefits who want to work. Completely voluntary.", services: "Free employment services through Employment Networks (ENs) or Vocational Rehabilitation. Career counseling, job placement, skills training.", award: "Work incentives protect your benefits: Trial Work Period (9 months of earnings without losing benefits), Extended Period of Eligibility (36 months), Expedited Reinstatement if benefits stopped.", apply: "Call Ticket to Work Help Line: 1-866-968-7842 (TTY: 1-866-833-2967). Or visit choosework.ssa.gov to find an Employment Network.", url: "https://choosework.ssa.gov/" } },
+    { id: 89, name: "Pre-Employment Transition Services (Pre-ETS)", summary: "Free career exploration and work-readiness services for students with disabilities ages 14–21. Delivered through Indiana’s Vocational Rehabilitation Bureau.", funding: "Federal", agency: "FSSA", audience: "individual", tags: ["individual","youth"], eligibility: { age: ["14-17","18-24"], status: ["student"], goal: ["job","certificate","apprenticeship"], circumstances: ["disability"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "Students with disabilities ages 14-21 who are enrolled in an educational program (IEP, 504 plan, or informal accommodation). Does NOT require a VR case to receive services.", services: "Five required activities: (1) job exploration counseling, (2) workplace readiness training, (3) work-based learning experiences, (4) counseling on postsecondary enrollment, (5) self-advocacy instruction.", apply: "Contact Indiana Bureau of Rehabilitation Services or your school’s transition coordinator. 1,616 students served through JAG Pre-ETS partnership in SFY25.", url: "https://www.in.gov/fssa/ddars/brs/vocational-rehabilitation-employment/" } },
+    { id: 90, name: "Indiana Refugee Employment Services", summary: "Employment training, English classes, cultural orientation, and job placement for refugees, asylees, Cuban/Haitian entrants, and trafficking victims in Indiana. Services can last up to 5 years.", funding: "Federal", agency: "FSSA", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","returning"], goal: ["job","certificate","upskill"], circumstances: ["refugee"], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, details: { eligibility: "ORR-eligible populations in Indiana: refugees, asylees, Cuban/Haitian entrants, Special Immigrant Visa holders, and victims of trafficking.", services: "Cash assistance (up to 5 months), English language classes, cultural orientation, employment training, job placement, career pathway support. Services can continue up to 5 years.", apply: "Contact resettlement agency: Exodus Refugee Immigration (Indianapolis), Catholic Charities, or Burmese American Community Institute (BACI).", url: "https://www.in.gov/fssa/dfr/refugee-services/" } },
+    { id: 91, name: "IDOC Correctional Education & Apprenticeship", summary: "Free education and vocational training for incarcerated individuals: GED prep, college degrees, industry certifications, and USDOL registered apprenticeships. Available at 15 IDOC facilities.", funding: "State", agency: "DOC", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","returning"], goal: ["certificate","degree","apprenticeship"], circumstances: ["justice"], field: ["any","manufacturing","healthcare","construction","logistics"] }, details: { eligibility: "Incarcerated individuals in Indiana Department of Correction facilities. Programs available across 15 facilities statewide.", services: "Literacy/TASC/GED, vocational certifications (NCCER, welding, culinary, cosmetology, logistics, building trades), college degrees through 6 partner universities (including Ivy Tech, Ball State, Indiana State), USDOL registered apprenticeships.", award: "Free — all education and training at no cost. Second Chance Pell eligible at partner institutions.", apply: "Enroll through facility education department. Coordinate with IDOC re-entry services.", note: "Complements the HIRE program (#27) which provides post-release employment placement.", url: "https://www.in.gov/idoc/divisions/re-entry/programs/" } },
+    { id: 92, name: "Individual Development Accounts (IDA)", summary: "Matched savings program for low-to-moderate income Hoosiers. Save and receive 3:1 or 4:1 matching funds for qualified purchases including vehicles for work, education expenses, or small business startup.", funding: "State", agency: "IHCDA", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54","55+"], status: ["employed","underemployed","returning"], goal: ["tuition","upskill","job"], circumstances: ["low-income"], field: ["any","business","healthcare","it","manufacturing","construction","logistics"] }, details: { eligibility: "Low-to-moderate income Indiana residents. Must complete financial literacy training and establish a savings plan.", award: "Matched savings at 3:1 or 4:1 ratio. Funds can be used for: education/training expenses, vehicle for employment, small business startup, homeownership.", apply: "Contact your local IDA provider through IHCDA. Program administered by community organizations statewide.", url: "https://www.in.gov/ihcda/program-partners/individual-development-accounts-ida/" } },
+    { id: 93, name: "INvestABLE (ABLE Accounts)", summary: "Tax-advantaged savings accounts for individuals with disabilities. Save up to $100,000 without affecting SSI or Medicaid eligibility. Funds cover education, training, transportation, and more.", funding: "Federal", agency: "IN Education Savings Authority", audience: "individual", tags: ["individual"], eligibility: { age: ["14-17","18-24","25-54","55+"], status: ["student","employed","unemployed","underemployed","returning"], goal: ["tuition","certificate","upskill","job"], circumstances: ["disability"], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Individuals with a disability with onset before age 26. Includes physical, intellectual, developmental, and mental health disabilities.", award: "Tax-advantaged savings up to $100,000 without affecting SSI eligibility ($100K+ pauses SSI but preserves Medicaid). Annual contribution limit: $18,000 (2026). Employed individuals can contribute an additional amount.", coveredExpenses: "Education, job training, transportation, assistive technology, housing, healthcare, financial management, legal fees — any disability-related expense.", apply: "Open an account at investable.in.gov. Indiana residents get state income tax deduction on contributions.", url: "https://www.investable.in.gov/" } },
+
+    // === P3: SMALL BUSINESS & EMPLOYER SERVICES ===
+    { id: 95, name: "Indiana SBDC (Small Business Development Center)", summary: "Free confidential business advising, training workshops, and up to $15,000 in professional services through the INTAP program. 10 regional offices across Indiana.", funding: "Federal", agency: "SBA/IEDC", audience: "employer", tags: ["employer"], empEligibility: { need: ["training","hiring","pipeline","retention","small-biz"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana small businesses and entrepreneurs. Free and confidential. 10 regional offices statewide.", services: "Business advising, HR fundamentals workshops, marketing training, financial analysis, business transition planning. INTAP program: up to $15,000 in professional services for growth projects.", apply: "Contact your regional SBDC center at isbdc.org or call for an appointment.", url: "https://www.isbdc.org/" } },
+    { id: 96, name: "Fast Track Grant", summary: "Accelerates degree completion for Indiana students already receiving state financial aid (21st Century Scholars or Frank O’Bannon) by allowing them to front-load aid for year-round enrollment.", funding: "State", agency: "CHE", audience: "individual", tags: ["individual"], eligibility: { age: ["18-24","25-54"], status: ["student"], goal: ["degree","tuition"], circumstances: [], field: ["any","business","healthcare","it","manufacturing","construction","logistics","education"] }, details: { eligibility: "Must be a current 21st Century Scholars or Frank O’Bannon Grant recipient using state aid in the current year. Must earn 30+ credit hours in the award year and have remaining eligibility units.", award: "Additional semester of existing state aid used in a compressed timeframe (e.g., summer term), allowing students to graduate faster.", apply: "Automatic consideration through ScholarTrack for eligible students. Contact your financial aid office.", url: "https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/fast-track/" } }
+
+,
+
+    // === IHC PROGRAMS & LOCAL RESOURCES ===
+    { id: 100, name: "Invest Onward (Rise & Reskill)", summary: "IHC’s own workforce training program offering employability skills, hospitality training, property maintenance certification, and resume building. Monthly cohorts with free enrollment for Hamilton County residents.", funding: "Local", agency: "IHC", audience: "both", tags: ["individual","employer","ihc"], eligibility: { age: ["18-24","25-54","55+"], status: ["unemployed","underemployed","returning"], goal: ["job","certificate","upskill"], circumstances: [], field: ["any","manufacturing","healthcare","it","construction","logistics","business"] }, empEligibility: { need: ["training","pipeline","retention"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Hamilton County residents or employers. Individuals: unemployed or underemployed adults seeking career skills. Employers: can refer employees or partner as work experience sites.", services: "Rise & Reskill (employability skills), Hospitality Training, Building Property Maintenance Training, Resume Builder workshops. Monthly cohorts April–December 2026.", award: "Free enrollment for participants. Employers get trained, work-ready candidates.", apply: "Contact Invest Hamilton County: investhamiltoncounty.com", url: "https://investhamiltoncounty.com" } },
+    { id: 101, name: "Invest Ability", summary: "IHC’s disability workforce program connecting employers with qualified candidates with disabilities. Partners with VR, Federal Bonding, and WOTC for comprehensive inclusive hiring support.", funding: "Local", agency: "IHC", audience: "employer", tags: ["employer","ihc"], empEligibility: { need: ["hiring","diversity","pipeline"], hiring: ["disability"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any Hamilton County employer interested in inclusive hiring practices. Pairs with Vocational Rehabilitation referrals and Federal Bonding.", services: "Candidate matching, workplace accommodation guidance, inclusive hiring best practices, connection to WOTC tax credits ($2,400/hire) and Federal Bonding ($5K-$25K coverage).", apply: "Contact Invest Hamilton County: investhamiltoncounty.com", url: "https://investhamiltoncounty.com" } },
+    { id: 102, name: "Alex Business Services", summary: "IHC’s consulting platform providing market intelligence, competitive landscape analysis, strategic growth guidance, and B2B lead matching for Hamilton County businesses.", funding: "Local", agency: "IHC", audience: "employer", tags: ["employer","ihc"], empEligibility: { need: ["expansion","small-biz","hiring","pipeline"], hiring: ["any"], wage: ["13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Hamilton County businesses seeking growth support. Available through IHC directly or via OneZone Chamber partnership.", services: "Inbound (find local providers), Outbound (find clients), Consultation (strategic growth), Market Intelligence (sizing, competitive analysis), Chamber Connect (member integration).", apply: "Contact Invest Hamilton County or OneZone Chamber", url: "https://investhamiltoncounty.com" } },
+    { id: 103, name: "Hamilton County Data Hub (Alex)", summary: "Free access to IHC’s proprietary data intelligence platform combining 1,000+ datasets for evidence-based workforce and economic development decisions. Talent pipeline analytics, QoL scoring, and site selection data.", funding: "Local", agency: "IHC", audience: "employer", tags: ["employer","ihc"], empEligibility: { need: ["hiring","pipeline","retention","expansion"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Available to Hamilton County employers and site selectors. Free workforce analytics and economic data.", services: "Labor market intelligence, commute pattern analysis, competitor benchmarking, QoL site selection scoring (85/100), industry cluster mapping, talent availability forecasts.", apply: "Contact Invest Hamilton County: investhamiltoncounty.com", url: "https://investhamiltoncounty.com" } },
+    { id: 104, name: "OneZone Chamber of Commerce", summary: "Hamilton County’s premier business chamber (1,200+ members in Carmel, Fishers, and northern HC). Networking events, advocacy, business development, and exclusive member resources.", funding: "Local", agency: "OneZone", audience: "employer", tags: ["employer"], empEligibility: { need: ["hiring","small-biz","pipeline","expansion"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any business in the greater Hamilton County area. Membership-based with multiple tiers.", services: "Networking events, advocacy, business referrals, Market Snapshot reports (via IHC partnership), professional development workshops.", apply: "Visit onezonecommerce.com or call 317-436-4653", url: "https://onezonecommerce.com" } },
+    { id: 105, name: "WorkOne Interview Rooms & Computer Labs", summary: "Free employer access to WorkOne facilities for interviews, hiring events, skills testing, and computer labs. Professional setting at no cost.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["hiring","pipeline"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer. Free to use — no membership or program enrollment required.", services: "Private interview rooms, computer labs for applicant testing, space for hiring events, pre-screened candidate referrals.", apply: "Contact Kristal Heffley at WorkOne: 317-431-8383, kheffley@workonecentral.org", contact: "Kristal Heffley — 317-431-8383, kheffley@workonecentral.org", url: "https://www.workonecentral.org" } },
+
+    // === CHILDCARE-SPECIFIC ===
+    { id: 106, name: "Tri-Share Childcare Model", summary: "Innovative cost-sharing model where childcare costs are split three ways: employer, employee, and state/county. Reduces family childcare burden by 65%. Pilot opportunities available in Hamilton County.", funding: "Local", agency: "IHC", audience: "employer", tags: ["employer","childcare"], empEligibility: { need: ["childcare","retention","benefits"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer interested in subsidizing employee childcare costs. Model proven in Michigan (195 employers, 65% family cost reduction) and piloting in Indiana (Noble County, 11 NE Indiana counties via NEIECC).", award: "Employer pays ~1/3 of childcare costs. Employee pays ~1/3. State/county subsidy covers ~1/3. Typical employer cost: $200-$400/employee/month.", apply: "Contact Invest Hamilton County to explore pilot participation", note: "Hamilton County is positioned for a county-led Tri-Share pilot. IHC can coordinate employer coalition.", url: "https://investhamiltoncounty.com" } },
+    { id: 107, name: "Backup Childcare Benefits", summary: "Guidance on implementing employer-sponsored backup childcare — in-center, in-home, or personal network reimbursement. Typical cost: $1,000-$2,000/employee/year with 3-10x ROI from reduced absenteeism.", funding: "N/A", agency: "IHC", audience: "employer", tags: ["employer","childcare"], empEligibility: { need: ["childcare","retention","benefits"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer. IHC provides free guidance on implementing backup care benefits.", services: "Benefit design consultation, provider comparisons (Bright Horizons, Care.com, KinderCare, Upwards), cost-benefit analysis, ROI modeling.", award: "Typical employer investment: $1,000-$2,000/employee/year. ROI: 3-10x from reduced absenteeism, turnover, and recruitment costs.", apply: "Contact Invest Hamilton County for free consultation", note: "Child Care Answers (Hamilton County): 317-636-5727, childcareanswers.org", url: "https://investhamiltoncounty.com" } },
+    { id: 108, name: "Dependent Care FSA (DCFSA)", summary: "Tax-advantaged benefit allowing employees to set aside up to $7,500/year (2026) pre-tax for childcare expenses. Saves employers 7.65% in FICA taxes on every dollar contributed.", funding: "Federal", agency: "IRS", audience: "employer", tags: ["employer","childcare"], empEligibility: { need: ["childcare","benefits","tax-credits","retention"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer offering a cafeteria plan (Section 125). Employees with children under 13 or dependent adults requiring care.", award: "Employees save 22-35% on childcare costs (tax bracket dependent). Employers save 7.65% FICA on all DCFSA contributions. 2026 limit: $7,500/year (up from $5,000).", apply: "Implement through your payroll/benefits administrator. No government approval needed — employer establishes the plan.", note: "Stackable with Section 45F employer childcare tax credit. Does NOT reduce eligibility for other childcare subsidies.", url: "https://www.irs.gov/publications/p503" } },
+
+    // === IEDC INCENTIVES ===
+    { id: 109, name: "Hoosier Business Investment (HBI) Tax Credit", summary: "Indiana tax credit for businesses making capital investments that support job creation. Non-refundable credits certified over 2 years based on eligible investment amount.", funding: "State", agency: "IEDC", audience: "employer", tags: ["employer","incentive"], empEligibility: { need: ["expansion","tax-credits"], hiring: ["any"], wage: ["13-23","23+"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Indiana businesses making qualified capital investments (equipment, building improvements, new facilities) that support job creation.", award: "Non-refundable income tax credits as a percentage of eligible capital investment, certified over 2 years. Amount negotiated with IEDC based on project scope.", apply: "Apply directly to IEDC. Requires formal proposal with investment plan and job creation targets.", url: "https://iedc.in.gov/indiana-advantages/investments" } },
+    { id: 110, name: "Headquarters Relocation Tax Credit (HQRTC)", summary: "Up to 50% of relocation costs for businesses moving corporate headquarters, division offices, or research centers to Indiana. Small HQRTC available for venture-backed companies.", funding: "State", agency: "IEDC", audience: "employer", tags: ["employer","incentive"], empEligibility: { need: ["expansion","tax-credits"], hiring: ["any"], wage: ["23+"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Businesses relocating corporate HQ, division offices, or research centers to Indiana. Small HQRTC: companies with $4M+ venture capital.", award: "Up to 50% of relocation costs including capital investment. Small HQRTC: refundable, $5M statewide cap/year.", apply: "Apply to IEDC with relocation proposal", url: "https://iedc.in.gov/indiana-advantages/investments" } },
+    { id: 111, name: "Indiana New Markets Tax Credit", summary: "State tax credit for qualified investments in low-income community development entities. Supports businesses investing in underserved areas within the Indianapolis MSA.", funding: "State", agency: "IEDC", audience: "employer", tags: ["employer","incentive"], empEligibility: { need: ["expansion","tax-credits","small-biz"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Qualified Community Development Entities (CDEs) making investments in low-income census tracts. Hamilton County itself has no qualifying tracts, but the Indianapolis MSA has 47 Opportunity Zones (36 in Marion County).", award: "39% of qualified investment claimed over 7 years (based on federal NMTC structure). Indiana piggybacks on federal allocations.", apply: "Through certified CDEs. Contact IEDC for current allocation cycle.", url: "https://iedc.in.gov/indiana-advantages/investments" } },
+
+    // === SBA / FEDERAL ===
+    { id: 112, name: "SBA 7(a) and 504 Loan Programs", summary: "Federal loan guarantee programs for small businesses. 7(a) loans up to $5M for working capital/equipment; 504 loans for major fixed assets and real estate with below-market rates.", funding: "Federal", agency: "SBA", audience: "employer", tags: ["employer"], empEligibility: { need: ["expansion","small-biz"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Small businesses meeting SBA size standards (varies by NAICS code). Must be for-profit, operating in the US, with reasonable owner equity.", award: "7(a): Up to $5M, flexible use (working capital, equipment, debt refinancing). 504: Up to $5.5M for major fixed assets, 10-25 year terms, below-market fixed rates.", apply: "Apply through SBA-approved lenders. Find local lenders at sba.gov/lender-match. Indiana SBDC provides free application assistance.", url: "https://www.sba.gov/funding-programs/loans" } },
+    { id: 113, name: "Opportunity Zone Investment Guidance", summary: "Tax incentives for investments in designated Opportunity Zones within the Indianapolis MSA. Hamilton County has no OZ tracts, but 47 exist in the MSA (primarily Marion County) for expansion projects.", funding: "Federal", agency: "IRS", audience: "employer", tags: ["employer","incentive"], empEligibility: { need: ["expansion","tax-credits"], hiring: ["any"], wage: ["13-23","23+"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Investors with capital gains who invest through Qualified Opportunity Funds (QOFs) in designated OZ census tracts. Hamilton County has zero OZ tracts. MSA has 47 (36 in Marion County).", award: "Capital gains tax deferral until 2026, plus permanent exclusion of gains on OZ investments held 10+ years.", apply: "Establish or invest in a QOF. IHC can provide MSA Opportunity Zone mapping.", note: "Most relevant for Hamilton County businesses considering expansion sites in neighboring Marion County or other MSA locations.", url: "https://www.irs.gov/credits-deductions/businesses/opportunity-zones" } },
+
+    // === COMPLIANCE & REGULATORY ===
+    { id: 114, name: "ACA Employer Mandate Guidance", summary: "Compliance guidance for businesses with 50+ full-time equivalent employees. The Affordable Care Act requires applicable large employers to offer minimum essential coverage or face penalties.", funding: "Federal", agency: "IRS", audience: "employer", tags: ["employer","compliance"], empEligibility: { need: ["compliance","benefits"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Applicable Large Employers (ALEs): 50+ full-time equivalent employees in prior year. Penalty: $2,880/employee (2026) for not offering coverage.", services: "Coverage requirement guidance, affordability safe harbors, reporting obligations (Forms 1094-C/1095-C), SHOP Marketplace options for small employers.", apply: "Consult with benefits broker or HR advisor. IRS resources at healthcare.gov/employers.", note: "Indiana SBDC offers free compliance consultations for businesses approaching the 50-employee threshold.", url: "https://www.healthcare.gov/employers/" } },
+    { id: 115, name: "FMLA Compliance Resources", summary: "Compliance guidance for employers with 50+ employees within 75 miles. The Family and Medical Leave Act requires 12 weeks of unpaid, job-protected leave for qualifying reasons.", funding: "Federal", agency: "USDOL", audience: "employer", tags: ["employer","compliance"], empEligibility: { need: ["compliance","retention"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Covered employers: 50+ employees within 75 miles. Eligible employees: 12+ months employed, 1,250+ hours worked.", services: "Leave administration guidance, intermittent leave tracking, military family leave provisions, state law interaction (Indiana has no state FMLA equivalent).", apply: "DOL compliance assistance: 1-866-487-9243. Free employer guides at dol.gov/agencies/whd/fmla.", url: "https://www.dol.gov/agencies/whd/fmla" } },
+    { id: 116, name: "OSHA Training & Compliance Resources", summary: "Free and low-cost workplace safety training, consultation, and compliance assistance. Indiana operates a State Plan through IOSHA with free on-site consultation for small businesses.", funding: "Federal", agency: "OSHA", audience: "employer", tags: ["employer","compliance"], empEligibility: { need: ["compliance","training"], hiring: ["any"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "All employers. INSafe (Indiana’s OSHA consultation program) provides FREE on-site safety assessments for small and mid-size businesses with no citations or penalties.", services: "Free on-site hazard assessments, safety training, OSHA 10/30-hour courses, recordkeeping guidance, industry-specific compliance guides.", apply: "INSafe consultation: 317-232-2688 or insafe@dol.in.gov. National OSHA: 1-800-321-OSHA.", url: "https://www.in.gov/dol/safety-and-health/insafe-consultation/" } },
+
+    // === WORKFORCE ASSESSMENT ===
+    { id: 117, name: "WorkKeys Assessments", summary: "ACT WorkKeys skills testing validates job candidates’ workplace abilities in applied math, workplace documents, and business writing. Free through WorkOne for employers and job seekers.", funding: "Federal", agency: "WorkOne", audience: "employer", tags: ["employer","workone"], empEligibility: { need: ["hiring","pipeline","training"], hiring: ["any","veterans","youth","disability","justice","public-assist"], wage: ["under-13","13-23","23+","varies"], industry: ["manufacturing","healthcare","it","construction","logistics","professional","other"] }, details: { eligibility: "Any employer or job seeker. Free when administered through WorkOne centers.", services: "Skills profiling for job candidates, National Career Readiness Certificate (NCRC) validation, job profiling to establish skill benchmarks for positions, talent pipeline screening.", award: "Free for employers and job seekers through WorkOne. Certified NCRC credential for candidates who pass.", apply: "Contact WorkOne: 317-431-8383, kheffley@workonecentral.org", contact: "Kristal Heffley — 317-431-8383, kheffley@workonecentral.org", url: "https://www.workonecentral.org" } }
+];
+
+
+// ============================================================
+// STATE + MATCH ENGINE
+// ============================================================
+let answers = {};
+let currentQuestionIndex = 0;
+const questionIds = ['ind-age','ind-status','ind-goal','ind-circumstances','ind-field'];
+let _allMatched = [];
+
+function showQuestion(index) {
+  document.querySelectorAll('#quiz-section .question').forEach((q, i) => {
+    q.classList.toggle('active', i === index);
+  });
+  const isLast = index === questionIds.length - 1;
+  document.getElementById('next-btn').textContent = isLast ? 'See my matches →' : 'Next →';
+  updateProgress();
+}
+
+function updateProgress() {
+  const pct = ((currentQuestionIndex + 1) / questionIds.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function selectOption(el, qId, value) {
+  el.closest('.options').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[qId] = value;
+}
+
+function toggleOption(el, qId, value) {
+  el.classList.toggle('selected');
+  if (!answers[qId]) answers[qId] = [];
+  if (Array.isArray(answers[qId])) {
+    const idx = answers[qId].indexOf(value);
+    if (idx > -1) answers[qId].splice(idx, 1);
+    else answers[qId].push(value);
+  }
+}
+
+function nextQuestion() {
+  const qId = questionIds[currentQuestionIndex];
+  const val = answers[qId];
+  const isOptionalMulti = qId === 'ind-circumstances';
+  if (!val && !isOptionalMulti) return;
+  if (Array.isArray(val) && val.length === 0 && !isOptionalMulti) return;
+  if (currentQuestionIndex < questionIds.length - 1) {
+    currentQuestionIndex++;
+    showQuestion(currentQuestionIndex);
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    showQuestion(currentQuestionIndex);
+  }
+}
+
+// ============================================================
+// MATCH ENGINE — individual track only
+// ============================================================
+function matchPrograms() {
+  const matched = [];
+  PROGRAMS.forEach(program => {
+    if (program.inactive) return;
+    if (!program.eligibility) return; // employer-only programs skipped
+    let score = 0;
+    let reasons = [];
+    const e = program.eligibility;
+    const age = answers['ind-age'];
+    const status = answers['ind-status'];
+    const goal = answers['ind-goal'];
+    const circs = answers['ind-circumstances'] || [];
+    const field = answers['ind-field'];
+
+    if (age && e.age && e.age.length > 0 && !e.age.includes(age)) return;
+    if (age && e.age && e.age.includes(age)) score += 1;
+
+    if (status && e.status && e.status.length > 0 && !e.status.includes(status)) return;
+    if (status && e.status && e.status.includes(status)) { score += 2; reasons.push('Matches your situation'); }
+
+    if (goal && e.goal && e.goal.length > 0 && !e.goal.includes(goal)) return;
+    if (goal && e.goal && e.goal.includes(goal)) { score += 3; reasons.push('Matches your goal'); }
+
+    if (e.circumstances && e.circumstances.length > 0) {
+      const hasMatch = e.circumstances.some(c => circs.includes(c));
+      if (!hasMatch) return;
+      score += 3;
+      reasons.push('Special eligibility match');
+    }
+
+    if (field && field !== 'any' && e.field && e.field.length > 0 && !e.field.includes(field) && !e.field.includes('any')) return;
+    if (field && e.field && (e.field.includes(field) || e.field.includes('any'))) score += 1;
+
+    matched.push(Object.assign({}, program, { score, reasons }));
+  });
+  matched.sort((a, b) => b.score - a.score);
+  return matched;
+}
+
+// ============================================================
+// DETAIL RENDERING
+// ============================================================
+function buildDetailsHtml(p) {
+  let html = '';
+  const d = p.details;
+  html += '<div class="detail-row"><div class="detail-label">Funding</div><div class="detail-value">' + p.funding + '</div></div>';
+  html += '<div class="detail-row"><div class="detail-label">Agency</div><div class="detail-value">' + p.agency + '</div></div>';
+  if (p.reasons && p.reasons.length > 0) {
+    html += '<div class="detail-row"><div class="detail-label">Why It Matches</div><div class="detail-value">' + p.reasons.join('; ') + '</div></div>';
+  }
+  if (!d) return html;
+  const fields = [
+    ['eligibility', 'Eligibility'], ['award', 'Award'], ['income', 'Income'], ['gpa', 'GPA'],
+    ['fields', 'Fields'], ['programReqs', 'Program Reqs'], ['accountability', 'Accountability'],
+    ['timeline', 'Timeline'], ['indianaImpact', 'Indiana Impact'], ['budgetImpact', 'Budget Impact'],
+    ['commentDocket', 'Comment Docket'], ['indianaPrograms', 'IN Programs'], ['services', 'Services'],
+    ['forJobSeekers', 'Job Seekers'], ['barriers', 'Barriers'], ['outcomes', 'Outcomes'],
+    ['coveredExpenses', 'Covers'], ['covers', 'Covers'], ['wageReq', 'Wage Req'],
+    ['minimumHours', 'Min Hours'], ['hours', 'Hours'], ['training', 'Training'],
+    ['requirements', 'Requirements'], ['partnerReq', 'Partner Req'], ['waivers', 'Waivers'],
+    ['capabilities', 'Capabilities'], ['documentation', 'Documents'], ['duration', 'Duration'],
+    ['commitment', 'Commitment'], ['funding', 'Funding'], ['apply', 'How to Apply'],
+    ['deadline', 'Deadline'], ['localLocations', 'Local Sites'], ['contact', 'Local Contact'],
+  ];
+  fields.forEach(pair => {
+    if (d[pair[0]]) html += '<div class="detail-row"><div class="detail-label">' + pair[1] + '</div><div class="detail-value">' + d[pair[0]] + '</div></div>';
+  });
+  if (d.warning) html += '<div class="detail-row"><div class="detail-label">Warning</div><div class="detail-value" style="color: var(--color-accent); font-weight: 600;">' + d.warning + '</div></div>';
+  if (d.note) html += '<div class="detail-row"><div class="detail-label">Note</div><div class="detail-value" style="font-style: italic;">' + d.note + '</div></div>';
+  if (d.url) html += '<div class="detail-row"><div class="detail-label">Learn More</div><div class="detail-value"><a href="' + d.url + '" target="_blank" rel="noopener">' + d.url + '</a></div></div>';
+  return html;
+}
+
+function buildProgramCard(p) {
+  const isHighMatch = p.score >= 5;
+  const isWorkOne = p.tags && p.tags.includes('workone');
+  const isFeatured = p.id === 25; // Workforce Pell
+  let cardClass = isHighMatch ? 'highlight' : (isWorkOne ? 'workone' : '');
+  if (isFeatured) cardClass = 'featured';
+
+  let tagsHtml = '';
+  if (p.tags) {
+    if (p.tags.includes('new-2026')) tagsHtml += '<span class="tag tag-new">NEW 2026</span>';
+    if (p.tags.includes('ihc')) tagsHtml += '<span class="tag tag-ihc">IHC</span>';
+    if (p.funding === 'State') tagsHtml += '<span class="tag tag-state">State</span>';
+    if (p.funding === 'Federal') tagsHtml += '<span class="tag tag-federal">Federal</span>';
+    if (p.funding === 'Local' && !p.tags.includes('ihc')) tagsHtml += '<span class="tag tag-state">Local</span>';
+    if (p.tags.includes('individual')) tagsHtml += '<span class="tag tag-individual">Individual</span>';
+    if (p.tags.includes('youth')) tagsHtml += '<span class="tag tag-youth">Youth</span>';
+    if (p.tags.includes('veteran')) tagsHtml += '<span class="tag tag-veteran">Veteran</span>';
+    if (p.tags.includes('workone')) tagsHtml += '<span class="tag tag-workone">WorkOne</span>';
+  }
+  if (isHighMatch) tagsHtml += '<span class="tag tag-match">Strong Match</span>';
+
+  const cardId = 'card-' + p.id;
+  return '<div class="program-card ' + cardClass + '" id="' + cardId + '">' +
+    '<div class="program-name">' + p.name + '</div>' +
+    '<div class="program-tags">' + tagsHtml + '</div>' +
+    '<div class="program-summary">' + p.summary + '</div>' +
+    '<button class="expand-btn" onclick="toggleDetails(this, \'' + cardId + '\')">▸ More details</button>' +
+    '<div class="program-details">' + buildDetailsHtml(p) + '</div>' +
+  '</div>';
+}
+
+function toggleDetails(btn, cardId) {
+  const card = document.getElementById(cardId);
+  const details = card.querySelector('.program-details');
+  details.classList.toggle('open');
+  btn.innerHTML = details.classList.contains('open') ? '▾ Less' : '▸ More details';
+}
+
+function filterResults(agency, el) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const filtered = agency === 'all' ? _allMatched : _allMatched.filter(p => p.agency === agency);
+  const list = document.getElementById('results-list');
+  list.innerHTML = '';
+  filtered.forEach(p => { list.innerHTML += buildProgramCard(p); });
+}
+
+function showResults() {
+  _allMatched = matchPrograms();
+  document.getElementById('quiz-section').style.display = 'none';
+  document.getElementById('results-section').classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('results-count').textContent = _allMatched.length;
+
+  const pellBanner = document.getElementById('pell-banner-container');
+  pellBanner.innerHTML = '<div class="pell-banner">' +
+    '<div class="pell-banner-title">⭐ Workforce Pell Grant — live July 1, 2026</div>' +
+    '<div class="pell-banner-text">Short-term training programs (8–15 weeks) are now eligible for Pell Grant funding. Even if you already have a bachelor\'s degree, you may qualify. Ivy Tech, Vincennes, and Indiana Tech are expected early adopters for programs like EMT, CNA, CDL, welding, and phlebotomy. Look for it in the Fall 2026 or Spring 2027 enrollment cycle.</div>' +
+    '</div>';
+
+  const agencies = Array.from(new Set(_allMatched.map(p => p.agency)));
+  const filterBar = document.getElementById('filter-bar');
+  filterBar.innerHTML = '<div class="filter-chip active" onclick="filterResults(\'all\', this)">All</div>';
+  agencies.forEach(a => {
+    filterBar.innerHTML += '<div class="filter-chip" onclick="filterResults(\'' + a + '\', this)">' + a + '</div>';
+  });
+
+  const list = document.getElementById('results-list');
+  list.innerHTML = '';
+  _allMatched.forEach(p => { list.innerHTML += buildProgramCard(p); });
+}
+
+function resetQuiz() {
+  answers = {};
+  currentQuestionIndex = 0;
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('quiz-section').style.display = '';
+  document.getElementById('results-section').classList.remove('visible');
+  showQuestion(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init
+updateProgress();
+</script>
+
+</body>
+</html>
