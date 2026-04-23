@@ -42,3 +42,9 @@ services:
       - type: rewrite
         source: /tools/re-entry-storytelling
         destination: /tools/re-entry-storytelling/index.html
+      - type: rewrite
+        source: /tools/pathway-explorer
+        destination: /tools/pathway-explorer/index.html
+      - type: rewrite
+        source: /tools/training-finder
+        destination: /tools/training-finder/index.html

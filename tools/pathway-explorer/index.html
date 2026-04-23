@@ -343,6 +343,7 @@
 </style>
 </head>
 <body data-brand="ihc-2026">
+  <span style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">Invest Hamilton County — Where Insight Becomes Action</span>
   <a href="#main" class="skip-link">Skip to content</a>
 
   <div class="topbar" role="banner">
@@ -612,6 +613,26 @@
       ? '<ul class="pathway-list">' + inbound.map(function(e) { return pathwayCard(e, true); }).join('') + '</ul>'
       : '<div class="empty-pathways">We don\'t have mapped entry paths into this occupation yet. Most people enter this kind of work through a combination of education, certificates, and experience. Your facilitator or WorkOne counselor can help you plan.</div>';
 
+    // Career Coach + Alex deep-links — IHC-paid Lightcast Career Coach companion
+    const ccRegion = 'Hamilton%20County%20Area%20(County)';
+    const ccRadius = '25%20miles';
+    const ccBase = 'https://investhamiltoncounty.lightcastcc.com';
+    const ccSearch = ccBase + '/search/careers?region=' + ccRegion + '&radius=' + ccRadius + '&q=' + encodeURIComponent(occ.title);
+    const ccPrograms = ccBase + '/browse-programs?region=' + ccRegion + '&radius=' + ccRadius + '&q=' + encodeURIComponent(occ.title);
+    const ccResume = ccBase + '/login?radius=' + ccRadius + '&redirect=%2Fprofile%2Fresume%3Fregion%3D' + ccRegion + '%26radius%3D' + ccRadius + '&region=' + ccRegion;
+    const alexUrl = 'https://alex-economic-impact.onrender.com/alex-site-intelligence.html?soc=' + encodeURIComponent(occ.soc);
+    const ccCtaHtml =
+      '<section class="cc-ctas" style="margin-top:1rem; padding:1rem 1.25rem; background:linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); color:#fff; border-radius:10px;">' +
+        '<div style="font-family:var(--font-family-heading); font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--color-warm); font-weight:600; margin-bottom:0.4rem;">Take this further · free Hamilton County tools</div>' +
+        '<div style="display:flex; flex-wrap:wrap; gap:0.5rem 0.85rem; font-size:0.92rem;">' +
+          '<a href="' + ccSearch + '" target="_blank" rel="noopener" style="color:#fff; text-decoration:underline; font-weight:600;">📋 Career Coach: ' + esc(occ.title) + ' detail →</a>' +
+          '<a href="' + ccPrograms + '" target="_blank" rel="noopener" style="color:#fff; text-decoration:underline; font-weight:600;">🎓 Training programs near you →</a>' +
+          '<a href="' + ccResume + '" target="_blank" rel="noopener" style="color:#fff; text-decoration:underline; font-weight:600;">📝 Build a resume →</a>' +
+          '<a href="' + alexUrl + '" target="_blank" rel="noopener" style="color:#fff; text-decoration:underline; font-weight:600;">📊 Alex Workforce data →</a>' +
+        '</div>' +
+        '<p style="margin:0.6rem 0 0; font-size:0.82rem; opacity:0.9;">Career Coach is paid for by Invest Hamilton County. Free for any Hamilton County resident.</p>' +
+      '</section>';
+
     detailEl.innerHTML =
       '<section class="occ-header" aria-labelledby="occ-title">' +
         '<div class="occ-header-top">' +
@@ -626,6 +647,7 @@
           '<div class="qs"><div class="qs-label">Typical openings a year</div><div class="qs-value">' + (num(occ.openings) || '—') + '</div><div class="qs-sub">Both new jobs and replacements</div></div>' +
           '<div class="qs"><div class="qs-label">How the field is growing</div><div class="qs-value">' + growth(occ.growth_pct) + '</div><div class="qs-sub">Projected 5-year change</div></div>' +
         '</div>' +
+        ccCtaHtml +
       '</section>' +
       wageHtml +
       '<section class="pathways-block" aria-labelledby="next-title">' +

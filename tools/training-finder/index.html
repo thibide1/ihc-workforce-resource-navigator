@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training Finder — Workforce Resource Navigator</title>
+<meta name="description" content="Find training programs, certificates, and degrees in Hamilton County and central Indiana. Free Hamilton County tool from Invest Hamilton County, powered by Career Coach.">
+<meta name="theme-color" content="#413494">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens-shared.css">
+<link rel="stylesheet" href="../../assets/css/tokens-ihc-2026.css">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--color-neutral-10);
+    color: var(--color-text);
+    font-family: var(--font-family-body);
+    font-size: 17px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--color-primary); }
+  a:focus-visible, button:focus-visible {
+    outline: 3px solid var(--color-secondary); outline-offset: 2px; border-radius: 4px;
+  }
+
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--color-neutral-20);
+    padding: 0.7rem 1rem; position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .topbar-back {
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: 500;
+    color: var(--color-neutral); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .topbar-back:hover { color: var(--color-primary); }
+  .topbar-meta { display: flex; align-items: center; gap: 0.75rem; }
+  .topbar-logo { height: 26px; width: auto; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff; border-radius: 14px;
+    padding: 2.25rem 1.75rem; margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-warm); margin-bottom: 0.5rem;
+  }
+  .hero h1 {
+    font-family: var(--font-family-heading); font-weight: 800;
+    font-size: 2.1rem; line-height: 1.1; letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+  .hero-sub { font-size: 1.1rem; line-height: 1.55; max-width: 620px; margin: 0; opacity: 0.96; }
+
+  .quick-search {
+    background: #fff; border-radius: 14px;
+    padding: 1.5rem 1.5rem 1.75rem;
+    box-shadow: 0 2px 10px rgba(65,52,148,0.08);
+    margin-bottom: 1.5rem;
+  }
+  .quick-search h2 {
+    font-family: var(--font-family-heading); color: var(--color-primary);
+    font-size: 1.4rem; margin: 0 0 0.4rem;
+  }
+  .quick-search p { margin: 0 0 1rem; color: var(--color-text); }
+  .quick-search-form { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .quick-search-input {
+    flex: 1 1 280px; min-height: 50px;
+    font-family: var(--font-family-body); font-size: 1.05rem;
+    padding: 0 1rem;
+    border: 1.5px solid var(--color-neutral-33); border-radius: 10px;
+  }
+  .quick-search-input:focus { border-color: var(--color-primary); outline: none; }
+  .quick-search-btn {
+    background: var(--color-primary); color: #fff;
+    font-family: var(--font-family-heading); font-weight: 600;
+    border: none; border-radius: 10px; padding: 0 1.6rem;
+    cursor: pointer; font-size: 1.05rem;
+  }
+  .quick-search-btn:hover { background: var(--color-primary-dark); }
+
+  .quick-pick-row {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;
+  }
+  .quick-pick {
+    background: var(--color-neutral-10); border: 1px solid var(--color-neutral-20);
+    border-radius: 999px; padding: 0.4rem 0.95rem;
+    font-family: var(--font-family-heading); font-size: 0.85rem; font-weight: 500;
+    color: var(--color-primary); text-decoration: none;
+    transition: all 0.15s;
+  }
+  .quick-pick:hover { background: var(--color-primary-10); border-color: var(--color-primary); }
+
+  .section-title {
+    font-family: var(--font-family-heading); font-size: 1.3rem;
+    color: var(--color-primary); margin: 1.5rem 0 0.75rem;
+    letter-spacing: -0.005em;
+  }
+  .section-sub { color: var(--color-neutral); margin: 0 0 1rem; }
+
+  .card-grid {
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .card {
+    background: #fff; border-radius: 12px;
+    padding: 1.2rem 1.3rem;
+    box-shadow: 0 2px 8px rgba(65,52,148,0.08);
+    border-left: 4px solid var(--color-secondary);
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .card.purple { border-left-color: var(--color-primary); }
+  .card.gold { border-left-color: var(--color-warm); }
+  .card.green { border-left-color: var(--color-green); }
+  .card.red { border-left-color: var(--color-accent); }
+  .card-icon { font-size: 1.6rem; line-height: 1; }
+  .card-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.1rem; margin: 0;
+  }
+  .card-body { font-size: 0.95rem; line-height: 1.55; margin: 0; color: var(--color-text); }
+  .card-link {
+    margin-top: auto; display: inline-block;
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-primary); text-decoration: none;
+    padding-top: 0.4rem; font-size: 0.95rem;
+  }
+  .card-link:hover { text-decoration: underline; }
+
+  .funding-strip {
+    margin: 2rem 0 1rem;
+    background: var(--color-secondary-10);
+    border-left: 5px solid var(--color-secondary);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+  }
+  .funding-strip h2 {
+    font-family: var(--font-family-heading); color: var(--color-primary);
+    font-size: 1.2rem; margin: 0 0 0.4rem;
+  }
+  .funding-list { margin: 0.6rem 0 0; padding-left: 1.2rem; }
+  .funding-list li { margin-bottom: 0.5rem; line-height: 1.55; }
+  .funding-list strong { color: var(--color-primary); }
+
+  .info-card {
+    background: #fff; border-radius: 10px;
+    padding: 1.1rem 1.25rem; margin-bottom: 0.9rem;
+    border-left: 4px solid var(--color-secondary);
+    box-shadow: 0 1px 4px rgba(65,52,148,0.06);
+  }
+  .info-card-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+
+  footer {
+    max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 2rem;
+    color: var(--color-neutral); font-size: 0.85rem; line-height: 1.55;
+  }
+  footer p { margin: 0.5rem 0; }
+</style>
+</head>
+<body data-brand="ihc-2026">
+  <span style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">Invest Hamilton County — Where Insight Becomes Action</span>
+
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <a href="../../index.html" class="topbar-back" aria-label="Back to Workforce Resource Navigator">← Workforce Resource Navigator</a>
+      <div class="topbar-meta">
+        <img src="../../assets/img/ihc-logo-fullcolor.png" alt="Invest Hamilton County" class="topbar-logo">
+      </div>
+    </div>
+  </div>
+
+  <main role="main">
+
+    <section class="hero">
+      <div class="hero-eyebrow">Free for Hamilton County residents</div>
+      <h1>Find a training program — and the funding to pay for it.</h1>
+      <p class="hero-sub">Short-credential certificates, apprenticeships, and degrees in Hamilton County and central Indiana. Powered by Career Coach, paid for by Invest Hamilton County.</p>
+    </section>
+
+    <section class="quick-search">
+      <h2>What do you want to train for?</h2>
+      <p>Type a job, a field, or a credential. We'll search programs near you in Career Coach.</p>
+      <form class="quick-search-form" id="search-form" action="https://investhamiltoncounty.lightcastcc.com/browse-programs" method="get" target="_blank" rel="noopener">
+        <input type="hidden" name="region" value="Hamilton County Area (County)">
+        <input type="hidden" name="radius" value="25 miles">
+        <input type="text" class="quick-search-input" name="q" id="q-input" placeholder="e.g. CDL, welding, nursing, HVAC" autocomplete="off" aria-label="Search training programs">
+        <button type="submit" class="quick-search-btn">Search programs →</button>
+      </form>
+
+      <div class="quick-pick-row" aria-label="Common searches">
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=CDL" target="_blank" rel="noopener" class="quick-pick">CDL training</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=welding" target="_blank" rel="noopener" class="quick-pick">Welding</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=nursing" target="_blank" rel="noopener" class="quick-pick">Nursing / CNA</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=HVAC" target="_blank" rel="noopener" class="quick-pick">HVAC</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=electrical" target="_blank" rel="noopener" class="quick-pick">Electrical</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=plumbing" target="_blank" rel="noopener" class="quick-pick">Plumbing</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=carpentry" target="_blank" rel="noopener" class="quick-pick">Carpentry</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=manufacturing" target="_blank" rel="noopener" class="quick-pick">Manufacturing</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=culinary" target="_blank" rel="noopener" class="quick-pick">Culinary</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=IT" target="_blank" rel="noopener" class="quick-pick">IT / tech</a>
+        <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=apprenticeship" target="_blank" rel="noopener" class="quick-pick">Apprenticeships</a>
+      </div>
+    </section>
+
+    <h2 class="section-title">Other ways to find training</h2>
+    <p class="section-sub">Different lists for different situations. All free.</p>
+
+    <div class="card-grid">
+      <div class="card purple">
+        <div class="card-icon">🔥</div>
+        <h3 class="card-title">Hot careers in Hamilton County</h3>
+        <p class="card-body">Browse the careers with the most openings near you right now. Each one shows the training programs that match.</p>
+        <a class="card-link" href="https://investhamiltoncounty.lightcastcc.com/hot-careers?region=Hamilton%20County%20Area%20(County)&radius=25%20miles" target="_blank" rel="noopener">See hot careers →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎓</div>
+        <h3 class="card-title">Browse all programs</h3>
+        <p class="card-body">Filter by program type, length, cost, credential. Includes Ivy Tech, IUPUI, Marian, and other Hamilton County area schools.</p>
+        <a class="card-link" href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles" target="_blank" rel="noopener">Browse programs →</a>
+      </div>
+
+      <div class="card green">
+        <div class="card-icon">🧭</div>
+        <h3 class="card-title">Not sure what to train for?</h3>
+        <p class="card-body">Take a free career interest assessment. It matches you with careers that fit how you think — then shows the training to get there.</p>
+        <a class="card-link" href="https://investhamiltoncounty.lightcastcc.com/assessment?region=Hamilton%20County%20Area%20(County)&radius=25%20miles" target="_blank" rel="noopener">Take the assessment →</a>
+      </div>
+
+      <div class="card gold">
+        <div class="card-icon">🛠</div>
+        <h3 class="card-title">Match training to your skills</h3>
+        <p class="card-body">Tell the O*NET tool what you're already good at. It surfaces careers and training that match — including ones you might not have thought of.</p>
+        <a class="card-link" href="https://investhamiltoncounty.lightcastcc.com/onet?region=Hamilton%20County%20Area%20(County)&radius=25%20miles" target="_blank" rel="noopener">Skills assessment →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💼</div>
+        <h3 class="card-title">Already know the job?</h3>
+        <p class="card-body">Open the Pathway Explorer, find your target job, and tap "Training programs" — it'll bring up the right programs for that path.</p>
+        <a class="card-link" href="../pathway-explorer/index.html">Open Pathway Explorer →</a>
+      </div>
+
+      <div class="card red">
+        <div class="card-icon">📓</div>
+        <h3 class="card-title">Re-entering the workforce?</h3>
+        <p class="card-body">From Paper to Pathway connects training programs to your story and to expungement, bonding, and Hamilton County Community Corrections support.</p>
+        <a class="card-link" href="../re-entry-storytelling/index.html">Open From Paper to Pathway →</a>
+      </div>
+    </div>
+
+    <section class="funding-strip" aria-labelledby="funding-title">
+      <h2 id="funding-title">Programs that help pay for training</h2>
+      <p>Most Hamilton County residents qualify for at least one of these. The school's financial aid office or your local WorkOne can confirm eligibility.</p>
+      <ul class="funding-list">
+        <li><strong>WIOA</strong> (Workforce Innovation &amp; Opportunity Act) — federal training dollars routed through Indiana DWD. Often covers full tuition for in-demand training. Apply through your local WorkOne: <strong>1-800-891-6499</strong>.</li>
+        <li><strong>Workforce Ready Grant</strong> — Indiana program covering tuition for high-demand short-credential certificates at Ivy Tech, Vincennes, and others. <a href="https://www.in.gov/che/state-financial-aid/state-financial-aid-by-program/workforce-ready-grant/" target="_blank" rel="noopener">Indiana CHE info →</a></li>
+        <li><strong>Next Level Jobs Employer Training Grant</strong> — for people whose employer enrolls them in upskilling. <strong>1-800-891-6499.</strong></li>
+        <li><strong>Pell Grant</strong> — federal grant for low- to moderate-income students. Doesn't have to be paid back. File the FAFSA at <a href="https://studentaid.gov" target="_blank" rel="noopener">studentaid.gov</a>.</li>
+        <li><strong>Apprenticeship</strong> — earn while you learn. Most Registered Apprenticeships pay $18–$30/hour during training. Browse <a href="https://investhamiltoncounty.lightcastcc.com/browse-programs?region=Hamilton%20County%20Area%20(County)&radius=25%20miles&q=apprenticeship" target="_blank" rel="noopener">apprenticeships in Hamilton County →</a></li>
+        <li><strong>Employer tuition reimbursement</strong> — many local employers (Lilly, Riverview Health, IU Health, Kroger, others) pay all or part of training costs. Ask HR.</li>
+        <li><strong>Hamilton County Community Foundation scholarships</strong> — local funds for trades and credentials. <strong>317-843-2483.</strong> <a href="https://www.hamiltoncountycommunityfoundation.org" target="_blank" rel="noopener">hamiltoncountycommunityfoundation.org</a></li>
+      </ul>
+    </section>
+
+    <h2 class="section-title">If you're stuck — talk to a person</h2>
+    <p class="section-sub">Free help, no commitment.</p>
+
+    <div class="info-card">
+      <div class="info-card-title">WorkOne — Indiana's career counseling network</div>
+      <p style="margin:0;">Free counseling on training options, funding, and job search. Hamilton County residents typically use the Carmel center: <strong>317-571-4220</strong>. Statewide: <strong>1-800-891-6499</strong>.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">Ivy Tech Hamilton County (Noblesville)</div>
+      <p style="margin:0;">Walk in or call. Their workforce navigators are good at matching people to the right credential. <strong>317-296-5400.</strong> <a href="https://www.ivytech.edu/locations/hamilton-county/" target="_blank" rel="noopener">ivytech.edu/hamilton-county →</a></p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">The Pursuit Institute</div>
+      <p style="margin:0;">For high schoolers and young adults — career &amp; technical pathways across all six Hamilton County school corporations. <a href="https://www.thepursuitinstitute.org" target="_blank" rel="noopener">thepursuitinstitute.org →</a></p>
+    </div>
+
+  </main>
+
+  <footer role="contentinfo">
+    <p><strong>Training Finder</strong> · A program of Invest Hamilton County. Powered by Career Coach (Lightcast). Programs and funding are provided by third parties — call to confirm cost, schedule, and eligibility before enrolling.</p>
+    <p>Nothing on this page is stored on our servers. No account, no tracking. Following an external link may take you to a site with its own privacy policy.</p>
+  </footer>
+
+</body>
+</html>

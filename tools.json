@@ -74,21 +74,25 @@
       "badge": "New"
     },
     {
-      "id": "placeholder-training-finder",
+      "id": "training-finder",
       "name": "Training Finder",
       "tagline": "What can you learn, and who pays for it?",
-      "description": "A guide to short-credential, certificate, and degree programs in Hamilton County and central Indiana — with funding pathways (WIOA, Ivy Tech grants, employer-sponsored).",
+      "description": "A search-first guide to short-credential, certificate, apprenticeship, and degree programs in Hamilton County. Powered by Career Coach (free, paid for by IHC). Plus a funding cheat sheet — WIOA, Workforce Ready Grant, Pell, employer reimbursement.",
       "category": "training",
-      "status": "coming-soon",
+      "status": "live",
       "audience": "People considering retraining, new credentials, or career moves",
-      "time_estimate": "10 minutes",
+      "time_estimate": "5 minutes",
       "what_you_get": [
-        "Programs matched to the kind of work you want",
-        "Cost and time estimates",
-        "Funding programs you might qualify for"
+        "Live program search across Hamilton County and central Indiana",
+        "Quick-pick chips for the most common training paths (CDL, welding, nursing, HVAC, IT)",
+        "A plain-language list of programs that help pay for training",
+        "Direct phone numbers for WorkOne, Ivy Tech, and Hamilton County Community Foundation"
       ],
+      "launch_path": "tools/training-finder/index.html",
       "icon": "🎓",
-      "brand_color": "gold"
+      "brand_color": "gold",
+      "privacy_note": "No account on this page. Searches go to Career Coach (free Hamilton County tool).",
+      "badge": "New"
     },
     {
       "id": "placeholder-support-map",
