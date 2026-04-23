@@ -294,6 +294,300 @@
     background: transparent; color: var(--color-accent);
     border: 1.5px solid var(--color-accent);
   }
+  .btn-secondary {
+    background: var(--color-secondary); color: #fff;
+  }
+  .btn-secondary:hover { background: var(--color-secondary-dark); }
+  .btn-icon {
+    background: transparent; color: var(--color-primary);
+    border: 1px solid var(--color-neutral-20);
+    padding: 0.4rem 0.7rem; font-size: 0.85rem;
+  }
+  .btn-icon:hover { border-color: var(--color-primary); background: var(--color-primary-10); }
+
+  /* ---------- Peer-sample accordion (G-1) ---------- */
+  .peer-sample-wrap {
+    margin: 1rem 0;
+    border: 1.5px solid var(--color-secondary-33);
+    border-radius: 10px;
+    background: var(--color-secondary-10);
+    overflow: hidden;
+  }
+  .peer-sample-toggle {
+    width: 100%; text-align: left; background: transparent;
+    border: none; padding: 0.9rem 1.1rem;
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-primary); font-size: 0.95rem;
+    cursor: pointer; display: flex; align-items: center; gap: 0.6rem;
+  }
+  .peer-sample-toggle:hover { background: var(--color-secondary-20); }
+  .peer-sample-toggle .chev { transition: transform 0.2s; font-size: 0.8rem; }
+  .peer-sample-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .peer-sample-body {
+    padding: 0 1.1rem 1.1rem;
+    display: none;
+  }
+  .peer-sample-body.open { display: block; }
+  .peer-sample-item {
+    background: #fff; border-radius: 8px;
+    padding: 0.85rem 1rem; margin-bottom: 0.65rem;
+    border-left: 3px solid var(--color-secondary);
+  }
+  .peer-sample-item:last-child { margin-bottom: 0; }
+  .peer-sample-label {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-neutral); letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 0.25rem;
+  }
+  .peer-sample-quote {
+    font-style: italic; line-height: 1.55; color: var(--color-text);
+    font-size: 0.98rem;
+  }
+  .peer-sample-use {
+    margin-top: 0.5rem;
+    font-family: var(--font-family-heading); font-size: 0.85rem;
+    color: var(--color-primary); font-weight: 600;
+    background: transparent; border: none; cursor: pointer; padding: 0;
+  }
+  .peer-sample-use:hover { text-decoration: underline; }
+
+  /* ---------- Sentence-stem starter (G-8) ---------- */
+  .stem-wrap {
+    margin: 0.5rem 0 1rem;
+    font-family: var(--font-family-heading); font-size: 0.85rem;
+  }
+  .stem-trigger {
+    background: transparent; border: none; cursor: pointer;
+    color: var(--color-primary); font-weight: 600;
+    padding: 0.3rem 0; text-decoration: underline;
+  }
+  .stem-list {
+    margin-top: 0.6rem; display: none; gap: 0.5rem;
+    flex-direction: column;
+  }
+  .stem-list.open { display: flex; }
+  .stem-chip {
+    background: #fff; border: 1.5px dashed var(--color-neutral-33);
+    border-radius: 8px; padding: 0.6rem 0.85rem;
+    text-align: left; cursor: pointer;
+    font-family: var(--font-family-body); font-size: 0.95rem;
+    color: var(--color-text); font-style: italic;
+  }
+  .stem-chip:hover {
+    border-color: var(--color-primary); background: var(--color-primary-10);
+    border-style: solid;
+  }
+
+  /* ---------- Read-aloud button (G-7) ---------- */
+  .read-aloud {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: transparent; border: 1px solid var(--color-neutral-20);
+    border-radius: 999px; padding: 0.25rem 0.7rem;
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    color: var(--color-neutral); cursor: pointer;
+    margin-left: 0.5rem; vertical-align: middle;
+  }
+  .read-aloud:hover { color: var(--color-primary); border-color: var(--color-primary); }
+  .read-aloud.playing { color: var(--color-primary); border-color: var(--color-primary); background: var(--color-primary-10); }
+
+  /* ---------- Stage-of-change gate (G-3) ---------- */
+  .stage-gate {
+    background: #fff; border-radius: 14px;
+    padding: 2rem 1.5rem; box-shadow: 0 2px 10px rgba(65,52,148,0.06);
+  }
+  .stage-gate h1 {
+    font-family: var(--font-family-heading); color: var(--color-primary);
+    font-size: 1.7rem; line-height: 1.2; margin: 0 0 0.5rem;
+  }
+  .stage-gate p.lead {
+    font-size: 1.05rem; color: var(--color-text); margin: 0 0 1.25rem;
+  }
+  .stage-options { display: grid; gap: 0.75rem; }
+  .stage-option {
+    display: block; padding: 1rem 1.1rem;
+    border: 1.5px solid var(--color-neutral-20); border-radius: 10px;
+    background: #fff; cursor: pointer; transition: all 0.15s;
+  }
+  .stage-option:hover { border-color: var(--color-secondary); background: var(--color-secondary-10); }
+  .stage-option.checked { border-color: var(--color-primary); background: var(--color-primary-10); }
+  .stage-option-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.05rem; margin-bottom: 0.15rem;
+  }
+  .stage-option-desc {
+    color: var(--color-text); font-size: 0.95rem; line-height: 1.45;
+  }
+
+  /* ---------- Affirmation interstitial (G-5) ---------- */
+  .affirm-card {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff; border-radius: 14px;
+    padding: 2.25rem 1.75rem; text-align: center;
+    box-shadow: 0 4px 18px rgba(65,52,148,0.18);
+  }
+  .affirm-eyebrow {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-warm); margin-bottom: 0.5rem;
+  }
+  .affirm-main {
+    font-family: var(--font-family-heading); font-weight: 700;
+    font-size: 1.45rem; line-height: 1.3; letter-spacing: -0.01em;
+    margin: 0 0 0.75rem;
+  }
+  .affirm-sub {
+    font-size: 1rem; line-height: 1.55; max-width: 480px;
+    margin: 0 auto; opacity: 0.95;
+  }
+
+  /* ---------- Reflect-revise interstitial (G-2) ---------- */
+  .reflect-card {
+    background: #fff; border-radius: 14px;
+    padding: 1.75rem 1.5rem; border-left: 5px solid var(--color-secondary);
+    box-shadow: 0 2px 10px rgba(94,174,224,0.12);
+  }
+  .reflect-eyebrow {
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-secondary-dark); margin-bottom: 0.5rem;
+  }
+  .reflect-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.4rem; line-height: 1.25;
+    margin: 0 0 1rem;
+  }
+  .reflect-preview {
+    background: var(--color-neutral-10); border-radius: 10px;
+    padding: 1rem 1.2rem; font-style: italic; line-height: 1.6;
+    color: var(--color-text); margin-bottom: 1.1rem;
+  }
+  .reflect-prompt { font-size: 1rem; margin: 0 0 1rem; color: var(--color-text); }
+  .reflect-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+  /* ---------- Resume-paste (G-9) ---------- */
+  .resume-intro {
+    background: var(--color-secondary-10); border-left: 4px solid var(--color-secondary);
+    border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.25rem;
+  }
+  .resume-intro strong { color: var(--color-primary); }
+  .resume-paste-area {
+    width: 100%; min-height: 10rem; resize: vertical;
+    font-family: var(--font-family-body); font-size: 0.95rem;
+    padding: 0.9rem 1rem;
+    border: 1.5px solid var(--color-neutral-33); border-radius: 10px;
+  }
+  .resume-extracted {
+    margin-top: 1.25rem; background: var(--color-primary-10);
+    border-radius: 10px; padding: 1rem 1.2rem;
+    border-left: 4px solid var(--color-primary);
+  }
+  .resume-extracted-label {
+    font-family: var(--font-family-heading); font-weight: 600;
+    color: var(--color-primary); font-size: 0.82rem;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .resume-tags {
+    display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;
+  }
+  .resume-tag {
+    background: #fff; border: 1px solid var(--color-primary-33);
+    color: var(--color-primary); border-radius: 999px;
+    padding: 0.2rem 0.65rem; font-size: 0.82rem;
+    font-family: var(--font-family-heading); font-weight: 500;
+  }
+  .resume-warn {
+    margin-top: 0.75rem; background: #fff;
+    border: 1px solid var(--color-warm); border-radius: 8px;
+    padding: 0.7rem 0.9rem; font-size: 0.9rem; color: var(--color-text);
+  }
+  .resume-warn strong { color: var(--color-warm-dark); }
+
+  /* ---------- New guide cards (T-1, T-5, T-7, T-11, etc.) ---------- */
+  .info-card {
+    background: #fff; border-radius: 10px;
+    padding: 1.1rem 1.25rem; margin-bottom: 0.9rem;
+    border-left: 4px solid var(--color-secondary);
+    box-shadow: 0 1px 4px rgba(65,52,148,0.06);
+  }
+  .info-card.highlight { border-left-color: var(--color-primary); background: var(--color-primary-10); }
+  .info-card.warm { border-left-color: var(--color-warm); }
+  .info-card.green { border-left-color: var(--color-green); }
+  .info-card-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    color: var(--color-primary); font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+  .info-card-body { font-size: 0.95rem; line-height: 1.55; margin: 0 0 0.5rem; }
+  .info-card-action {
+    display: inline-block; margin-top: 0.4rem;
+    font-family: var(--font-family-heading); font-weight: 600;
+    font-size: 0.85rem; color: var(--color-primary);
+  }
+
+  /* ---------- Pocket card (T-7) ---------- */
+  .pocket-card {
+    max-width: 480px; margin: 1rem auto;
+    background: #fff; border: 2px solid var(--color-primary);
+    border-radius: 14px; padding: 1.25rem 1.4rem;
+    box-shadow: 0 3px 14px rgba(65,52,148,0.15);
+  }
+  .pocket-card-eyebrow {
+    font-family: var(--font-family-heading); font-size: 0.75rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-accent); font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .pocket-card-answer {
+    font-size: 1rem; line-height: 1.55; color: var(--color-text);
+  }
+  .pocket-card-footer {
+    margin-top: 0.9rem; padding-top: 0.7rem;
+    border-top: 1px dashed var(--color-neutral-33);
+    font-size: 0.78rem; color: var(--color-neutral);
+    font-family: var(--font-family-heading);
+  }
+
+  /* ---------- Pathway CTA (T-12) ---------- */
+  .pathway-cta {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    color: #fff; border-radius: 10px; padding: 1rem 1.25rem;
+    margin-top: 0.65rem;
+  }
+  .pathway-cta-title {
+    font-family: var(--font-family-heading); font-weight: 700;
+    margin: 0 0 0.3rem;
+  }
+  .pathway-cta a {
+    color: #fff; font-weight: 600; text-decoration: underline;
+  }
+
+  /* ---------- Recovery-vs-conviction disclosure callout (CC-6) ---------- */
+  .disclosure-compare {
+    display: grid; gap: 0.75rem; margin: 1rem 0;
+  }
+  @media (min-width: 600px) {
+    .disclosure-compare { grid-template-columns: 1fr 1fr; }
+  }
+  .disclosure-box {
+    background: #fff; border-radius: 10px; padding: 1rem 1.1rem;
+  }
+  .disclosure-box.recovery { border-top: 4px solid var(--color-green); }
+  .disclosure-box.record { border-top: 4px solid var(--color-accent); }
+  .disclosure-box-label {
+    font-family: var(--font-family-heading); font-weight: 700;
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .disclosure-box.recovery .disclosure-box-label { color: var(--color-green); }
+  .disclosure-box.record .disclosure-box-label { color: var(--color-accent); }
+
+  /* ---------- Print-only: pocket card ---------- */
+  @media print {
+    .topbar, .progress-wrap, .nav-row, .crisis, footer,
+    .guide-actions, .welcome-cta, .peer-sample-toggle .chev,
+    .resume-intro, .read-aloud { display: none !important; }
+    body { background: #fff; }
+    .pocket-card { page-break-after: always; }
+  }
 
   /* ---------- Review screen ---------- */
   .review-intro {
@@ -505,12 +799,192 @@
 <script>
 (function() {
   'use strict';
+
+  // ============================================================
+  // PEER SAMPLES (G-1) — fictional composites, flagged as examples
+  // Evidence: Maruna 2001 redemption scripts are learned by hearing others'
+  // ============================================================
+  const PEER_SAMPLES = {
+    q5a: [
+      { who: 'Marcus, 34', quote: 'I got a drug charge in 2019. Four years. I served it, came home in 2024.' },
+      { who: 'Ashley, 29', quote: "I had a theft misdemeanor in 2020 — it happened when I was using. I've been in recovery 14 months now." },
+      { who: 'Dave, 52', quote: "I was in prison a long time. I came home 6 months ago. I'm starting over." },
+    ],
+    q5d: [
+      { who: 'Marcus, 34', quote: "I was around the wrong people, making choices I wouldn't make now." },
+      { who: 'Ashley, 29', quote: "I was using. I'm not anymore — and I own both parts." },
+      { who: 'Dave, 52', quote: "I did what I did. I've thought about it every day since." },
+    ],
+    q6b: [
+      { who: 'Marcus, 34', quote: "I've been working steady at a warehouse for 9 months. I've been on time every shift." },
+      { who: 'Ashley, 29', quote: "I finished my first year of Ivy Tech classes. My daughter lives with me now." },
+      { who: 'Dave, 52', quote: "I walked every morning for 6 months. Didn't skip a day. That matters to me." },
+    ],
+    q6c: [
+      { who: 'Marcus, 34', quote: "I do better with a routine. I need to know the day's plan." },
+      { who: 'Ashley, 29', quote: "I can stay calm when things go wrong. I used to run. Now I don't." },
+      { who: 'Dave, 52', quote: "I work hard when I know what's expected. I ask questions when I don't." },
+    ],
+    q8a: [
+      { who: 'Marcus, 34', quote: 'CDL driver — local routes if possible.' },
+      { who: 'Ashley, 29', quote: 'Something in peer support or community health. I want to help.' },
+      { who: 'Dave, 52', quote: 'Landscaping crew. Outdoor work. I like being on my feet.' },
+    ],
+    q8b: [
+      { who: 'Marcus, 34', quote: "I've always liked driving. It pays well. My uncle drives and he likes it." },
+      { who: 'Ashley, 29', quote: "Because I've been through it. I know what people need when they're in it." },
+      { who: 'Dave, 52', quote: "I'm good with my hands. I want to be tired at the end of the day in the right way." },
+    ],
+    q8c: [
+      { who: 'Marcus, 34', quote: "I have a drug charge and I want my CDL. I'm not sure what that means." },
+      { who: 'Ashley, 29', quote: "I lost my home health aide license because of my conviction." },
+      { who: 'Dave, 52', quote: "I don't know how far back they look on background checks." },
+    ],
+    q9b: [
+      { who: 'Marcus, 34', quote: '"Why should we take a chance on you?" I never know what to say.' },
+      { who: 'Ashley, 29', quote: '"What were you doing between 2020 and 2024?"' },
+      { who: 'Dave, 52', quote: '"Tell me about a time you led a team." I haven\'t.' },
+    ],
+    q10b: [
+      { who: 'Marcus, 34', quote: "I need a ride to the interview and I didn't want to admit it." },
+      { who: 'Ashley, 29', quote: "Childcare. My sister watches her but I can't keep asking." },
+      { who: 'Dave, 52', quote: "I need help filling out the application. The online ones are hard." },
+    ],
+  };
+
+  // ============================================================
+  // SENTENCE STEMS (G-8) — "Help me start"
+  // Evidence: MI technique — when someone says "I don't know," offer structure
+  // ============================================================
+  const SENTENCE_STEMS = {
+    q5a: ["I was charged with…", "In [year], I had…", "I made a choice I'd make differently today — "],
+    q5d: ["I was using.", "I was in a bad spot.", "I made a decision I own."],
+    q6b: ["I finished…", "I've stayed clean since…", "I've worked steadily for…", "I repaired something that mattered — "],
+    q6c: ["I do better when…", "I've learned that I can…", "I know now that I need…"],
+    q8a: ["I want to drive…", "I want to work with my hands at…", "I want a job where I can…"],
+    q8b: ["I'm good at it because…", "A friend does this and likes it.", "I've always wanted to…", "The pay and hours fit my life."],
+    q8c: ["I have a record and I want to…", "I have a license issue with…", "I'm not sure if my past stops me from…"],
+    q9b: ["\"Why should we take a chance on you?\"", "\"Tell me about the gap years.\"", "\"What's your biggest failure?\""],
+    q10b: ["I need help with…", "I've been embarrassed to ask for…", "I don't know where to start on…"],
+  };
+
+  // ============================================================
+  // RECOVERY vs CONVICTION DISCLOSURE COACHING (CC-6)
+  // Evidence: ADA §12114(b) protects recovery; conviction disclosure is not protected
+  // ============================================================
+  const RECOVERY_COACHING = {
+    in_recovery: {
+      heading: "You have two different stories — and they work differently.",
+      recovery: {
+        title: "Recovery framing",
+        protected: "Protected under the ADA",
+        guidance: "You're not required to share your recovery status with employers — ever. If you choose to, \"person in long-term recovery\" is dignified language. Federal law (ADA §12114(b)) protects you once you've stopped using and are in a recovery program. Current illegal use is not protected — so timing matters.",
+      },
+      conviction: {
+        title: "Conviction framing",
+        protected: "Not federally protected",
+        guidance: "A conviction isn't protected the same way. Indiana has no statewide \"Ban the Box\" for private employers, so an application can ask. Best research (Pager 2003; Ali et al. 2017) says: acknowledge briefly, accept responsibility without excuses, and pivot to what's changed. Never lie — but don't over-share.",
+      },
+      combined: "In practice: lead with recovery if it's relevant and you choose to share it. Keep conviction disclosure short and forward-facing. They're different conversations."
+    },
+    conviction_only: {
+      heading: "Your disclosure has one job: move the conversation forward.",
+      guidance: "A conviction isn't federally protected like recovery is. Indiana has no \"Ban the Box\" for private employers, so an application can ask. The research (Pager 2003; Ali et al. 2017) is clear: short answer, own it, pivot to what's changed. Long explanations backfire. Blame backfires. The forward pivot is what sticks."
+    },
+  };
+
+  // ============================================================
+  // INDIANA OCCUPATIONS WITH LICENSE RESTRICTIONS (T-3 NICCC)
+  // Evidence: 42 USC §1320a-7 healthcare, FDIC §19 finance, IC 12-17.2 childcare, 49 CFR §383.51 CDL
+  // This is INFORMATION, not advice — tool flags these but doesn't diagnose eligibility
+  // ============================================================
+  const RESTRICTED_OCCUPATIONS = {
+    healthcare: {
+      label: "Healthcare roles with direct patient care (CNA, HHA, nurse, EMT)",
+      rule: "Federal rule 42 USC §1320a-7 excludes people with certain convictions from Medicaid/Medicare-funded roles, which is most healthcare. Time-limited for some offenses.",
+      path: "Indiana Professional Licensing Agency (PLA) at 317-234-3009 can tell you about specific licenses. Expungement under IC 35-38-9 may change the picture.",
+    },
+    finance: {
+      label: "Banking, credit union, insurance roles handling money",
+      rule: "FDIC Section 19 bars people with certain dishonesty-related convictions. 7-year lookback for most.",
+      path: "FDIC waiver is possible for older or less serious cases.",
+    },
+    childcare: {
+      label: "Childcare, early-ed, K-12 direct contact with children",
+      rule: "Indiana IC 12-17.2-3.5 and federal CCDBG require background checks; specific disqualifying offenses listed.",
+      path: "Indiana FSSA can confirm whether a specific conviction is disqualifying. Some are permanent; some are time-limited.",
+    },
+    cdl: {
+      label: "Commercial Driver's License (CDL)",
+      rule: "49 CFR §383.51 disqualifies CDL for certain drug and alcohol offenses — some for 1 year, some for life.",
+      path: "Indiana BMV at 1-888-692-6841. If you completed CDL training through PEN Products or a school, they can tell you the specific rule for your case.",
+    },
+    schools: {
+      label: "Public K-12 school employment",
+      rule: "Indiana IC 20-26-5-10 requires expanded background checks. Disqualifying offense list is specific.",
+      path: "Indiana Department of Education. If an old offense might be eligible for expungement, talk to Indiana Legal Services first.",
+    },
+  };
+
+  // ============================================================
+  // ADJACENT RESOURCES (T-1, T-2, T-4, T-6, T-9, T-10, T-13)
+  // ============================================================
+  const GUIDE_EXTRAS = {
+    federal_bonding: {
+      title: "Federal Bonding Program — ask employers about this",
+      body: "The U.S. Department of Labor will provide a free $5,000 fidelity bond for your first 6 months on a job. The employer pays nothing. It's designed specifically for people who employers might see as \"at-risk\" — including people with records, people in recovery, and people with gaps in work history.",
+      action: "When you interview, you can say: \"I'm eligible for the Federal Bonding Program — it's free and covers any risk the company might worry about.\" Full details at bonds4jobs.com.",
+    },
+    wotc: {
+      title: "Work Opportunity Tax Credit — a reason they want to hire you",
+      body: "Employers who hire someone with a felony conviction in the last year can get up to a $2,400 federal tax credit. You don't pay for this — the IRS does. Many employers don't know about it.",
+      action: "Ask the HR person: \"Would you like information on the Work Opportunity Tax Credit? I may qualify your company for up to $2,400.\" This turns your record into a reason they want to hire you.",
+    },
+    hccc: {
+      title: "Hamilton County Community Corrections — direct hire pathway",
+      body: "If you're on Community Corrections in Hamilton County, HCCC's workforce coordinator has direct relationships with employers in Carmel, Fishers, Noblesville, and Westfield who actively hire participants.",
+      action: "Call HCCC at 317-776-9746 and ask for the workforce coordinator. Tell them you completed From Paper to Pathway and want to be matched.",
+    },
+    expungement: {
+      title: "Indiana expungement — you may be eligible",
+      body: "Under IC 35-38-9, many Indiana convictions can be sealed or expunged after a waiting period: 5 years for most misdemeanors, 8 years for minor felonies, 8–10 years for more serious ones. After expungement, you may legally answer \"no\" to questions about the expunged record on most job applications (IC 35-38-9 §10c). Indiana has a one-lifetime petition rule, so getting it right matters.",
+      action: "Do NOT try this alone. Call Indiana Legal Services at 1-800-869-0212 (free) or Neighborhood Christian Legal Clinic at 317-429-4131. They'll tell you if you qualify and help you file.",
+    },
+    peer_mentor: {
+      title: "Talk to someone who's been where you are",
+      body: "Aspire Indiana Health runs a peer recovery support line staffed by people in long-term recovery. They take calls about work, housing, court, family — anything. Free and confidential.",
+      action: "Aspire peer support: 1-877-574-1254. Indiana Recovery Hub (recovery-specific): recoveryhub.org.",
+    },
+    apprenticeship: {
+      title: "Earn while you learn — Registered Apprenticeships",
+      body: "Indiana has hundreds of Registered Apprenticeships where you earn a paycheck while you train for a skilled trade. Many pay $18–$30/hour during training. Fields that hire people with records: electrical, plumbing, welding, HVAC, carpentry, culinary, and some healthcare support roles.",
+      action: "Search at apprenticeship.gov — filter to Indiana. Or call DWD Apprenticeship Indiana: 317-232-7670.",
+    },
+    fcra: {
+      title: "What employers actually see on a background check",
+      body: "Federal law (FCRA §1681c) limits most background checks to a 7-year lookback for arrests that didn't end in conviction. Convictions can show up longer in Indiana. You have the right to pull your own Indiana State Police record before any interview so you know what the employer will see.",
+      action: "Indiana State Police criminal history check: in.gov/isp/criminal-history ($15 online). Pull yours before interviews so nothing surprises you.",
+    },
+    second_chance: {
+      title: "Companies that publicly hire people with records",
+      body: "The Second Chance Business Coalition — 50+ major employers, many with Indiana locations — has publicly committed to giving people with records a fair shot. Not every role, but a real start.",
+      employers: ["JPMorgan Chase", "Walmart", "McDonald's", "Microsoft", "Eaton", "CVS Health", "Target", "Hilton", "Amazon (many roles)", "General Motors", "Koch Industries"],
+      action: "When you search jobs, try these names first. They've already said yes.",
+    },
+    cdpa_privacy: {
+      title: "Your answers stay with you",
+      body: "This tool runs entirely in your browser. Your answers are saved only on this device. Nothing is sent over the internet. No account, no password, no tracking. Indiana's Consumer Data Protection Act (IC 24-15, effective January 2026) gives you the right to know what a service collects. This service collects nothing beyond what you write on your own device — and you can close the tab to remove it.",
+    },
+  };
+
   // ============================================================
   // SCHEMA — one question per page
   // ============================================================
   const PAGES = [
     { id: 'welcome', type: 'welcome' },
+    { id: 'resume-paste', type: 'resume-paste' },
     { id: 'consent', type: 'consent' },
+    { id: 'stage-gate', type: 'stage-gate' },
     { id: 'q3a', section: 'About you', qid: 'Q3.a',
       question: 'What should we call you?',
       hint: 'Optional — any name is fine. A nickname works.',
@@ -555,6 +1029,7 @@
         { field: 'q4b_2', placeholder: '2.' },
         { field: 'q4b_3', placeholder: '3.' },
       ]},
+    { id: 'affirm-1', type: 'affirmation', text: "You've already done more than most people do on their first try.", sub: "The next part is about what's changed. That's the part employers care about most." },
     { id: 'q5a', section: 'What happened', qid: 'Q5.a',
       question: 'In one or two sentences — what happened?',
       hint: 'Example: "I got a drug charge in 2019." That\'s enough. You don\'t have to explain everything.',
@@ -586,6 +1061,7 @@
       question: 'What have you learned about yourself?',
       hint: 'Example: "I do better with a routine." "I can stay calm when everyone else panics."',
       type: 'textarea', field: 'q6c', rows: 4, skippable: true },
+    { id: 'reflect-1', type: 'reflection', after: 'q6c' },
     { id: 'q7a', section: 'Recovery (optional)', qid: 'Q7.a',
       question: 'Are you in recovery from substance use?',
       callout: { type: 'care', text: '<strong>You don\'t have to share this with employers. Ever.</strong> People in recovery are protected under the ADA. This question is so we can match you with the right resources — that\'s all.' },
@@ -616,6 +1092,7 @@
       callout: { type: 'info', text: 'Some jobs have legal rules — healthcare, childcare, driving (CDL), banking, schools. You don\'t need to know the rules. Just write what you\'re worried about.' },
       hint: 'Example: "I have a DUI and want to drive." "I have a drug charge and want a hospital job."',
       type: 'textarea', field: 'q8c', rows: 3, sensitive: true, skippable: true },
+    { id: 'affirm-2', type: 'affirmation', text: "Almost there.", sub: "The last few questions are about what would help — and what to practice. Then your guide is ready." },
     { id: 'q9a', section: 'Practice', qid: 'Q9.a',
       question: 'Which interview questions worry you most?',
       hint: 'Pick up to 3. We\'ll write practice answers for each one you pick.',
@@ -658,18 +1135,22 @@
   };
 
   // Skill keyword → job-idea hints (heuristic, plain-language)
+  // SOC codes wire each suggestion to Alex Workforce Ecosystem deep-links (T-11)
+  // restricted: flags that trigger NICCC-style coaching (T-3)
   const JOB_HEURISTICS = [
-    { keys: ['drive','driving','truck','cdl','delivery'], title: 'Truck driver', wage: '$45,000–$70,000/year', credential: 'CDL Class A (3–8 weeks of training, often employer-paid)', why: 'You named driving as a strength. CDL Class A pays well and is one of the most consistently hiring fields in central Indiana.' },
-    { keys: ['warehouse','forklift','distribution','lift'], title: 'Warehouse / forklift operator', wage: '$35,000–$45,000/year', credential: 'Forklift certification (often employer-paid in 1–2 days)', why: 'Warehouse work is plentiful around Hamilton County. Forklift adds a few dollars an hour.' },
-    { keys: ['care','caregiving','kids','elder','nursing','home health','disabilities'], title: 'Nursing assistant (CNA) or home health aide', wage: '$32,000–$42,000/year', credential: 'CNA: ~75 hours of training. HHA: agency-specific.', why: 'You\'re already experienced caring for people. Going formal opens benefits + steadier hours.' },
-    { keys: ['cook','kitchen','food'], title: 'Cook (line cook or institutional)', wage: '$28,000–$40,000/year', credential: 'Usually no formal credential — start as line cook, move up.', why: 'Restaurants and institutional kitchens (schools, hospitals) hire continuously.' },
-    { keys: ['fix','tools','repair','maintenance','blueprint'], title: 'Maintenance technician', wage: '$40,000–$55,000/year', credential: 'No specific credential; on-the-job training. Trade school helps.', why: 'You have repair instincts. Apartment complexes, schools, and warehouses all need maintenance staff.' },
-    { keys: ['weld','welding'], title: 'Welder', wage: '$45,000–$65,000/year', credential: 'Ivy Tech welding certificate: ~6 months. Often eligible for funding.', why: 'You named welding. Indiana manufacturing pays well for welders and there are training grants.' },
-    { keys: ['cash','register','customer','retail','complaints'], title: 'Customer service representative', wage: '$32,000–$42,000/year', credential: 'No specific credential. Communication skills matter most.', why: 'You\'re comfortable handling people. Indoor, schedule-stable, lots of openings.' },
-    { keys: ['construction','outside'], title: 'Construction laborer', wage: '$35,000–$50,000/year', credential: 'No specific credential. OSHA-10 helps.', why: 'You said you can work outside. Indiana has a construction shortage right now.' },
-    { keys: ['clean','janitor','cleaning'], title: 'Cleaning / janitorial supervisor', wage: '$30,000–$42,000/year', credential: 'No specific credential. Reliability matters most.', why: 'You named cleaning to a high standard. Schools and commercial buildings hire steadily; supervisor adds pay.' },
-    { keys: ['lead','crew','train','teach','mentored'], title: 'Lead / crew supervisor', wage: '$40,000–$55,000/year', credential: 'No specific credential — usually promoted from within.', why: 'You\'ve led a group. That\'s rare. Crew lead at any of your past jobs is a real path.' },
-    { keys: ['computer','tablet','phone','admin','office','write'], title: 'Office / admin assistant', wage: '$32,000–$42,000/year', credential: 'No specific credential. Word/Excel basics help.', why: 'Office roles are stable, indoors, schedule-friendly. Lots of openings post-pandemic.' },
+    { keys: ['drive','driving','truck','cdl','delivery'], title: 'Truck driver', soc: '53-3032', wage: '$45,000–$70,000/year', credential: 'CDL Class A (3–8 weeks of training, often employer-paid)', why: 'You named driving as a strength. CDL Class A pays well and is one of the most consistently hiring fields in central Indiana.', restricted: 'cdl' },
+    { keys: ['warehouse','forklift','distribution','lift'], title: 'Warehouse / forklift operator', soc: '53-7051', wage: '$35,000–$45,000/year', credential: 'Forklift certification (often employer-paid in 1–2 days)', why: 'Warehouse work is plentiful around Hamilton County. Forklift adds a few dollars an hour.' },
+    { keys: ['care','caregiving','kids','elder','nursing','home health','disabilities'], title: 'Nursing assistant (CNA) or home health aide', soc: '31-1131', wage: '$32,000–$42,000/year', credential: 'CNA: ~75 hours of training. HHA: agency-specific.', why: "You're already experienced caring for people. Going formal opens benefits + steadier hours.", restricted: 'healthcare' },
+    { keys: ['cook','kitchen','food'], title: 'Cook (line cook or institutional)', soc: '35-2014', wage: '$28,000–$40,000/year', credential: 'Usually no formal credential — start as line cook, move up.', why: 'Restaurants and institutional kitchens (schools, hospitals) hire continuously.' },
+    { keys: ['fix','tools','repair','maintenance','blueprint'], title: 'Maintenance technician', soc: '49-9071', wage: '$40,000–$55,000/year', credential: 'No specific credential; on-the-job training. Trade school helps.', why: 'You have repair instincts. Apartment complexes, schools, and warehouses all need maintenance staff.' },
+    { keys: ['weld','welding'], title: 'Welder', soc: '51-4121', wage: '$45,000–$65,000/year', credential: 'Ivy Tech welding certificate: ~6 months. Often eligible for funding.', why: 'You named welding. Indiana manufacturing pays well for welders and there are training grants.' },
+    { keys: ['cash','register','customer','retail','complaints'], title: 'Customer service representative', soc: '43-4051', wage: '$32,000–$42,000/year', credential: 'No specific credential. Communication skills matter most.', why: "You're comfortable handling people. Indoor, schedule-stable, lots of openings." },
+    { keys: ['construction','outside'], title: 'Construction laborer', soc: '47-2061', wage: '$35,000–$50,000/year', credential: 'No specific credential. OSHA-10 helps.', why: 'You said you can work outside. Indiana has a construction shortage right now.' },
+    { keys: ['clean','janitor','cleaning'], title: 'Cleaning / janitorial supervisor', soc: '37-1011', wage: '$30,000–$42,000/year', credential: 'No specific credential. Reliability matters most.', why: 'You named cleaning to a high standard. Schools and commercial buildings hire steadily; supervisor adds pay.' },
+    { keys: ['lead','crew','train','teach','mentored'], title: 'Lead / crew supervisor', soc: '11-1021', wage: '$40,000–$55,000/year', credential: 'No specific credential — usually promoted from within.', why: "You've led a group. That's rare. Crew lead at any of your past jobs is a real path." },
+    { keys: ['computer','tablet','phone','admin','office','write'], title: 'Office / admin assistant', soc: '43-6014', wage: '$32,000–$42,000/year', credential: 'No specific credential. Word/Excel basics help.', why: 'Office roles are stable, indoors, schedule-friendly. Lots of openings post-pandemic.' },
+    { keys: ['landscape','lawn','yard','outside'], title: 'Landscaping crew member', soc: '37-3011', wage: '$30,000–$42,000/year', credential: 'No specific credential. Pesticide license adds pay.', why: 'You said you like outdoor work. Hamilton County landscaping demand is steady March–November.' },
+    { keys: ['hvac','plumbing','electric','trades'], title: 'HVAC / plumbing / electrical apprentice', soc: '49-9021', wage: '$35,000–$60,000/year (paid apprenticeship)', credential: 'Registered apprenticeship — earn while you learn.', why: 'Skilled trades are short on workers. Apprenticeship pays you to train. Many fields are open to people with records.' },
   ];
 
   // Practice answer templates (interview Q → coached example structure)
@@ -808,6 +1289,8 @@
   function defaultData() {
     return {
       consent: false,
+      resume_text: '',
+      stage: '',
       q3a: '', q3b: '', q3c: '',
       q3d_years: '', q3d_months: '', q3d_kind: '',
       q3e: [], q3e_other: '',
@@ -890,8 +1373,9 @@
 
       <ul class="welcome-list">
         <li><strong>One question at a time.</strong> No long pages.</li>
-        <li><strong>Skip anything.</strong> Sensitive questions have a Skip button.</li>
-        <li><strong>On-device only.</strong> Nothing is sent over the internet.</li>
+        <li><strong>Skip anything, anytime.</strong> Every question has a Skip button — no penalty.</li>
+        <li><strong>On-device only.</strong> Nothing leaves your browser. No account, no tracking, no cookies.</li>
+        <li><strong>Have a resume?</strong> Paste it on the next page and we'll save you time.</li>
         <li><strong>Most people finish in 20–40 minutes.</strong></li>
       </ul>
 
@@ -949,7 +1433,16 @@
     if (page.hint) {
       h.push(`<p class="qpage-hint">${page.hint}</p>`);
     }
+    // Peer samples shown BEFORE input — Maruna 2001: hear another's story before composing
+    const fieldKey = page.field || '';
+    if (PEER_SAMPLES[fieldKey]) {
+      h.push(renderPeerSamples(fieldKey));
+    }
     h.push(renderInput(page));
+    // Sentence stems shown AFTER input on text/textarea — only when blank
+    if ((page.type === 'textarea' || page.type === 'text') && SENTENCE_STEMS[fieldKey] && !state.data[fieldKey]) {
+      h.push(renderStems(fieldKey));
+    }
     h.push(`</div>`);
     return h.join('');
   }
@@ -1081,6 +1574,9 @@
     const jobs = buildJobs(d);
     const practice = buildPractice(d);
     const resources = buildResources(d);
+    const fullStoryText = [story.brief, story.respons, story.pivot].filter(Boolean).join(' ');
+    const inRecovery = d.q7a === 'Yes';
+    const hasRecord = (d.q5a && !d.q5a_skip) || d.q5c;
 
     let h = '';
     h += `<div class="guide-celebration">
@@ -1089,6 +1585,7 @@
     </div>`;
     h += `<div class="guide-actions">
       <button class="btn btn-primary" data-action="print">🖨 Print my guide</button>
+      <button class="btn btn-ghost" data-action="jump-pocket">💳 Jump to pocket card</button>
       <button class="btn btn-ghost" data-action="copy">📋 Copy as text</button>
       <button class="btn btn-ghost" data-action="download">⬇ Download (.txt)</button>
       <button class="btn btn-ghost" data-action="back-to-review">← Edit answers</button>
@@ -1096,28 +1593,69 @@
 
     h += `<article class="guide">`;
 
-    // Story
+    // Story (Maruna 3-part structure made explicit)
     h += `<section class="guide-section">
-      <div class="guide-section-eyebrow">Your story</div>
-      <h2>A draft in your own words.</h2>
-      <p class="guide-section-sub">Read it out loud. Change what isn't quite you. Practice it until it feels natural.</p>
-      ${story.brief ? `<p class="story-part">${esc(story.brief)}</p>` : ''}
-      ${story.respons ? `<p class="story-part">${esc(story.respons)}</p>` : ''}
-      ${story.pivot ? `<p class="story-part">${esc(story.pivot)}</p>` : ''}
+      <div class="guide-section-eyebrow">Your story · 30–60 seconds out loud</div>
+      <h2>A draft in your own words. ${readAloudBtn(fullStoryText, 'Read your story aloud')}</h2>
+      <p class="guide-section-sub">Three parts: <strong>name what happened briefly</strong> → <strong>own it without excuses</strong> → <strong>land on what's changed</strong>. Read it aloud. Change what isn't quite you.</p>
+      ${story.brief ? `<p class="story-part"><span style="font-family:var(--font-family-heading); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-secondary-dark); font-weight:700; display:block; margin-bottom:0.2rem;">Brief acknowledgment</span>${esc(story.brief)}</p>` : ''}
+      ${story.respons ? `<p class="story-part"><span style="font-family:var(--font-family-heading); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-secondary-dark); font-weight:700; display:block; margin-bottom:0.2rem;">Accountability</span>${esc(story.respons)}</p>` : ''}
+      ${story.pivot ? `<p class="story-part"><span style="font-family:var(--font-family-heading); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-secondary-dark); font-weight:700; display:block; margin-bottom:0.2rem;">Forward pivot</span>${esc(story.pivot)}</p>` : ''}
     </section>`;
 
-    // Jobs
+    // Recovery vs Conviction disclosure distinction (CC-6)
+    if (hasRecord) {
+      const coach = inRecovery ? RECOVERY_COACHING.in_recovery : RECOVERY_COACHING.conviction_only;
+      h += `<section class="guide-section">
+        <div class="guide-section-eyebrow">When to share what</div>
+        <h2>${esc(coach.heading)}</h2>`;
+      if (inRecovery) {
+        h += `<div class="disclosure-compare">
+          <div class="disclosure-box recovery">
+            <div class="disclosure-box-label">${esc(coach.recovery.title)} · ${esc(coach.recovery.protected)}</div>
+            <p style="margin:0;">${esc(coach.recovery.guidance)}</p>
+          </div>
+          <div class="disclosure-box record">
+            <div class="disclosure-box-label">${esc(coach.conviction.title)} · ${esc(coach.conviction.protected)}</div>
+            <p style="margin:0;">${esc(coach.conviction.guidance)}</p>
+          </div>
+        </div>
+        <p style="margin-top:0.5rem; font-size:0.95rem;"><strong>Bottom line:</strong> ${esc(coach.combined)}</p>`;
+      } else {
+        h += `<p>${esc(coach.guidance)}</p>`;
+      }
+      h += `</section>`;
+    }
+
+    // Jobs (with Alex deep-link + restricted-occ flag)
     if (jobs.length) {
       h += `<section class="guide-section">
         <div class="guide-section-eyebrow">Three job ideas</div>
         <h2>What fits what you can do.</h2>
-        <p class="guide-section-sub">Based on the skills and interests you named. Not a complete list — starting points.</p>`;
+        <p class="guide-section-sub">Based on the skills and interests you named. Each links to deeper data on Alex — Hamilton County wages, who hires, what's next.</p>`;
       jobs.forEach(j => {
         h += `<div class="job-card">
           <div class="job-title">${esc(j.title)}</div>
           <div class="job-meta"><strong>Typical pay:</strong> ${esc(j.wage)} · <strong>How to start:</strong> ${esc(j.credential)}</div>
-          <div class="why-match">${esc(j.why)}</div>
-        </div>`;
+          <div class="why-match">${esc(j.why)}</div>`;
+        if (j.restricted && RESTRICTED_OCCUPATIONS[j.restricted]) {
+          const r = RESTRICTED_OCCUPATIONS[j.restricted];
+          h += `<div class="info-card warm" style="margin-top:0.6rem;">
+            <div class="info-card-title">⚠ Worth checking before you apply</div>
+            <p class="info-card-body">${esc(r.rule)}</p>
+            <p class="info-card-body"><strong>How to find out:</strong> ${esc(r.path)}</p>
+          </div>`;
+        }
+        if (j.soc) {
+          h += `<div class="pathway-cta">
+            <div class="pathway-cta-title">See where this job goes</div>
+            <p style="margin:0 0 0.5rem; font-size:0.9rem;">Hamilton County wages, common next steps, who's hiring — on Alex.</p>
+            <a href="https://alex-economic-impact.onrender.com/alex-site-intelligence.html?soc=${encodeURIComponent(j.soc)}" target="_blank" rel="noopener">Open in Alex Workforce →</a>
+            &nbsp;·&nbsp;
+            <a href="../pathway-explorer/index.html?soc=${encodeURIComponent(j.soc)}">See the career path →</a>
+          </div>`;
+        }
+        h += `</div>`;
       });
       h += `</section>`;
     }
@@ -1132,18 +1670,98 @@
         h += `<div class="practice-card">
           <div class="practice-banner">Question</div>
           <div class="practice-q">"${esc(p.q)}"</div>
-          <div class="practice-answer">${esc(p.answer)}</div>
+          <div class="practice-answer">${esc(p.answer)} ${readAloudBtn(p.answer, 'Read this answer aloud')}</div>
           <div class="practice-coach"><strong>Why this works:</strong> ${esc(p.coach)}</div>
         </div>`;
       });
       h += `</section>`;
     }
 
-    // Resources
+    // POCKET CARD (T-7) — wallet-sized 30-second answer
+    const pocketAnswer = (practice.find(p => /record|background|drug test/i.test(p.q)) || practice[0]);
+    if (pocketAnswer) {
+      h += `<section class="guide-section" id="pocket-card-section">
+        <div class="guide-section-eyebrow">Pocket card · print and fold</div>
+        <h2>The one answer to memorize.</h2>
+        <p class="guide-section-sub">Print this page. Fold it to wallet size. Read it three times before any interview.</p>
+        <div class="pocket-card" id="pocket-card">
+          <div class="pocket-card-eyebrow">When they ask about your record</div>
+          <div class="pocket-card-answer">"${esc(pocketAnswer.answer)}"</div>
+          <div class="pocket-card-footer">From Paper to Pathway · Invest Hamilton County · Practice three times before each interview.</div>
+        </div>
+      </section>`;
+    }
+
+    // ADJACENT TOOLS — what employers and the system can do FOR you
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Things employers can do for you</div>
+      <h2>Two programs that turn your record into a reason to hire you.</h2>
+      <p class="guide-section-sub">Most hiring managers don't know about these. You can be the one to tell them.</p>
+      <div class="info-card highlight">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.federal_bonding.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.federal_bonding.body)}</p>
+        <p class="info-card-body"><strong>What to say:</strong> ${esc(GUIDE_EXTRAS.federal_bonding.action)}</p>
+      </div>
+      <div class="info-card highlight">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.wotc.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.wotc.body)}</p>
+        <p class="info-card-body"><strong>What to say:</strong> ${esc(GUIDE_EXTRAS.wotc.action)}</p>
+      </div>
+    </section>`;
+
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Direct paths to work in Hamilton County</div>
+      <h2>The fast routes — already set up for people in your situation.</h2>
+      <div class="info-card green">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.hccc.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.hccc.body)}</p>
+        <p class="info-card-body"><strong>How:</strong> ${esc(GUIDE_EXTRAS.hccc.action)}</p>
+      </div>
+      <div class="info-card green">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.apprenticeship.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.apprenticeship.body)}</p>
+        <p class="info-card-body"><strong>Where:</strong> ${esc(GUIDE_EXTRAS.apprenticeship.action)}</p>
+      </div>
+      <div class="info-card green">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.second_chance.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.second_chance.body)}</p>
+        <p class="info-card-body"><strong>Names to search:</strong> ${GUIDE_EXTRAS.second_chance.employers.map(e => esc(e)).join(' · ')}</p>
+        <p class="info-card-body" style="margin-top:0.5rem;">${esc(GUIDE_EXTRAS.second_chance.action)}</p>
+      </div>
+    </section>`;
+
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Know what they'll see</div>
+      <h2>Background checks, expungement, and what's actually allowed.</h2>
+      <div class="info-card">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.fcra.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.fcra.body)}</p>
+        <p class="info-card-body"><strong>How:</strong> ${esc(GUIDE_EXTRAS.fcra.action)}</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">${esc(GUIDE_EXTRAS.expungement.title)}</div>
+        <p class="info-card-body">${esc(GUIDE_EXTRAS.expungement.body)}</p>
+        <p class="info-card-body"><strong>Important:</strong> ${esc(GUIDE_EXTRAS.expungement.action)}</p>
+      </div>
+    </section>`;
+
+    if (inRecovery || (d.q10a || []).indexOf('Mental health support') >= 0 || (d.q10a || []).indexOf('Addiction recovery support') >= 0) {
+      h += `<section class="guide-section">
+        <div class="guide-section-eyebrow">Someone to talk to</div>
+        <h2>You don't have to do this alone.</h2>
+        <div class="info-card">
+          <div class="info-card-title">${esc(GUIDE_EXTRAS.peer_mentor.title)}</div>
+          <p class="info-card-body">${esc(GUIDE_EXTRAS.peer_mentor.body)}</p>
+          <p class="info-card-body"><strong>Numbers:</strong> ${esc(GUIDE_EXTRAS.peer_mentor.action)}</p>
+        </div>
+      </section>`;
+    }
+
+    // Resources (existing — Q10.a-driven)
     if (resources.length) {
       h += `<section class="guide-section">
-        <div class="guide-section-eyebrow">People who can help</div>
-        <h2>Resources for what you said you needed.</h2>
+        <div class="guide-section-eyebrow">People who can help with what you said you needed</div>
+        <h2>Phone numbers that work.</h2>
         <p class="guide-section-sub">Always call first — places change. If a number doesn't work, dial 2-1-1 and they'll route you.</p>`;
       resources.forEach(r => {
         h += `<div class="resource-card">
@@ -1154,6 +1772,13 @@
       });
       h += `</section>`;
     }
+
+    // Privacy posture (T-14 CDPA)
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Privacy</div>
+      <h2>${esc(GUIDE_EXTRAS.cdpa_privacy.title)}</h2>
+      <p>${esc(GUIDE_EXTRAS.cdpa_privacy.body)}</p>
+    </section>`;
 
     h += `<div class="guide-disclaimer">
       <strong>One reminder:</strong> This is general information and coaching, not legal advice. For legal questions, Indiana Legal Services is free at <strong>1-800-869-0212</strong>. For specific employer or licensing questions, talk to a lawyer. If you're in crisis, call or text <strong>988</strong>.
@@ -1166,45 +1791,51 @@
   // ============================================================
   // GUIDE GENERATORS
   // ============================================================
+  // Maruna 2001: redemption-script structure has three movements —
+  // "true self" (brief acknowledgment), accountability without excuses,
+  // generative forward pivot. We construct each explicitly.
   function buildStory(d) {
     const parts = { brief: '', respons: '', pivot: '' };
-    // Brief acknowledgment
+
+    // --- PART 1: Brief acknowledgment (name what happened, briefly) ---
     if (d.q5a && !d.q5a_skip) {
       parts.brief = d.q5a.trim();
-      if (d.q5b && !d.q5b_skip && parts.brief.indexOf(String(d.q5b)) < 0) {
-        // year already in narrative? otherwise add
-        // skip for cleanliness
-      }
     } else {
-      const yr = (d.q5b && !d.q5b_skip) ? ' ' + d.q5b : '';
-      const stat = d.q5c === 'Yes, fully closed' ? "It's fully closed." :
-                   d.q5c === 'Still open or on probation/parole' ? "I'm still under supervision and I'm fully compliant." :
-                   "";
-      parts.brief = "I have a closed case from a few years back" + yr + ". " + stat + " I'd rather focus on what's been going on since.";
-      parts.brief = parts.brief.replace(/\s+/g, ' ').trim();
+      const yr = (d.q5b && !d.q5b_skip) ? ' from ' + d.q5b : '';
+      const stat = d.q5c === 'Yes, fully closed' ? " It's fully closed." :
+                   d.q5c === 'Still open or on probation/parole' ? " I'm still under supervision and I'm fully compliant." : '';
+      parts.brief = ("I have a closed case" + yr + "." + stat).replace(/\s+/g, ' ').trim();
     }
-    // Responsibility
-    if (d.q5d && !d.q5d_skip) {
-      parts.respons = d.q5d.trim() + " That was my call, and I own it.";
-    } else if (d.q6c) {
-      parts.respons = "I own the work it took to get here. " + d.q6c.trim();
+
+    // --- PART 2: Accountability (own it; no blame, no excuses) ---
+    // Anti-pattern guards (research 03 §2.2): never blame circumstances, co-defendants, or system
+    const why = (d.q5d && !d.q5d_skip) ? d.q5d.trim() : '';
+    if (why) {
+      // Strip excuse-y openers if user accidentally included them
+      const cleaned = why.replace(/^(but |however |the thing is |what happened was )/i, '');
+      parts.respons = cleaned + (cleaned.match(/[.!?]$/) ? '' : '.') + " That was on me, and I own it.";
     } else {
-      parts.respons = "I own that part of my history, and I own the work it took to be where I am now.";
+      parts.respons = "I own that part of my history. I'm not running from it and I'm not making excuses.";
     }
-    // Pivot
+
+    // --- PART 3: Forward pivot (what's changed; where this is going) ---
     const accomplishments = d.q6a || [];
     const proud = (d.q6b || '').trim();
     const learned = (d.q6c || '').trim();
+    const want = (d.q8a || '').trim();
     let pivot = "Since then ";
     if (accomplishments.length) {
       pivot += "I've " + accomplishments.slice(0, 3).map(a => a.toLowerCase()).join(', ') + ".";
+    } else if (proud) {
+      pivot += proud + (proud.match(/[.!?]$/) ? '' : '.');
     } else {
-      pivot += "I've been working on getting steady.";
+      pivot += "I've been getting steady — routine, accountability, showing up.";
     }
-    if (proud) pivot += " " + proud;
-    if (learned && learned !== proud) pivot += " " + learned;
-    if (d.q8a) pivot += " I'm looking for " + d.q8a.toLowerCase().trim() + ".";
+    if (proud && accomplishments.length) pivot += ' ' + proud + (proud.match(/[.!?]$/) ? '' : '.');
+    if (learned && learned !== proud) pivot += ' ' + learned + (learned.match(/[.!?]$/) ? '' : '.');
+    if (want) pivot += " I'm looking for " + want.toLowerCase() + ".";
     parts.pivot = pivot.replace(/\s+/g, ' ').trim();
+
     return parts;
   }
 
@@ -1266,6 +1897,249 @@
   }
 
   // ============================================================
+  // RESUME PARSER (G-9 phase 1) — paste-text only, all in-browser
+  // No server upload, no PII leaves device. Privacy floor preserved.
+  // ============================================================
+  function parseResume(text) {
+    if (!text || text.trim().length < 20) return { ok: false };
+    const lower = text.toLowerCase();
+    const result = {
+      ok: true,
+      jobs: [],          // [{title, employer, years}]
+      skills: [],        // skill keyword matches
+      educationFlags: [],// 'ged','high school','associates','bachelors'
+      gapFlags: [],      // [{from, to, lengthMonths}]
+      licenseFlags: [],  // suspect "revoked"/"expired"/"surrendered"
+      raw: text,
+    };
+
+    // Job titles — match against JOB_HEURISTICS keys
+    const titleHits = new Set();
+    JOB_HEURISTICS.forEach(j => {
+      if (j.keys.some(k => lower.indexOf(k) >= 0)) titleHits.add(j.title);
+    });
+    result.jobTitleHits = Array.from(titleHits);
+
+    // Generic skills extraction
+    const skillKeywords = [
+      'forklift','cdl','osha','servsafe','cpr','first aid','welding','hvac','electrical',
+      'plumbing','carpentry','customer service','cash handling','pos','microsoft office',
+      'excel','word','outlook','quickbooks','typing','bilingual','spanish','driving',
+      'lifting','warehouse','inventory','scheduling','team lead','supervisor','training',
+    ];
+    skillKeywords.forEach(s => {
+      if (lower.indexOf(s) >= 0) result.skills.push(s);
+    });
+
+    // Education flags
+    if (/\bged\b/i.test(text)) result.educationFlags.push('GED');
+    if (/high school|hs diploma/i.test(text)) result.educationFlags.push('High school');
+    if (/associate|a\.s\.|a\.a\./i.test(text)) result.educationFlags.push('Associate');
+    if (/bachelor|b\.s\.|b\.a\./i.test(text)) result.educationFlags.push('Bachelor');
+    if (/ivy tech/i.test(text)) result.educationFlags.push('Ivy Tech');
+
+    // Year-range gap detection (very simple — catches "2018-2022" style ranges)
+    const ranges = [...text.matchAll(/(19|20)\d{2}\s*[-–—to]+\s*((19|20)\d{2}|present|current)/gi)]
+      .map(m => m[0]);
+    result.dateRanges = ranges;
+
+    // License revocation flags (Ashley persona)
+    if (/revok|surrender|expired license|license suspended/i.test(text)) {
+      result.licenseFlags.push('A license shown on your resume looks revoked, surrendered, or expired. Confirm before listing it as current.');
+    }
+
+    return result;
+  }
+
+  function applyResumeToData(parsed) {
+    if (!parsed.ok) return;
+    const d = state.data;
+    // Pre-fill Q4a skill checkboxes from resume skill keywords
+    const skillToQ4a = {
+      'forklift': 'Lift and carry heavy things safely',
+      'cdl': 'Drive a car, truck, or van',
+      'driving': 'Drive a car, truck, or van',
+      'lifting': 'Lift and carry heavy things safely',
+      'warehouse': 'Lift and carry heavy things safely',
+      'cpr': 'Stay calm around people who are upset',
+      'first aid': 'Stay calm around people who are upset',
+      'customer service': 'Talk to customers and handle complaints',
+      'cash handling': 'Handle money or run a cash register',
+      'pos': 'Handle money or run a cash register',
+      'microsoft office': 'Use a computer, phone, or tablet',
+      'excel': 'Use a computer, phone, or tablet',
+      'word': 'Use a computer, phone, or tablet',
+      'team lead': 'Lead a group or crew',
+      'supervisor': 'Lead a group or crew',
+      'training': 'Train or teach someone else',
+      'scheduling': 'Keep a schedule and show up on time',
+    };
+    if (!Array.isArray(d.q4a)) d.q4a = [];
+    parsed.skills.forEach(s => {
+      const target = skillToQ4a[s];
+      if (target && d.q4a.indexOf(target) < 0) d.q4a.push(target);
+    });
+    // Pre-fill Q3e by job-title hit categories
+    const titleToQ3e = {
+      'Truck driver': 'Driving / delivery / trucking',
+      'Warehouse / forklift operator': 'Warehouse / distribution',
+      'Nursing assistant (CNA) or home health aide': 'Healthcare / caregiving',
+      'Cook (line cook or institutional)': 'Food service',
+      'Customer service representative': 'Retail',
+      'Construction laborer': 'Construction',
+      'Welder': 'Manufacturing / factory',
+      'Cleaning / janitorial supervisor': 'Cleaning / janitorial',
+      'Maintenance technician': 'Skilled trades',
+      'Office / admin assistant': 'Office / admin',
+      'Landscaping crew member': 'Landscaping / lawn care',
+    };
+    if (!Array.isArray(d.q3e)) d.q3e = [];
+    (parsed.jobTitleHits || []).forEach(t => {
+      const target = titleToQ3e[t];
+      if (target && d.q3e.indexOf(target) < 0) d.q3e.push(target);
+    });
+    // Save back
+    save();
+  }
+
+  // ============================================================
+  // READ-ALOUD (G-7) — Web Speech API
+  // ============================================================
+  function speak(text, btn) {
+    if (!('speechSynthesis' in window)) return;
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      document.querySelectorAll('.read-aloud.playing').forEach(b => b.classList.remove('playing'));
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.95; u.pitch = 1; u.volume = 1;
+    if (btn) {
+      btn.classList.add('playing');
+      u.onend = function() { btn.classList.remove('playing'); };
+    }
+    window.speechSynthesis.speak(u);
+  }
+  function readAloudBtn(text, label) {
+    const safe = String(text).replace(/"/g, '&quot;');
+    return `<button class="read-aloud" data-action="speak" data-text="${esc(safe)}" aria-label="${esc(label || 'Read aloud')}" title="Read aloud">🔊 Read</button>`;
+  }
+
+  // ============================================================
+  // NEW RENDERERS
+  // ============================================================
+  function renderResumePaste() {
+    const pasted = state.data.resume_text || '';
+    const parsed = pasted ? parseResume(pasted) : null;
+    let extracted = '';
+    if (parsed && parsed.ok) {
+      const tags = [];
+      (parsed.jobTitleHits || []).forEach(t => tags.push(`<span class="resume-tag">💼 ${esc(t)}</span>`));
+      (parsed.skills || []).slice(0, 12).forEach(s => tags.push(`<span class="resume-tag">${esc(s)}</span>`));
+      (parsed.educationFlags || []).forEach(e => tags.push(`<span class="resume-tag">🎓 ${esc(e)}</span>`));
+      const warns = (parsed.licenseFlags || []).map(w => `<div class="resume-warn"><strong>Heads up:</strong> ${esc(w)}</div>`).join('');
+      extracted = `<div class="resume-extracted">
+        <div class="resume-extracted-label">What we found</div>
+        <p style="margin:0 0 0.5rem;">We pre-filled these in your toolkit. You can change anything later.</p>
+        <div class="resume-tags">${tags.join('')}</div>
+        ${warns}
+      </div>`;
+    }
+    return `<div class="qpage">
+      <div class="qpage-eyebrow">Optional · saves you time</div>
+      <h1 class="qpage-question">Have a resume? Paste it here.</h1>
+      <p class="qpage-hint">Skip this if you don't have one — most people don't, and the toolkit works either way.</p>
+      <div class="resume-intro">
+        <strong>Your resume never leaves this device.</strong> It's processed in your browser. Nothing is uploaded, saved on a server, or sent to anyone.
+      </div>
+      <textarea class="resume-paste-area" data-field="resume_text" placeholder="Paste resume text here. Don't worry about formatting — we'll figure out what we can.">${esc(pasted)}</textarea>
+      <div style="margin-top:0.75rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-action="parse-resume">Use this resume</button>
+        <button class="btn btn-icon" data-action="clear-resume">Clear</button>
+      </div>
+      ${extracted}
+    </div>`;
+  }
+
+  function renderStageGate() {
+    const v = state.data.stage || '';
+    const opts = [
+      { id: 'thinking', title: 'Just thinking about it', desc: "Not sure what's next yet. Looking at options." },
+      { id: 'getting_ready', title: 'Getting ready', desc: 'Have a goal in mind. Working out the details.' },
+      { id: 'doing', title: 'Doing it now', desc: 'Actively job hunting. Sending applications.' },
+      { id: 'keeping_going', title: 'Keeping it going', desc: 'Already working. Want to step up.' },
+    ];
+    return `<div class="stage-gate">
+      <div class="qpage-eyebrow">One question first</div>
+      <h1>Where are you with this right now?</h1>
+      <p class="lead">There's no wrong answer. This just helps us match the toolkit to where you are.</p>
+      <div class="stage-options" role="radiogroup" aria-label="Stage">
+        ${opts.map(o => `
+          <label class="stage-option ${v === o.id ? 'checked' : ''}">
+            <input type="radio" name="stage" value="${o.id}" data-field="stage" ${v === o.id ? 'checked' : ''} style="position:absolute; left:-9999px;">
+            <div class="stage-option-title">${esc(o.title)}</div>
+            <div class="stage-option-desc">${esc(o.desc)}</div>
+          </label>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function renderAffirmation(page) {
+    return `<div class="affirm-card">
+      <div class="affirm-eyebrow">Halfway check</div>
+      <p class="affirm-main">${esc(page.text)}</p>
+      <p class="affirm-sub">${esc(page.sub || '')}</p>
+    </div>`;
+  }
+
+  function renderReflection(page) {
+    const d = state.data;
+    const story = buildStory(d);
+    const preview = [story.brief, story.respons, story.pivot].filter(Boolean).join(' ');
+    return `<div class="reflect-card">
+      <div class="reflect-eyebrow">A look at what you have so far</div>
+      <h2 class="reflect-title">Here's what your story sounds like.</h2>
+      <p style="margin:0 0 0.75rem; font-size:0.95rem; color:var(--color-neutral);">A draft, in your own words. You can keep going and change anything later.</p>
+      <div class="reflect-preview">${esc(preview)} ${readAloudBtn(preview, 'Read your story aloud')}</div>
+      <p class="reflect-prompt">Want to add anything before we keep going?</p>
+      <div class="reflect-actions">
+        <button class="btn btn-ghost" data-action="back-to-q6c">← Add to my answers</button>
+        <button class="btn btn-primary" data-action="next">Looks good — keep going →</button>
+      </div>
+    </div>`;
+  }
+
+  function renderPeerSamples(qid) {
+    const samples = PEER_SAMPLES[qid];
+    if (!samples || !samples.length) return '';
+    const items = samples.map((s, i) => `
+      <div class="peer-sample-item">
+        <div class="peer-sample-label">${esc(s.who)}</div>
+        <div class="peer-sample-quote">"${esc(s.quote)}"</div>
+        <button class="peer-sample-use" data-action="use-sample" data-qid="${esc(qid)}" data-idx="${i}">Use this as a starting point →</button>
+      </div>`).join('');
+    return `<div class="peer-sample-wrap">
+      <button class="peer-sample-toggle" data-action="toggle-samples" aria-expanded="false">
+        <span class="chev">▶</span> Read how someone else answered this
+      </button>
+      <div class="peer-sample-body">
+        <p style="margin:0 0 0.75rem; font-size:0.85rem; color:var(--color-neutral); font-style:italic;">These are examples from people in similar situations. Use them as a starting point — yours doesn't have to sound the same.</p>
+        ${items}
+      </div>
+    </div>`;
+  }
+
+  function renderStems(qid) {
+    const stems = SENTENCE_STEMS[qid];
+    if (!stems || !stems.length) return '';
+    const chips = stems.map((s, i) => `<button class="stem-chip" data-action="use-stem" data-qid="${esc(qid)}" data-idx="${i}">${esc(s)}</button>`).join('');
+    return `<div class="stem-wrap">
+      <button class="stem-trigger" data-action="toggle-stems">Help me start →</button>
+      <div class="stem-list">${chips}</div>
+    </div>`;
+  }
+
+  // ============================================================
   // RENDER + NAV
   // ============================================================
   function render() {
@@ -1284,6 +2158,34 @@
       html = renderWelcome();
       navHtml = '';
       crisis.style.display = 'none';
+    } else if (page.type === 'resume-paste') {
+      html = renderResumePaste();
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        <button class="btn btn-skip" data-action="skip">Skip — I don't have one</button>
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next">Continue →</button>`;
+      crisis.style.display = 'block';
+    } else if (page.type === 'stage-gate') {
+      html = renderStageGate();
+      const ok = !!state.data.stage;
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        <button class="btn btn-skip" data-action="skip">Skip</button>
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next" ${ok ? '' : 'disabled'}>Continue →</button>`;
+      crisis.style.display = 'block';
+    } else if (page.type === 'affirmation') {
+      html = renderAffirmation(page);
+      navHtml = `
+        <button class="btn btn-ghost" data-action="prev">← Back</button>
+        <div class="nav-row-spacer"></div>
+        <button class="btn btn-primary" data-action="next">Keep going →</button>`;
+      crisis.style.display = 'block';
+    } else if (page.type === 'reflection') {
+      html = renderReflection(page);
+      navHtml = '';
+      crisis.style.display = 'block';
     } else if (page.type === 'consent') {
       html = renderConsent();
       navHtml = `
@@ -1374,6 +2276,13 @@
           const nextBtn = document.querySelector('[data-action="next"]');
           if (nextBtn) nextBtn.disabled = !state.data.consent;
         }
+        // Stage gate radios — toggle .checked class on label, enable Continue
+        if (field === 'stage') {
+          document.querySelectorAll('.stage-option').forEach(o => o.classList.remove('checked'));
+          el.closest('.stage-option')?.classList.add('checked');
+          const nextBtn = document.querySelector('[data-action="next"]');
+          if (nextBtn) nextBtn.disabled = !state.data.stage;
+        }
       });
 
       // For text inputs, also save on input (debounced)
@@ -1422,6 +2331,67 @@
         else if (action === 'back-to-review') {
           const idx = state.sequence.findIndex(p => p.type === 'review');
           if (idx >= 0) { state.pageIdx = idx; render(); }
+        }
+        // --- v2 additions ---
+        else if (action === 'parse-resume') {
+          const parsed = parseResume(state.data.resume_text || '');
+          if (parsed.ok) {
+            applyResumeToData(parsed);
+            render();
+            // brief flash
+            const note = document.createElement('div');
+            note.textContent = '✓ Resume read — your toolkit is pre-filled.';
+            note.style.cssText = 'position:fixed; top:80px; left:50%; transform:translateX(-50%); background:var(--color-green); color:#fff; padding:0.7rem 1.2rem; border-radius:8px; font-family:var(--font-family-heading); font-weight:600; z-index:200; box-shadow:0 4px 14px rgba(0,0,0,0.15);';
+            document.body.appendChild(note);
+            setTimeout(() => note.remove(), 2500);
+          }
+        }
+        else if (action === 'clear-resume') {
+          state.data.resume_text = ''; save(); render();
+        }
+        else if (action === 'toggle-samples') {
+          const expanded = el.getAttribute('aria-expanded') === 'true';
+          el.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          const body = el.parentElement.querySelector('.peer-sample-body');
+          if (body) body.classList.toggle('open', !expanded);
+        }
+        else if (action === 'toggle-stems') {
+          const list = el.parentElement.querySelector('.stem-list');
+          if (list) list.classList.toggle('open');
+        }
+        else if (action === 'use-sample') {
+          const qid = el.dataset.qid;
+          const idx = parseInt(el.dataset.idx, 10);
+          const sample = (PEER_SAMPLES[qid] || [])[idx];
+          if (sample && qid) {
+            state.data[qid] = sample.quote;
+            save(); render();
+          }
+        }
+        else if (action === 'use-stem') {
+          const qid = el.dataset.qid;
+          const idx = parseInt(el.dataset.idx, 10);
+          const stem = (SENTENCE_STEMS[qid] || [])[idx];
+          if (stem && qid) {
+            state.data[qid] = stem + ' ';
+            save(); render();
+            // focus the textarea so they can keep writing
+            setTimeout(() => {
+              const ta = document.querySelector(`[data-field="${qid}"]`);
+              if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+            }, 60);
+          }
+        }
+        else if (action === 'speak') {
+          speak(el.dataset.text || '', el);
+        }
+        else if (action === 'back-to-q6c') {
+          const idx = state.sequence.findIndex(p => p.id === 'q6c');
+          if (idx >= 0) { state.pageIdx = idx; render(); }
+        }
+        else if (action === 'jump-pocket') {
+          const el2 = document.getElementById('pocket-card');
+          if (el2) el2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
     });
