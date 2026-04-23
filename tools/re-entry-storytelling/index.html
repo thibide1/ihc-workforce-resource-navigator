@@ -801,6 +801,47 @@
   'use strict';
 
   // ============================================================
+  // CAREER COACH — IHC's Lightcast Career Coach white-label
+  // Free for any Hamilton County resident. 2.5 years left on contract.
+  // Use this as the always-on companion: resume builder, real-time job postings,
+  // career detail with wages, local training programs, interest + skills assessments.
+  // ============================================================
+  const CAREER_COACH = {
+    base: 'https://investhamiltoncounty.lightcastcc.com',
+    region: 'Hamilton%20County%20Area%20(County)',
+    radius: '25%20miles',
+    // Bookmark URLs (region pre-set so users land in Hamilton County)
+    home: function() { return this.base + '/?region=' + this.region + '&radius=' + this.radius; },
+    signup: function() { return this.base + '/sign-up'; },
+    resume: function() { return this.base + '/login?radius=' + this.radius + '&redirect=%2Fprofile%2Fresume%3Fregion%3D' + this.region + '%26radius%3D' + this.radius + '&region=' + this.region; },
+    browseCareers: function() { return this.base + '/browse-careers?region=' + this.region + '&radius=' + this.radius; },
+    hotCareers: function() { return this.base + '/hot-careers?region=' + this.region + '&radius=' + this.radius; },
+    browsePrograms: function() { return this.base + '/browse-programs?region=' + this.region + '&radius=' + this.radius; },
+    careerDetail: function(slug) { return this.base + '/careers/' + slug + '?region=' + this.region + '&radius=' + this.radius; },
+    searchPrograms: function(q) { return this.base + '/browse-programs?region=' + this.region + '&radius=' + this.radius + '&q=' + encodeURIComponent(q); },
+    assessment: function() { return this.base + '/assessment?region=' + this.region + '&radius=' + this.radius; },
+    onet: function() { return this.base + '/onet?region=' + this.region + '&radius=' + this.radius; },
+  };
+
+  // SOC code → Career Coach title-slug (BLS-derived kebab case)
+  // Used to deep-link from each job idea straight to live wage + posting + skill data
+  const SOC_TO_CC_SLUG = {
+    '53-3032': 'heavy-and-tractor-trailer-truck-drivers',
+    '53-7051': 'industrial-truck-and-tractor-operators',
+    '31-1131': 'nursing-assistants',
+    '35-2014': 'cooks-restaurant',
+    '49-9071': 'maintenance-and-repair-workers-general',
+    '51-4121': 'welders-cutters-solderers-and-brazers',
+    '43-4051': 'customer-service-representatives',
+    '47-2061': 'construction-laborers',
+    '37-1011': 'first-line-supervisors-of-housekeeping-and-janitorial-workers',
+    '11-1021': 'general-and-operations-managers',
+    '43-6014': 'secretaries-and-administrative-assistants-except-legal-medical-and-executive',
+    '37-3011': 'landscaping-and-groundskeeping-workers',
+    '49-9021': 'heating-air-conditioning-and-refrigeration-mechanics-and-installers',
+  };
+
+  // ============================================================
   // PEER SAMPLES (G-1) — fictional composites, flagged as examples
   // Evidence: Maruna 2001 redemption scripts are learned by hearing others'
   // ============================================================
@@ -958,7 +999,7 @@
     apprenticeship: {
       title: "Earn while you learn — Registered Apprenticeships",
       body: "Indiana has hundreds of Registered Apprenticeships where you earn a paycheck while you train for a skilled trade. Many pay $18–$30/hour during training. Fields that hire people with records: electrical, plumbing, welding, HVAC, carpentry, culinary, and some healthcare support roles.",
-      action: "Search at apprenticeship.gov — filter to Indiana. Or call DWD Apprenticeship Indiana: 317-232-7670.",
+      action: "Browse Hamilton County apprenticeship programs free on Career Coach (paid for by IHC). Or search apprenticeship.gov for the federal database. Or call DWD Apprenticeship Indiana: 317-232-7670.",
     },
     fcra: {
       title: "What employers actually see on a background check",
@@ -1375,7 +1416,8 @@
         <li><strong>One question at a time.</strong> No long pages.</li>
         <li><strong>Skip anything, anytime.</strong> Every question has a Skip button — no penalty.</li>
         <li><strong>On-device only.</strong> Nothing leaves your browser. No account, no tracking, no cookies.</li>
-        <li><strong>Have a resume?</strong> Paste it on the next page and we'll save you time.</li>
+        <li><strong>Have a resume?</strong> Paste it on the next page and we'll save you time. Don't have one? We'll show you a free builder.</li>
+        <li><strong>Free Hamilton County tool included.</strong> When you finish, your guide links into <strong>Career Coach</strong> — live job postings, wages, and training programs in your area. Free.</li>
         <li><strong>Most people finish in 20–40 minutes.</strong></li>
       </ul>
 
@@ -1647,13 +1689,18 @@
           </div>`;
         }
         if (j.soc) {
+          const ccSlug = SOC_TO_CC_SLUG[j.soc];
           h += `<div class="pathway-cta">
-            <div class="pathway-cta-title">See where this job goes</div>
-            <p style="margin:0 0 0.5rem; font-size:0.9rem;">Hamilton County wages, common next steps, who's hiring — on Alex.</p>
-            <a href="https://alex-economic-impact.onrender.com/alex-site-intelligence.html?soc=${encodeURIComponent(j.soc)}" target="_blank" rel="noopener">Open in Alex Workforce →</a>
-            &nbsp;·&nbsp;
-            <a href="../pathway-explorer/index.html?soc=${encodeURIComponent(j.soc)}">See the career path →</a>
-          </div>`;
+            <div class="pathway-cta-title">Go deeper on this job</div>
+            <p style="margin:0 0 0.5rem; font-size:0.9rem;">Real Hamilton County wages, who's hiring right now, training programs near you, and where this job leads next.</p>
+            <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.92rem;">`;
+          if (ccSlug) {
+            h += `<div>📋 <a href="${CAREER_COACH.careerDetail(ccSlug)}" target="_blank" rel="noopener">Career Coach: ${esc(j.title)} detail →</a> <span style="opacity:0.85; font-size:0.85em;">(wages, skills, day-in-the-life)</span></div>`;
+            h += `<div>🎓 <a href="${CAREER_COACH.searchPrograms(j.title)}" target="_blank" rel="noopener">Career Coach: training programs in Hamilton County →</a></div>`;
+          }
+          h += `<div>📊 <a href="https://alex-economic-impact.onrender.com/alex-site-intelligence.html?soc=${encodeURIComponent(j.soc)}" target="_blank" rel="noopener">Alex Workforce: deeper data →</a></div>`;
+          h += `<div>🧭 <a href="../pathway-explorer/index.html?soc=${encodeURIComponent(j.soc)}">Pathway Explorer: where this leads →</a></div>`;
+          h += `</div></div>`;
         }
         h += `</div>`;
       });
@@ -1692,6 +1739,39 @@
       </section>`;
     }
 
+    // CAREER COACH — IHC's always-on companion (free Hamilton County tool)
+    h += `<section class="guide-section">
+      <div class="guide-section-eyebrow">Your Hamilton County companion · free</div>
+      <h2>Career Coach is the place to live in while you're job hunting.</h2>
+      <p class="guide-section-sub">Invest Hamilton County pays for it. Every Hamilton County resident gets free access. Use it to do everything below in one place.</p>
+      <div class="info-card highlight">
+        <div class="info-card-title">📝 Build (or update) your resume</div>
+        <p class="info-card-body">Guided builder. Saves automatically. Print or email it directly to employers.</p>
+        <p class="info-card-body"><a href="${CAREER_COACH.resume()}" target="_blank" rel="noopener" class="info-card-action">Open the resume builder →</a></p>
+      </div>
+      <div class="info-card highlight">
+        <div class="info-card-title">💼 See real jobs hiring near you</div>
+        <p class="info-card-body">Live postings updated daily — filtered to Hamilton County and a 25-mile radius. Save the ones you like.</p>
+        <p class="info-card-body"><a href="${CAREER_COACH.hotCareers()}" target="_blank" rel="noopener" class="info-card-action">See what's hot in Hamilton County right now →</a></p>
+      </div>
+      <div class="info-card highlight">
+        <div class="info-card-title">🎓 Find training and credentials nearby</div>
+        <p class="info-card-body">Browse short-credential programs, certificates, and degrees offered by Ivy Tech and other Hamilton County area schools. Filter by program type, length, and cost.</p>
+        <p class="info-card-body"><a href="${CAREER_COACH.browsePrograms()}" target="_blank" rel="noopener" class="info-card-action">Browse training programs →</a></p>
+      </div>
+      <div class="info-card highlight">
+        <div class="info-card-title">🧭 Not sure what you want? Take the assessment</div>
+        <p class="info-card-body">Two free tools: a career interest assessment matches you with careers that fit how you think, and the O*NET skills tool helps you see careers that match what you can do.</p>
+        <p class="info-card-body">
+          <a href="${CAREER_COACH.assessment()}" target="_blank" rel="noopener" class="info-card-action">Career interest assessment →</a><br>
+          <a href="${CAREER_COACH.onet()}" target="_blank" rel="noopener" class="info-card-action">Skills assessment (O*NET) →</a>
+        </p>
+      </div>
+      <p style="margin-top:0.75rem; font-size:0.9rem; color:var(--color-neutral);">
+        First time? <a href="${CAREER_COACH.signup()}" target="_blank" rel="noopener">Sign up free in about a minute →</a> No payment, no credit card. The whole site is paid for by Invest Hamilton County.
+      </p>
+    </section>`;
+
     // ADJACENT TOOLS — what employers and the system can do FOR you
     h += `<section class="guide-section">
       <div class="guide-section-eyebrow">Things employers can do for you</div>
@@ -1721,6 +1801,7 @@
         <div class="info-card-title">${esc(GUIDE_EXTRAS.apprenticeship.title)}</div>
         <p class="info-card-body">${esc(GUIDE_EXTRAS.apprenticeship.body)}</p>
         <p class="info-card-body"><strong>Where:</strong> ${esc(GUIDE_EXTRAS.apprenticeship.action)}</p>
+        <p class="info-card-body"><a href="${CAREER_COACH.searchPrograms('apprenticeship')}" target="_blank" rel="noopener" class="info-card-action">Open Hamilton County apprenticeship programs in Career Coach →</a></p>
       </div>
       <div class="info-card green">
         <div class="info-card-title">${esc(GUIDE_EXTRAS.second_chance.title)}</div>
@@ -2047,17 +2128,33 @@
     }
     return `<div class="qpage">
       <div class="qpage-eyebrow">Optional · saves you time</div>
-      <h1 class="qpage-question">Have a resume? Paste it here.</h1>
-      <p class="qpage-hint">Skip this if you don't have one — most people don't, and the toolkit works either way.</p>
-      <div class="resume-intro">
-        <strong>Your resume never leaves this device.</strong> It's processed in your browser. Nothing is uploaded, saved on a server, or sent to anyone.
+      <h1 class="qpage-question">Do you have a resume — or want help making one?</h1>
+      <p class="qpage-hint">Three options. Pick the one that fits.</p>
+
+      <div class="info-card highlight" style="margin-bottom:1rem;">
+        <div class="info-card-title">📝 Don't have one? Build one free on Career Coach</div>
+        <p class="info-card-body">Hamilton County residents have free access to <strong>Career Coach</strong> — a guided resume builder, real job postings, training programs, and career tools. Paid for by Invest Hamilton County. No catch.</p>
+        <p class="info-card-body" style="margin-top:0.5rem;">
+          <a href="${CAREER_COACH.resume()}" target="_blank" rel="noopener" class="info-card-action">Open the Career Coach resume builder →</a><br>
+          <a href="${CAREER_COACH.signup()}" target="_blank" rel="noopener" class="info-card-action" style="font-size:0.8rem; color:var(--color-neutral);">No account yet? Sign up free (1 minute) →</a>
+        </p>
       </div>
-      <textarea class="resume-paste-area" data-field="resume_text" placeholder="Paste resume text here. Don't worry about formatting — we'll figure out what we can.">${esc(pasted)}</textarea>
-      <div style="margin-top:0.75rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
-        <button class="btn btn-secondary" data-action="parse-resume">Use this resume</button>
-        <button class="btn btn-icon" data-action="clear-resume">Clear</button>
+
+      <div class="info-card" style="margin-bottom:1rem;">
+        <div class="info-card-title">📋 Already have a resume? Paste it here</div>
+        <p class="info-card-body">We'll read it in your browser to pre-fill some answers in this toolkit. <strong>Your resume never leaves this device.</strong> Nothing is uploaded.</p>
+        <textarea class="resume-paste-area" data-field="resume_text" placeholder="Paste resume text here. Don't worry about formatting — we'll figure out what we can." style="margin-top:0.5rem;">${esc(pasted)}</textarea>
+        <div style="margin-top:0.6rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+          <button class="btn btn-secondary" data-action="parse-resume">Use this resume</button>
+          <button class="btn btn-icon" data-action="clear-resume">Clear</button>
+        </div>
+        ${extracted}
       </div>
-      ${extracted}
+
+      <div class="info-card" style="margin-bottom:0;">
+        <div class="info-card-title">⏭ Don't have one and not ready to build one — that's fine</div>
+        <p class="info-card-body">The toolkit works without a resume. Tap Skip below.</p>
+      </div>
     </div>`;
   }
 

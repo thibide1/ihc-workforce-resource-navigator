@@ -270,7 +270,7 @@
   /* color variants (driven by tool.brand_color in data) */
   .tool-icon.brand-purple { background: var(--color-primary-10); color: var(--color-primary); }
   .tool-icon.brand-blue { background: var(--color-secondary-10); color: var(--color-secondary-dark); }
-  .tool-icon.brand-gold { background: var(--color-warm-10); color: var(--color-warm-dark, #8a6a00); }
+  .tool-icon.brand-gold { background: var(--color-warm-10); color: var(--color-warm-dark); }
   .tool-icon.brand-red { background: var(--color-accent-10); color: var(--color-accent-dark); }
 
   /* ---------- Status badge (top-right) ---------- */
@@ -585,6 +585,20 @@ window.WRN_DATA = {"categories": [{"id": "reentry", "label": "Re-Entry & Second 
   </header>
 
   <main id="main" role="main">
+
+    <section style="max-width:1100px; margin:0 auto var(--space-xl); padding:1.25rem 1.5rem; background:linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); color:#fff; border-radius:var(--radius-lg); box-shadow:0 4px 18px rgba(65,52,148,0.15);" aria-labelledby="cc-banner-heading">
+      <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between;">
+        <div style="flex:1 1 320px;">
+          <div style="font-family:var(--font-family-heading); font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--color-warm); font-weight:600; margin-bottom:0.35rem;">Free Hamilton County companion</div>
+          <h2 id="cc-banner-heading" style="font-family:var(--font-family-heading); font-weight:700; font-size:1.4rem; line-height:1.25; margin:0 0 0.4rem;">Career Coach — resume builder, live jobs, training programs.</h2>
+          <p style="margin:0; font-size:0.98rem; line-height:1.5; opacity:0.95;">Paid for by Invest Hamilton County. Free for any Hamilton County resident. Use it alongside the tools below.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem; min-width:220px;">
+          <a href="https://investhamiltoncounty.lightcastcc.com/login?radius=25%20miles&redirect=%2Fprofile%2Fresume%3Fregion%3DHamilton%20County%20Area%20%28County%29%26radius%3D25%20miles&region=Hamilton%20County%20Area%20%28County%29" target="_blank" rel="noopener" style="background:#fff; color:var(--color-primary); font-family:var(--font-family-heading); font-weight:700; padding:0.65rem 1rem; border-radius:8px; text-decoration:none; text-align:center;">Open Career Coach →</a>
+          <a href="https://investhamiltoncounty.lightcastcc.com/sign-up" target="_blank" rel="noopener" style="color:#fff; font-size:0.85rem; text-decoration:underline; text-align:center; opacity:0.9;">Sign up free (1 minute) →</a>
+        </div>
+      </div>
+    </section>
 
     <nav class="category-bar" id="category-bar" role="tablist" aria-label="Filter tools by category"></nav>
 
